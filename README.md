@@ -39,20 +39,19 @@ Figure 1. Schematic diagram of FRACTAL. The software recursively iterates top-do
 1. Download FRACTAL by
 
    ```shell
-    git clone https://github.com/yachielab/FRACTAL
+    git clone https://github.com/yachielab/FRACTAL.git
    ```
 
    or you can also obtain FRACTAL as follows
 
    ```shell
-    wget ~~~~/FRACTAL_latest.zip
-    unzip FRACTAL_latest.zip
+    wget https://github.com/yachielab/FRACTAL/archive/master.zip
+    unzip master.zip
    ```
 
 2. Add the absolute path of FRACTAL directory to $PATH
 3. Make FRACTAL.sh executable
 
-       cd FRACTAL
        chmod u+x FRACTAL.sh
 
 #### Installation of [Anaconda](https://www.anaconda.com/distribution/) (required)
