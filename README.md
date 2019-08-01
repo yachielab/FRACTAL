@@ -165,7 +165,7 @@ FRACTAL.sh -i test.fa -o FRACTAL_ML -m fasttreeML -p "-fastest -quiet" -c 16
 
 Input:    
 
-​	 [`test.fa`]() (FASTA format)
+​	 [`test.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.fa) (FASTA format)
 
 Output:  
 
