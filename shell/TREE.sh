@@ -70,7 +70,7 @@ elif [ $TREEMETHOD = "raxmlMP" ]; then
 # ML (fasttree)
 elif [ $TREEMETHOD = "fasttreeML" ]; then
     export OMP_NUM_THREADS=$THREADNUM
-    time $SOFTWARE -seed 111 -gtr -nt ${OPTION} < ${FILE}.aligned > ${FILE}.aligned.tree
+    time $SOFTWARE -gtr -nt ${OPTION} -seed 111 < ${FILE}.aligned > ${FILE}.aligned.tree
 else
     echo "exception: Tree construction method name seems wrong..."
 fi
