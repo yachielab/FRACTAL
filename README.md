@@ -130,6 +130,7 @@ Lineage estimation of the sequences in the test input file `test.fa` with the de
 FRACTAL.sh -i test.fa
 ```
 
+
 Input
 
 ​	 [`test.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.fa)  (FASTA format)
