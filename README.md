@@ -132,15 +132,15 @@ FRACTAL.sh -i test.fa
 
 Input
 
-​	 [`test.fa`]()  (FASTA format)
+​	 [`test.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.fa)  (FASTA format)
 
 Output
 
-​	 [`FRACTALout.nwk`]() (Newick format) will be created in your current working directory
+​	 [`FRACTALout.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTALout.nwk) (Newick format) will be created in your current working directory
 
 **Example 2**
 
-Lineage estimation by NJ using RapidNJ with distributed computing where the maximum job number is set to 100. The output file name is set to `FRACTAL_NJ`. Deletion of intermediate files is inactivated.
+Lineage estimation by NJ using RapidNJ with distributed computing where the maximum job number is set to 100. The output file name is set to `FRACTAL_NJ`.
 
 ```shell
 FRACTAL.sh -i test.fa -o FRACTAL_NJ -m rapidnjNJ -q 100
@@ -148,11 +148,11 @@ FRACTAL.sh -i test.fa -o FRACTAL_NJ -m rapidnjNJ -q 100
 
 Input:
 
-​	 [`test.fa`]() (FASTA format)
+​	 [`test.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.fa) (FASTA format)
 
 Output:
 
-​	 [`FRACTAL_NJ.nwk`]() (Newick format) for intermediate files will be created in your working directory.
+​	 [`FRACTAL_NJ.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_NJ.nwk) (Newick format) for intermediate files will be created in your working directory.
 
 **Example 3**
 
@@ -168,7 +168,7 @@ Input:
 
 Output:  
 
-​	 [`FRACTAL_ML.nwk`]() (Newick format) 
+​	 [`FRACTAL_ML.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_ML.nwk) (Newick format) 
 
 ### FRACTAL Usage
 
