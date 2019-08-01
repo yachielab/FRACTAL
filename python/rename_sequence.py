@@ -6,12 +6,6 @@ import os
 import subprocess
 import jplace_parse
 
-"""
-rename_sequence.py  receives    input .fa file path
-                                output .fa file path
-                    does        rename all the sequence sequentially "sequence0", "sequence1", ...
-"""
-
 def rename_sequence(in_fname,out_fname):
     with open(in_fname) as origin, open(out_fname, 'w') as renamed:
         input_itr = SeqIO.parse(origin, "fasta")

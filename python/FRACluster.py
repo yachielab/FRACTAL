@@ -1,17 +1,10 @@
-# FRACluster.py
-# coded by Naoki Konno
-# last update 12.06.2018
-
-# Input : FASTA file to be divided
-# Output : divided FASTAs, upstream tree file, directory info file
-# What to do :
 '''
 Until no paraphyletics, repeat:
     i) repeat 1-4 several times
         1. random sampling (in : FASTA, out : FASTA)
         2. RAxML phylogeny inference (in : FASTA, out : tree)
-        3. RAxML parameter optimization (in : RAxML log file, out RAxML log file)
-        4. phylogenetic placement (in : Reference FASTA, Reference Tree, Query FASTA, out : .jplace file)
+        3. RAxML parameter optimization (in : FASTA, tree, out RAxML log file)
+        4. phylogenetic placement (in : FASTA, Tree, RAxML log file, Query FASTA, out : .jplace file)
     ii) partition.py (in : .jplace files, out : divided FASTAs, directory info file)
 '''
 import sys
@@ -22,9 +15,7 @@ import shutil
 import rename_sequence
 import math
 import time
-#from memory_profiler import profile
 
-#@profile
 def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED):
     start=time.time() # in order to get the time which one cycle takes
     subprocess.call("which bash",shell=True)

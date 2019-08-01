@@ -34,8 +34,7 @@ $(basename ${0}) is a tool for lineage estimation from massive number of DNA seq
 
 Usage:
     FRACTAL.sh
-    [-v] [-h]
-    [-i input_file] [-d output_file_path] [-o output_file_name]
+    [-v] [-h] [-i input_file] [-d output_file_path] [-o output_file_name]
     [-m method] [-p "options"] [-s sequence_number] [-b model_name]
     [-x iteration_number] [-l sequence_number]
     [-q job_number] [-t thread_number] [-e]
@@ -51,34 +50,34 @@ Options:
     -d <String>
       Output directory path. Default: current working directory
     -o <String>
-      Output file name. Default: FRACTAL_output
+      Output file name. Default: FRACTALout
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>               
-      Software to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
+      Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
     -p <”String”>
-      Options for the software to reconstruct lineage tree in each iteration cycle.
+      Options for the software corresponding to the method selected by -m
     -s <Integer>
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>
-      Evolution model of RAxML for phylogenetic placement. Default: GTRCAT
+      Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
     -x <Integer>
-      Threshold for the maximum number of trials in the subsampling process
+      Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
-      Threshold number of input sequences to switch to direct lineage tree reconstruction in
-        each iteration cycle. Default: 500
+      Threshold number of input sequences to switch to direct lineage tree reconstruction 
+        in each iteration cycle. Default: 500
     -q <Integer>
-      Execute the distributed computing mode and set the number of jobs required.
-        Default: 1
+      Maximum number of jobs permissible for distributed computing.
+        Default: 1 (no distributed computing)
     -c <Integer>
-      Number of threads required for subsample tree construction and phylogenetic placement
+      Number of threads for the subsample tree reconstruction and the phylogenetic placement
         in each iteration cycle. Default: 1
     -e
-      Inactivate the deletion of intermediate files
+      Output intermediate files.
     -r <Integer>
-      Seed to generate random values. Default: 0
-    -M <String>
+      Seed number for generation of random values. Default: 0
+    -M <Integer>GB
       Memory requirement per distributed computing node. Default: 16GB
-    -I <String>
-      Memory requirement for the initial calculation node in the distributed computing mode.
+    -I <Integer>GB
+      Memory requirement for the first job in the distributed computing mode.
         Default: 16GB
 EOF
 }
@@ -150,8 +149,8 @@ fi
 echo '###############################################################################'
 echo 'FRACTAL was launched with following parameters:'
 echo "Max Iteration : ${MAX_ITERATION} [times]"
-echo "Subsample Size: ${SUBSAMPLE_SIZE} [cells]"
-echo "Threshold Size: ${THRESHOLD} [cells]"
+echo "Subsample Size: ${SUBSAMPLE_SIZE} [sequences]"
+echo "Threshold Size: ${THRESHOLD} [sequences]"
 echo "Rooting Mode: ${ROOTING}"
 echo "Tree Method: ${TREE}"
 echo "Code directory path: ${CODE_DIR}"
@@ -170,8 +169,8 @@ wait
 echo '###############################################################################' > ${OUT_DIR}/${NAME}/setting.o
 echo 'FRACTAL was launched with following parameters:'>> ${OUT_DIR}/${NAME}/setting.o
 echo "Max Iteration : ${MAX_ITERATION} [times]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Subsample Size: ${SUBSAMPLE_SIZE} [cells]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Threshold Size: ${THRESHOLD} [cells]">> ${OUT_DIR}/${NAME}/setting.o
+echo "Subsample Size: ${SUBSAMPLE_SIZE} [sequences]">> ${OUT_DIR}/${NAME}/setting.o
+echo "Threshold Size: ${THRESHOLD} [sequences]">> ${OUT_DIR}/${NAME}/setting.o
 echo "Rooting Mode: ${ROOTING}">> ${OUT_DIR}/${NAME}/setting.o
 echo "Tree Method: ${TREE}">> ${OUT_DIR}/${NAME}/setting.o
 echo "Code directory path: ${CODE_DIR}">> ${OUT_DIR}/${NAME}/setting.o

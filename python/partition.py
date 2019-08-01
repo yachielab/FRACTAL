@@ -1,10 +1,3 @@
-# partition.py
-# coded by Naoki Konno
-# latest update 12.06.2018
-# get .jplace file as input (.jplace) and returns partition (.jpart)
-
-# caution! : generates intermediate file "tmp.nwk" in working directory
-
 from Bio import Phylo
 from io import StringIO
 import sys
