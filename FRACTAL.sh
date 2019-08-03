@@ -118,16 +118,11 @@ if [ ! -e ${INFILE} ]; then
   exit 1
 fi
 echo "input fasta file ... OK"
-if [ ! -e ${OUT_DIR} ]; then
-  echo "${OUT_DIR} was not found" 1>&2
-  exit 1
-fi
-echo "output directory file ... OK"
 if [ ! -e ${CODE_DIR} ]; then
-  echo "${CODE_DIR} was not found" 1>&2
+  echo "executable FRACTAL.sh was not found" 1>&2
   exit 1
 fi
-echo "code directory file ... OK"
+echo "code directory ... OK"
 
 # setting tree construction software
 # ML (RAxML)
