@@ -73,14 +73,14 @@ Options:
       Number of threads for the subsample tree reconstruction and the phylogenetic placement
         in each iteration cycle. Default: 1
     -e
-      Output intermediate files.
+      Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
     -O "<String>"
-      Option for qsub. Default: ""
+      Options for qsub. Default: ""
       example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
-      Option especially for the first qsub. Default: the string specified by -O
+      Options especially for the first qsub. Default: the string specified by -O
 EOF
 }
 
