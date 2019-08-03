@@ -85,7 +85,7 @@ EOF
 }
 
 # read argument
-while getopts i:d:o:m:p:s:b:x:t:q:c:r:M:I:k:vhe OPT
+while getopts i:d:o:m:p:s:b:x:t:q:c:r:O:I:vhe OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
