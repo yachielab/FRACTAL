@@ -27,7 +27,7 @@ SEED=${17}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 # QSUB OPTION
-if [ -z $INIT_QSUB_OPTION ]; then
+if [ -z "$INIT_QSUB_OPTION" ]; then
   INIT_QSUB_OPTION=$QSUB_OPTION
 fi
 
