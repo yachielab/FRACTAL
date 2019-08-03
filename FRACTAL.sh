@@ -17,12 +17,14 @@ TREE=raxmlMP
 THREADNUM=1
 COLOR="FALSE"
 REMOVE_INTERMEDIATES=TRUE
-OPTION=""
+OPTION="" # option of tree reconstruction software
 SEED=0
 MODEL="GTRCAT"
-MEM_REQ=16
-INIT_MEM_REQ=16
-ENVIRONMENT="unspecified"
+QSUB_OPTION="" # option of qsub
+INIT_QSUB_OPTION="" # option of qsub
+#MEM_REQ=16
+#INIT_MEM_REQ=16
+#ENVIRONMENT="unspecified"
 
 function version {
   echo "######## FRACTAL v1.0.0 ########"
@@ -38,7 +40,7 @@ Usage:
     [-m method] [-p "options"] [-s sequence_number] [-b model_name]
     [-x iteration_number] [-l sequence_number]
     [-q job_number] [-t thread_number] [-e]
-    [-r integer] [-M memory_size] [-I memory_size]
+    [-r integer] [-O qsub_option] [-I first_qsub_option]
 
 Options:
     -v
@@ -53,7 +55,7 @@ Options:
       Output file name. Default: FRACTALout
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>               
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
-    -p <”String”>
+    -p "<String>"
       Options for the software corresponding to the method selected by -m
     -s <Integer>
       Number of sequences for the subsampling procedure. Default: 100
@@ -74,11 +76,11 @@ Options:
       Output intermediate files.
     -r <Integer>
       Seed number for generation of random values. Default: 0
-    -M <Integer>GB
-      Memory requirement per distributed computing node. Default: 16GB
-    -I <Integer>GB
-      Memory requirement for the first job in the distributed computing mode.
-        Default: 16GB
+    -O "<String>"
+      Option for qsub. Default: ""
+      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
+    -I "<String>"
+      Option especially for the first qsub. Default: the string specified by -O
 EOF
 }
 
@@ -101,9 +103,9 @@ do
     "c" ) FLG_C="TRUE" ; THREADNUM="$OPTARG";;
     "e" ) REMOVE_INTERMEDIATES="FALSE" ;;
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
-    "M" ) FLG_M="TRUE" ; MEM_REQ="$OPTARG";;
-    "I" ) FLG_I="TRUE" ; INIT_MEM_REQ="$OPTARG";;
-    "k" ) FLG_K="TRUE" ; ENVIRONMENT="$OPTARG";;
+    "O" ) FLG_M="TRUE" ; QSUB_OPTION="$OPTARG";;
+    "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
+    #"k" ) FLG_K="TRUE" ; ENVIRONMENT="$OPTARG";;
     * ) usage; exit 1;;
   esac
 done
@@ -163,7 +165,7 @@ echo "Memory requirement in qsub: ${MEM_REQ} [GB]"
 echo "random number seed: ${SEED}" 
 echo '###############################################################################' 
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} ${MEM_REQ} ${INIT_MEM_REQ} "${SEED}" ${ENVIRONMENT}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}"
 wait
 
 echo '###############################################################################' > ${OUT_DIR}/${NAME}/setting.o

@@ -1,7 +1,7 @@
 echo -n "job started: "
 date
 
-if [ $# -ne 18 ]; then
+if [ $# -ne 17 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -21,16 +21,20 @@ THREADNUM=${11}
 SOFTWARE=${12}
 OPTION=${13}
 MODEL=${14}
-mem_req=${15}
-INIT_MEM_REQ=${16}
+QSUB_OPTION=${15}
+INIT_QSUB_OPTION=${16}
 SEED=${17}
-ENVIRONMENT=${18}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
+# for SHIROKANE
+if [ $INIT_QSUB_OPTION = "" ]; then
+  INIT_QSUB_OPTION=$QSUB_OPTION
+fi
 if [ $ENVIRONMENT = "SHIROKANE" ]; then
   echo "Here's SHIROKANE!"
-  QSUB_OPTION='-l os7'
-fi # for SHIROKANE
+  QSUB_OPTION="$QSUB_OPTION+' -l os7'"
+  INIT_QSUB_OPTION="$INIT_QSUB_OPTION+' -l os7'"
+fi
 
 mkdir ${ROOT_DIR}
 mkdir ${ROOT_DIR}/nodes
@@ -59,8 +63,9 @@ echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} aligned $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\"" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 
+# first qsub
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub -pe def_slot ${THREADNUM} ${QSUB_OPTION} -l s_vmem=${INIT_MEM_REQ}G -l mem_req=${INIT_MEM_REQ}G -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_d0.sh # parallel mode
+  qsub ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_d0.sh # parallel mode
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
@@ -80,7 +85,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
-        qsub -pe def_slot ${THREADNUM} ${QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err -l s_vmem=$((${mem_req} / ${THREADNUM}))G -l mem_req=$((${mem_req} / ${THREADNUM}))G ${ROOT_DIR}/qsub_dir/${file}
+        qsub ${QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/${file}
         wait
         mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
       fi
@@ -103,6 +108,9 @@ fi
 echo -n "separation part finished: "
 date
 
+# tree infetence ended here
+
+# assemble the subtree .nwk files
 cp ${CODE_DIR}/txt/coloring_template.txt ${ROOT_DIR}/final_tree/coloring.txt
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
