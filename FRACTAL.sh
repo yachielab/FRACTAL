@@ -105,7 +105,6 @@ do
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
     "O" ) FLG_M="TRUE" ; QSUB_OPTION="$OPTARG";;
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
-    #"k" ) FLG_K="TRUE" ; ENVIRONMENT="$OPTARG";;
     * ) usage; exit 1;;
   esac
 done
@@ -147,43 +146,8 @@ else
   echo "exception: Tree construction method name seems wrong..."
 fi
 
-#record setting
-echo '###############################################################################'
-echo 'FRACTAL was launched with following parameters:'
-echo "Max Iteration : ${MAX_ITERATION} [times]"
-echo "Subsample Size: ${SUBSAMPLE_SIZE} [sequences]"
-echo "Threshold Size: ${THRESHOLD} [sequences]"
-echo "Rooting Mode: ${ROOTING}"
-echo "Tree Method: ${TREE}"
-echo "Code directory path: ${CODE_DIR}"
-echo "Input file path: ${INFILE}"
-echo "Output directory path: ${OUT_DIR}/${NAME}"
-echo "Model of RAxML: ${MODEL}"
-echo "Number of threads per node: ${THREADNUM}"
-echo "Number of Computers: ${NUM_OF_JOBS} [nodes]"
-echo "Memory requirement in qsub: ${MEM_REQ} [GB]" 
-echo "random number seed: ${SEED}" 
-echo '###############################################################################' 
-
 bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}"
 wait
-
-echo '###############################################################################' > ${OUT_DIR}/${NAME}/setting.o
-echo 'FRACTAL was launched with following parameters:'>> ${OUT_DIR}/${NAME}/setting.o
-echo "Max Iteration : ${MAX_ITERATION} [times]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Subsample Size: ${SUBSAMPLE_SIZE} [sequences]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Threshold Size: ${THRESHOLD} [sequences]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Rooting Mode: ${ROOTING}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Tree Method: ${TREE}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Code directory path: ${CODE_DIR}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Input file path: ${INFILE}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Output directory path: ${OUT_DIR}/${NAME}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Model of RAxML: ${MODEL}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Number of threads per node: ${THREADNUM}">> ${OUT_DIR}/${NAME}/setting.o
-echo "Number of Computers: ${NUM_OF_JOBS} [nodes]">> ${OUT_DIR}/${NAME}/setting.o
-echo "Memory requirement in qsub: ${MEM_REQ} [GB]" >> ${OUT_DIR}/${NAME}/setting.o
-echo "random number seed: ${SEED}" >> ${OUT_DIR}/${NAME}/setting.o
-echo '###############################################################################' >> ${OUT_DIR}/${NAME}/setting.o
 
 #show result
 echo "##############################################################"
@@ -191,9 +155,5 @@ echo "Lineage Construction Finished ~!"
 cp ${OUT_DIR}/${NAME}/final_tree/HUGE_Result.nwk ${OUT_DIR}/${NAME}.nwk
 if [ ${REMOVE_INTERMEDIATES} = "TRUE" ]; then
   rm -r $OUT_DIR/$NAME
-else
-  echo "input parameter file path: ${OUT_DIR}/${NAME}/setting.o"
-  echo "output .nwk path: ${OUT_DIR}/${NAME}/final_tree/HUGE_Result.nwk"
 fi
 echo "##############################################################"
-
