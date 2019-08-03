@@ -26,14 +26,9 @@ INIT_QSUB_OPTION=${16}
 SEED=${17}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
-# for SHIROKANE
-if [ $INIT_QSUB_OPTION = "" ]; then
+# QSUB OPTION
+if [ -z $INIT_QSUB_OPTION ]; then
   INIT_QSUB_OPTION=$QSUB_OPTION
-fi
-if [ $ENVIRONMENT = "SHIROKANE" ]; then
-  echo "Here's SHIROKANE!"
-  QSUB_OPTION="$QSUB_OPTION+' -l os7'"
-  INIT_QSUB_OPTION="$INIT_QSUB_OPTION+' -l os7'"
 fi
 
 mkdir ${ROOT_DIR}
@@ -118,7 +113,7 @@ echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "python3 ${CODE_DIR}/python/TreeAssembly.py ${ROOT_DIR}/nodes/d0 ${ROOT_DIR}/final_tree/HUGE_Result.nwk TRUE" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "echo \"finished\" > ${ROOT_DIR}/final_tree/assembly_flag.txt" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub -l s_vmem=${mem_req}G -l mem_req=${mem_req}G -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${QSUB_OPTION} ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
+  qsub ${QSUB_OPTION} ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh

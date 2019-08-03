@@ -176,7 +176,7 @@ Usage:
     [-m method] [-p "options"] [-s sequence_number] [-b model_name]
     [-x iteration_number] [-l sequence_number]
     [-q job_number] [-t thread_number] [-e]
-    [-r integer] [-M memory_size] [-I memory_size]
+    [-r integer] [-O qsub_option] [-I first_qsub_option]
 
 Options:
     -v
@@ -191,7 +191,7 @@ Options:
       Output file name. Default: FRACTALout
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>               
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
-    -p <”String”>
+    -p "<String>"
       Options for the software corresponding to the method selected by -m
     -s <Integer>
       Number of sequences for the subsampling procedure. Default: 100
@@ -212,18 +212,12 @@ Options:
       Output intermediate files.
     -r <Integer>
       Seed number for generation of random values. Default: 0
-    -M <Integer>GB
-      Memory requirement per distributed computing node. Default: 16GB
-    -I <Integer>GB
-      Memory requirement for the first job in the distributed computing mode.
-        Default: 16GB
+    -O "<String>"
+      Option for qsub. Default: ""
+      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
+    -I "<String>"
+      Option especially for the first qsub. Default: the string specified by -O
 ```
-
-
-### Note
-
-
-For those of you who use the SHIROKANE supercomputer at the Human Genome Center of the University of Tokyo, please use the option "-k SHIROKANE". This will specify the OS to be used for FRACTAL to CentOS7.
 
 
 ### Contact
