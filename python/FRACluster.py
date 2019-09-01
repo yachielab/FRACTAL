@@ -58,7 +58,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         os.mkdir("TREE")
         os.mkdir("PARAM")
         os.chdir(WD+"/TREE")
-        subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -s "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa -c "+CODEDIR+" -l "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -t "+str(THREAD_NUM)+" -e",shell=True)
+        subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -s "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
         shutil.move(WD+"/TREE/FRACTALout.nwk",WD+"/TERMINAL.nwk")
 
     # call FRACTAL cycle
