@@ -27,7 +27,7 @@ INIT_QSUB_OPTION="" # option of qsub
 #ENVIRONMENT="unspecified"
 
 function version {
-  echo "######## FRACTAL v1.1.0 ########"
+  echo "######## FRACTAL v1.1.1 ########"
 }
 
 function usage {
