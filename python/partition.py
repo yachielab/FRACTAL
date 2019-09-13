@@ -182,7 +182,6 @@ def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,ancseq,subt
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
         leaf.name=newname
-    Phylo.draw_ascii(tree)
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
