@@ -28,7 +28,7 @@ JOB_NAME="FRACTAL"
 #ENVIRONMENT="unspecified"
 
 function version {
-  echo "######## FRACTAL v1.1.1 ########"
+  echo "######## FRACTAL v1.2.1 ########"
 }
 
 function usage {

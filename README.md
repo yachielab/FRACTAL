@@ -217,6 +217,8 @@ Options:
       example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
+    -j "<String>"
+      Name of the job distributed by FRACTAL. Default: "FRACTAL"
 ```
 
 
