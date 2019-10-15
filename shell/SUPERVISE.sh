@@ -24,7 +24,9 @@ MODEL=${14}
 QSUB_OPTION=${15}
 INIT_QSUB_OPTION=${16}
 SEED=${17}
+JOB_NAME=${18}
 ROOT_DIR=${DATA_DIR}/${exp_num}
+QSUB_OPTION="${QSUB_OPTION} -N ${JOB_NAME}"
 
 # QSUB OPTION
 if [ -z "$INIT_QSUB_OPTION" ]; then
@@ -72,11 +74,11 @@ sleep 5
 # keep looking over qsub directory & executing qsub until no job is being processed in calculation node
 
 if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
-  a=$(qstat | grep 'qsub_d' | wc -l)
+  a=$(qstat | grep ${JOB_NAME} | wc -l)
   b=$(ls ${ROOT_DIR}/qsub_dir | wc -l)
   while [ $(expr $a + $b) -gt 0 ]; do
     for file in $(ls ${ROOT_DIR}/qsub_dir); do
-      NUMBER_OF_JOBS=$(qstat | grep 'qsub_d' | wc -l)
+      NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
@@ -86,7 +88,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       fi
     done
     sleep 5
-    a=$(qstat | grep 'qsub_d' | wc -l)
+    a=$(qstat | grep ${JOB_NAME} | wc -l)
     b=$(ls ${ROOT_DIR}/qsub_dir | wc -l)
   done
 else # sequential mode

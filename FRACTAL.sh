@@ -22,6 +22,7 @@ SEED=0
 MODEL="GTRCAT"
 QSUB_OPTION="" # option of qsub
 INIT_QSUB_OPTION="" # option of qsub
+JOB_NAME="FRACTAL"
 #MEM_REQ=16
 #INIT_MEM_REQ=16
 #ENVIRONMENT="unspecified"
@@ -81,11 +82,13 @@ Options:
       example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
+    -j "<String>"
+      Name of the job distributed by FRACTAL. Default: "FRACTAL"
 EOF
 }
 
 # read argument
-while getopts i:d:o:m:p:s:b:x:t:q:c:r:O:I:vhe OPT
+while getopts i:d:o:m:p:s:b:x:t:q:c:r:O:I:j:vhe OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -105,6 +108,7 @@ do
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
     "O" ) FLG_M="TRUE" ; QSUB_OPTION="$OPTARG";;
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
+    "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
     * ) usage; exit 1;;
   esac
 done
@@ -141,7 +145,7 @@ else
   echo "exception: Tree construction method name seems wrong..."
 fi
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}"
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}"
 wait
 
 #show result
