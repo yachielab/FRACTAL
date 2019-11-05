@@ -39,9 +39,9 @@ Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-d output_file_path] [-o output_file_name]
     [-m method] [-p "options"] [-s sequence_number] [-b model_name]
-    [-x iteration_number] [-l sequence_number]
-    [-q job_number] [-t thread_number] [-e]
-    [-r integer] [-O qsub_option] [-I first_qsub_option]
+    [-x iteration_number] [-t sequence_number]
+    [-q job_number] [-c thread_number] [-e]
+    [-r integer] [-O qsub_option] [-I first_qsub_option] [-j job_name]
 
 Options:
     -v
