@@ -37,7 +37,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
     tree_thread_num=THREAD_NUM
     if(TREEMETHOD=="raxmlML" or TREEMETHOD=="raxmlMP"): tree_thread_num=raxml_thread_num
 
-    i=0
+    i=1
     print("[node, seq]")
     print([NODE_COUNT,seq_count])
     print(NODE_COUNT>1 and seq_count<=THRESHOLD*100)

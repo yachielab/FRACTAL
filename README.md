@@ -172,10 +172,10 @@ Output:
 ```
 Usage:
     FRACTAL.sh
-    [-v] [-h] [-i input_file] [-d output_file_path] [-o output_file_name]
-    [-m method] [-p "options"] [-s sequence_number] [-b model_name]
+    [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
+    [-m method] [-p "options"] [-k sequence_number] [-b model_name]
     [-x iteration_number] [-t sequence_number]
-    [-q job_number] [-c thread_number] [-e]
+    [-d job_number] [-c thread_number] [-e]
     [-r integer] [-O qsub_option] [-I first_qsub_option] [-j job_name]
 
 Options:
@@ -185,15 +185,15 @@ Options:
       Print the usage of FRACTAL; ignore all the other parameters
     -i <String>
       Input FASTA file
-    -d <String>
-      Output directory path. Default: current working directory
     -o <String>
+      Output directory path. Default: current working directory
+    -f <String>
       Output file name. Default: FRACTALout
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>               
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
     -p "<String>"
       Options for the software corresponding to the method selected by -m
-    -s <Integer>
+    -k <Integer>
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
@@ -202,7 +202,7 @@ Options:
     -t <Integer>
       Threshold number of input sequences to switch to direct lineage tree reconstruction 
         in each iteration cycle. Default: 500
-    -q <Integer>
+    -d <Integer>
       Maximum number of jobs permissible for distributed computing.
         Default: 1 (no distributed computing)
     -c <Integer>
@@ -218,7 +218,7 @@ Options:
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
-      Name of the job distributed by FRACTAL. Default: "FRACTAL"
+      Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
 ```
 
 
