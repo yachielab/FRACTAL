@@ -140,7 +140,7 @@ Output
 Lineage estimation by NJ using RapidNJ with distributed computing where the maximum job number is set to 100. The output file name is set to `FRACTAL_NJ`.
 
 ```shell
-FRACTAL.sh -i test.fa -o FRACTAL_NJ -m rapidnjNJ -q 100
+FRACTAL.sh -i test.fa -f FRACTAL_NJ -m rapidnjNJ -d 100
 ```
 
 Input:
@@ -156,7 +156,7 @@ Output:
 Lineage estimation by ML using FastTreeMP with its option `-fastest -quiet` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  
 
 ```
-FRACTAL.sh -i test.fa -o FRACTAL_ML -m fasttreeML -p "-fastest -quiet" -c 16
+FRACTAL.sh -i test.fa -f FRACTAL_ML -m fasttreeML -p "-fastest -quiet" -c 16
 ```
 
 Input:    
