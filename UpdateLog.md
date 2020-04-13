@@ -1,8 +1,12 @@
 ### Update Log
 
-<h4> 3/8/2019 Version 1.3.0 </h4>
+<h4> 4/13/2020 Version 1.4.0 </h4>
 
-1. option : the names of some options were changed
+1. option : -s option was created to use any lineage estimation software of choice
+
+<h4> 3/8/2020 Version 1.3.0 </h4>
+
+1. option : names of some options were changed
 
 <h4> 10/15/2019 Version 1.2.0 </h4>
 

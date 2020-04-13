@@ -166,6 +166,34 @@ Output:
 
 ​	 [`FRACTAL_ML.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_ML.nwk) (Newick format) 
 
+**Example 4**
+
+Lineage estimation by any software of choice (here, ML method with GTR-Gamma model by RAxML).
+
+1. Create an .sh script which runs RAxML and output the lineage to standard output
+
+   Script:
+
+   ​	[`script.sh`]() 
+
+   ```shell
+   FASTA_file_path = $1
+   raxmlHPC-SSE3 -s $1 -n raxml -m GTRGAMMA -p 1
+   cat RAxML_bestTree.raxml
+   ```
+
+2. Make the .sh script executable
+
+   ```shell
+   chmod u+x script.sh
+   ```
+
+3. Run FRACTAL
+
+   ```
+   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s `pwd`/script.sh
+   ```
+
 ### FRACTAL Usage
 
 ```
@@ -189,9 +217,8 @@ Options:
     -f <String>
       Output file name. Default: FRACTALout
     -s <String>
-      Absolute path of the executable file used to reconstruct lineage tree in each iteration cycle.
-    -p "<String>"
-      Options for the software corresponding to the method selected by -m
+      Absolute path of the .sh script used to reconstruct lineage tree in each iteration cycle.
+      See usage (example 4).
     -k <Integer>
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>
@@ -221,6 +248,8 @@ Options:
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
       When you specify -s option, this option will be ignored.
+    -p "<String>"
+      Options for the software corresponding to the method selected by -s
 ```
 
 
