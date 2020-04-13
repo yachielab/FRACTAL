@@ -168,7 +168,7 @@ Output:
 
 **Example 4**
 
-Lineage estimation by any software of choice (here, ML method with GTR-Gamma model by RAxML).
+Lineage estimation by any phylogenetic tree reconstruction software of choice (here, ML method with GTR-Gamma model by RAxML).
 
 1. Write an .sh script which read a given FASTA file named "XXX", calculate a lineage of the sequences, and output a Newick file named "XXX.tree".
 
