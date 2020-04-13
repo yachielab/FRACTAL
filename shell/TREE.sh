@@ -73,7 +73,7 @@ elif [ $TREEMETHOD = "fasttreeML" ]; then
     time $SOFTWARE -gtr -nt ${OPTION} -seed 111 < ${FILE}.aligned > ${FILE}.aligned.tree
 # others
 elif [ $TREEMETHOD = "unspecified" ]; then
-    time $SOFTWARE ${FILE}.aligned > ${FILE}.aligned.tree
+    time $SOFTWARE ${FILE}.aligned
 else
     echo "exception: Tree construction method name seems wrong..."
 fi

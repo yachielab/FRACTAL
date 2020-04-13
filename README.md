@@ -177,9 +177,9 @@ Lineage estimation by any software of choice (here, ML method with GTR-Gamma mod
    ​	[`script.sh`]() 
 
    ```shell
-   FASTA_file_path = $1
-   raxmlHPC-SSE3 -s $1 -n raxml -m GTRGAMMA -p 1
-   cat RAxML_bestTree.raxml
+   FASTA_file_path=$1
+   raxmlHPC-SSE3 -s ${FASTA_file_path} -n raxml -m GTRGAMMA -p 1 > /dev/null
+   mv RAxML_bestTree.raxml ${FASTA_file_path}.tree
    ```
 
 2. Make the .sh script executable
@@ -188,10 +188,10 @@ Lineage estimation by any software of choice (here, ML method with GTR-Gamma mod
    chmod u+x script.sh
    ```
 
-3. Run FRACTAL
+3. Run FRACTAL (subsample size was set to 50)
 
    ```
-   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s `pwd`/script.sh
+   FRACTAL.sh -i test.fa -f FRACTAL_raxml -k 50 -s `pwd`/script.sh
    ```
 
 ### FRACTAL Usage
