@@ -170,17 +170,11 @@ Output:
 
 Lineage estimation by any software of choice (here, ML method with GTR-Gamma model by RAxML).
 
-1. Create an .sh script which runs RAxML and output the lineage to standard output
+1. Write an .sh script which read a given FASTA file named "XXX", calculate a lineage of the sequences, and output a Newick file named "XXX.tree".
 
    Script:
 
-   ​	[`script.sh`]() 
-
-   ```shell
-   FASTA_file_path=$1
-   raxmlHPC-SSE3 -s ${FASTA_file_path} -n raxml -m GTRGAMMA -p 1 > /dev/null
-   mv RAxML_bestTree.raxml ${FASTA_file_path}.tree
-   ```
+   ​	[`script.sh`]()  (shell script)
 
 2. Make the .sh script executable
 
@@ -190,7 +184,7 @@ Lineage estimation by any software of choice (here, ML method with GTR-Gamma mod
 
 3. Run FRACTAL (subsample size was set to 50)
 
-   ```
+   ```shell
    FRACTAL.sh -i test.fa -f FRACTAL_raxml -k 50 -s `pwd`/script.sh
    ```
 
