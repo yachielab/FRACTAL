@@ -182,10 +182,10 @@ Lineage estimation by any phylogenetic tree reconstruction software of choice (h
    chmod u+x script.sh
    ```
 
-3. Run FRACTAL (subsample size was set to 50)
+3. Run FRACTAL (the maximum job number is set to 100)
 
    ```shell
-   FRACTAL.sh -i test.fa -f FRACTAL_raxml -k 50 -s `pwd`/script.sh
+   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s `pwd`/script.sh -d 100
    ```
 
 ### FRACTAL Usage
