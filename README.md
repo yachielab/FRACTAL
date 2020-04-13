@@ -188,8 +188,8 @@ Options:
       Output directory path. Default: current working directory
     -f <String>
       Output file name. Default: FRACTALout
-    -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>               
-      Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
+    -s <String>
+      Absolute path of the executable file used to reconstruct lineage tree in each iteration cycle.
     -p "<String>"
       Options for the software corresponding to the method selected by -m
     -k <Integer>
@@ -218,6 +218,9 @@ Options:
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
+    -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
+      Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
+      When you specify -s option, this option will be ignored.
 ```
 
 

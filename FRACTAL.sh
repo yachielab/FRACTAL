@@ -6,10 +6,11 @@ CMDNAME="FRACTAL.sh"
 
 MAX_ITERATION=5             #Integer
 SUBSAMPLE_SIZE=100          #Integer
-INFILE="unspecified"       #Absolute Path of .fa file
+INFILE="unspecified"        #Absolute Path of .fa file
 NAME="FRACTALout"           #Experiment No.
 CODE_DIR=`dirname $0 | sed -e "s/\/FRACTAL.sh//"` #Absolute path of FRACTAL-X.X.X directory
 OUT_DIR="`pwd`"             #output dir should be ${OUT_DIR}/${NAME}
+SOFTWARE="unspecified"      #Absolute Path of the executable file for lineage reconstruction
 THRESHOLD=500
 ROOTING="Origin"
 NUM_OF_JOBS=1
@@ -88,7 +89,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:m:p:k:b:x:t:d:c:r:O:I:j:vhe OPT
+while getopts i:o:f:s:p:k:b:x:t:d:c:r:O:I:j:m:vhe OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -96,7 +97,7 @@ do
     "i" ) FLG_i="TRUE" ; INFILE="$OPTARG";;
     "o" ) FLG_o="TRUE" ; OUT_DIR="$OPTARG";;
     "f" ) FLG_F="TRUE" ; NAME="$OPTARG";;
-    "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
+    "s" ) FLG_s="TRUE" ; SOFTWARE="$OPTARG";;
     "p" ) FLG_P="TRUE" ; OPTION="$OPTARG";;
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
@@ -109,6 +110,7 @@ do
     "O" ) FLG_O="TRUE" ; QSUB_OPTION="$OPTARG";;
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
     "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
+    "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
     * ) usage; exit 1;;
   esac
 done
@@ -128,21 +130,26 @@ if [ ! -e ${CODE_DIR} ]; then
 fi
 echo "code directory ... OK"
 
-# setting tree construction software
-# ML (RAxML)
-if [ "${TREE}" = "raxmlML" ]; then
-  SOFTWARE=`which raxmlHPC-SSE3`
-# NJ
-elif [ "${TREE}" = "rapidnjNJ" ]; then
-  SOFTWARE=`which rapidnj`
-# MP
-elif [ "${TREE}" = "raxmlMP" ]; then
-  SOFTWARE=`which raxmlHPC-SSE3`
-# ML (fasttree)
-elif [ "${TREE}" = "fasttreeML" ]; then
-  SOFTWARE=`which FastTreeMP`
+if [ "${SOFTWARE}" = "unspecified" ]; then 
+    # setting tree construction software
+    # ML (RAxML)
+    if [ "${TREE}" = "raxmlML" ]; then
+    SOFTWARE=`which raxmlHPC-SSE3`
+    # NJ
+    elif [ "${TREE}" = "rapidnjNJ" ]; then
+    SOFTWARE=`which rapidnj`
+    # MP
+    elif [ "${TREE}" = "raxmlMP" ]; then
+    SOFTWARE=`which raxmlHPC-SSE3`
+    # ML (fasttree)
+    elif [ "${TREE}" = "fasttreeML" ]; then
+    SOFTWARE=`which FastTreeMP`
+    # any other software
+    else
+    echo "exception: Tree construction method name seems wrong..."
+    fi
 else
-  echo "exception: Tree construction method name seems wrong..."
+    TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
 bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}"

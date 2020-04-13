@@ -1,7 +1,7 @@
 CMDNAME="TREE.sh"
 
 THREAD_NUM=4
-TREEMETHOD="NJ"
+TREEMETHOD="unspecified"
 ALIGNMETHOD='aligned'
 FILE='unspecified'
 CODE_DIR='unspecified'
@@ -71,6 +71,9 @@ elif [ $TREEMETHOD = "raxmlMP" ]; then
 elif [ $TREEMETHOD = "fasttreeML" ]; then
     export OMP_NUM_THREADS=$THREADNUM
     time $SOFTWARE -gtr -nt ${OPTION} -seed 111 < ${FILE}.aligned > ${FILE}.aligned.tree
+# others
+else [ $TREEMETHOD = "unspecified" ]; then
+    time $SOFTWARE ${FILE}.aligned > ${FILE}.aligned.tree
 else
     echo "exception: Tree construction method name seems wrong..."
 fi
