@@ -149,6 +149,7 @@ if [ "${SOFTWARE}" = "unspecified" ]; then
     echo "exception: Tree construction method name seems wrong..."
     fi
 else
+    echo "Executable file used to reconstruct lineages: $SOFTWARE"
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
