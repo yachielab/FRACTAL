@@ -174,7 +174,7 @@ Lineage estimation by any software of choice (here, ML method with GTR-Gamma mod
 
    Script:
 
-   ​	[`script.sh`]()  (shell script)
+   ​	[`script.sh`](https://github.com/yachielab/FRACTAL/blob/hotfix/example/script/script.sh)  (shell script)
 
 2. Make the .sh script executable
 
@@ -243,7 +243,7 @@ Options:
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
       When you specify -s option, this option will be ignored.
     -p "<String>"
-      Options for the software corresponding to the method selected by -s
+      Options for the software corresponding to the method selected by -m
 ```
 
 
