@@ -136,7 +136,7 @@ Output
 
 **Example 2**
 
-Lineage estimation by NJ using RapidNJ with distributed computing where the maximum job number is set to 100. The output file name is set to `FRACTAL_NJ`.
+Lineage estimation by NJ using RapidNJ with distributed computing where the maximum number of computing nodes is set to 100. The output file name is set to `FRACTAL_NJ`.
 
 ```shell
 FRACTAL.sh -i test.fa -f FRACTAL_NJ -m rapidnjNJ -d 100
