@@ -168,24 +168,18 @@ Output:
 
 **Example 4**
 
-Lineage estimation by any phylogenetic tree reconstruction software of choice (here, ML method with GTR-Gamma model by RAxML).
+Lineage estimation with a software tool of choice and user defined parameters.
 
-1. Write an .sh script which read a given FASTA file named "XXX", calculate a lineage of the sequences, and output a Newick file named "XXX.tree".
+1. Prepare a shell script that takes a FASTA file as an input file, calculate a lineage of the input sequences, and output it to a Newick format file whose name is inherited from the input FASTA file, like from `foo.fa` to `foo.fa.tree`.
 
-   Script:
+2. Add the absolute path of the shell script to `$PATH`
 
-   ​	[`script.sh`](https://github.com/yachielab/FRACTAL/blob/hotfix/example/script/script.sh)  (shell script)
+3. Make the shell script executable
 
-2. Make the .sh script executable
-
-   ```shell
-   chmod u+x script.sh
-   ```
-
-3. Run FRACTAL (the maximum job number is set to 100)
+4. Execute FRACTAL as follows. The example shell script file [`ml_raxml.sh`](https://github.com/yachielab/FRACTAL/blob/hotfix/example/script/ml_raxml.sh) below is prepared and provided in the installation package for ML method with GTR-Gamma model by RAxML. The maximum number of computing nodes is set to 100 in the following command.
 
    ```shell
-   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s `pwd`/script.sh -d 100
+   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s ml_raxml.sh -d 100
    ```
 
 ### FRACTAL Usage
