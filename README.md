@@ -184,7 +184,7 @@ Lineage estimation with a software tool of choice and user defined parameters.
 
 ### FRACTAL Usage
 
-```shell
+```
 Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
