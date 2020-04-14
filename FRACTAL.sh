@@ -154,7 +154,7 @@ if [ "${SOFTWARE}" = "unspecified" ]; then
     fi
 else
     if [ ! -e ${SOFTWARE} ]; then
-        ${SOFTWARE}=`pwd`/${SOFTWARE}
+        ${SOFTWARE}=`which ${SOFTWARE}`
     fi
     echo "Executable file used to reconstruct lineages: $SOFTWARE"
     TREE="unspecified" # when -s is specified, -m is ignored
