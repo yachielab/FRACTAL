@@ -58,7 +58,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         os.mkdir("TREE")
         os.mkdir("PARAM")
         os.chdir(WD+"/TREE")
-        if (TREEMETHOD=="unspecified"):
+        if (TREEMETHOD!="unspecified"):
             subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
         else:
             subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -s "+SOFTWARE+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
