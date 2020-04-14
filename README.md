@@ -210,8 +210,8 @@ Options:
     -p "<String>"
       Options for the software corresponding to the method selected by -m
     -s <String>
-      Absolute path of the .sh script used to reconstruct lineage tree in each iteration cycle.
-        See usage (example 4).
+      File name of a shell script used to reconstruct lineage tree in each iteration cycle.
+        See sample codes (example 4).
     -k <Integer>
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>

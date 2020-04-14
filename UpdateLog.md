@@ -2,7 +2,7 @@
 
 <h4> 4/13/2020 Version 1.4.0 </h4>
 
-1. option : -s option was created to use any lineage estimation software of choice
+1. option : -s option was released to use a lineage estimation software of choice
 
 <h4> 3/8/2020 Version 1.3.0 </h4>
 
