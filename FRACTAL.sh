@@ -101,7 +101,7 @@ do
     "i" ) FLG_i="TRUE" ; INFILE="$OPTARG";;
     "o" ) FLG_o="TRUE" ; OUT_DIR="$OPTARG";;
     "f" ) FLG_F="TRUE" ; NAME="$OPTARG";;
-    "s" ) FLG_s="TRUE" ; SOFTWARE=$OPTARG;;
+    "s" ) FLG_s="TRUE" ; SOFTWARE=`which $OPTARG`;;
     "p" ) FLG_P="TRUE" ; OPTION="$OPTARG";;
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
@@ -153,9 +153,6 @@ if [ "${SOFTWARE}" = "unspecified" ]; then
     echo "exception: Tree construction method name seems wrong..."
     fi
 else
-    if [ ! -e ${SOFTWARE} ]; then
-        ${SOFTWARE}=`which ${SOFTWARE}`
-    fi
     echo "Executable file used to reconstruct lineages: $SOFTWARE"
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
