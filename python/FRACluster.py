@@ -133,6 +133,13 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         #delete files    #
         ##################
         os.remove("INPUT.fa")
+        os.remove("tmp.nwk")
+        shutil.rmtree("ANCSEQ")
+        shutil.rmtree("EPANG")
+        shutil.rmtree("PARAM")
+        shutil.rmtree("PARTITION")
+        shutil.rmtree("SUBSAMPLE")
+        shutil.rmtree("TREE")
     
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
