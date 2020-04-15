@@ -38,7 +38,6 @@ def TreeAssembly(StartDIR, outfname, delete_name):
         for internal_node in tree.get_nonterminals():
             internal_node.name=""
     Phylo.write(tree, outfname, 'newick')
-    print("\tTree Assembly Finished!")
 
 '''
 main function

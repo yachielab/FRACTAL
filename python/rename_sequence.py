@@ -49,7 +49,7 @@ def count_sequence_fast(in_fname):
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
     if(seed=="random"): random.seed(int(random.randint(0,99999)))
     elif(len(seed)!=0):random.seed(int(seed))
-    else:print("-s Error: invalid random seed!")
+    else:print("-r Error: invalid random seed!")
     if (n==None):
         n=count_sequence_fast(in_fname)[0]
     rand_idx=random.sample(range(n-1),subsample_size)
