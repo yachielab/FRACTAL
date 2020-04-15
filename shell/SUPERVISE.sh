@@ -127,5 +127,6 @@ while [ ! -e ${ROOT_DIR}/final_tree/assembly_flag.txt ]; do
   sleep 5
 done
 
+echo ""
 echo -n "huge tree reconstruction finished: "
 date
