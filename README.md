@@ -45,10 +45,13 @@
     unzip master.zip
    ```
 
-2. Add the absolute path of FRACTAL directory to $PATH
-3. Make FRACTAL.sh executable
+2. Add the absolute path of `FRACTAL` directory to `$PATH`
 
-       chmod u+x FRACTAL.sh
+3. Make `FRACTAL.sh` executable
+
+  ```
+   chmod u+x FRACTAL.sh
+  ```
 
 #### Installation of [Anaconda](https://www.anaconda.com/distribution/) (required)
 
@@ -60,7 +63,7 @@
     bash
     ```
 
-2. Please set $PATH to anaconda3/bin.
+2. Please set `$PATH` to `anaconda3/bin`.
 
 #### Installation of [Biopython](https://anaconda.org/anaconda/biopython) (required)
 
@@ -84,7 +87,7 @@
    rm *.o
    ```
 
-2. Set $PATH to raxmlHPC-SSE3 & raxmlHPC-PTHREADS-SSE3 executable.
+2. Set `$PATH` to `raxmlHPC-SSE3` & `raxmlHPC-PTHREADS-SSE3` executable.
 
 #### Installation of [EPA-ng](https://github.com/Pbdas/epa-ng) (required)
 
@@ -111,7 +114,7 @@
    chmod u+x FastTreeMP
    ```
 
-2. Please set $PATH to FastTreeMP executable.
+2. Please set `$PATH` to `FastTreeMP` executable.
 
 ### Sample Codes
 
