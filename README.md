@@ -49,9 +49,9 @@
 
 3. Make `FRACTAL.sh` executable
 
-  ```shell
+   ```shell
    chmod u+x FRACTAL.sh
-  ```
+   ```
 
 #### Installation of [Anaconda](https://www.anaconda.com/distribution/) (required)
 
