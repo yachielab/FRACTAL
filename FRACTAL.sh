@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #$ -S /bin/bash
 
 CMDNAME="FRACTAL.sh"
