@@ -49,7 +49,7 @@
 
 3. Make `FRACTAL.sh` executable
 
-  ```
+  ```shell
    chmod u+x FRACTAL.sh
   ```
 
@@ -57,7 +57,7 @@
 
 1. Execute the following commands
 
-    ```
+    ```shell
     wget https://repo.anaconda.com/archive/Anaconda3-2018.12-Linux-x86_64.sh
     bash Anaconda3-2018.12-Linux-x86_64.sh
     bash
@@ -69,7 +69,7 @@
 
 1. Install Biopython by
 
-   ```
+   ```shell
    conda install biopython
    ```
 
@@ -77,7 +77,7 @@
 
 1. Execute the following commands
 
-   ```
+   ```shell
    wget https://github.com/stamatak/standard-RAxML/archive/master.zip
    unzip master.zip
    cd standard-RAxML-master
@@ -93,7 +93,7 @@
 
 1. Install EPA-ng by
 
-   ```
+   ```shell
    conda install -c bioconda epa-ng
    ```
 
@@ -109,7 +109,7 @@
 
 1. Execute the following commands
 
-   ```
+   ```shell
    wget http://www.microbesonline.org/fasttree/FastTreeMP
    chmod u+x FastTreeMP
    ```
@@ -157,7 +157,7 @@ Output:
 
 Lineage estimation by ML using FastTreeMP with its option `-fastest -quiet` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  
 
-```
+```shell
 FRACTAL.sh -i test.fa -f FRACTAL_ML -m fasttreeML -p "-fastest -quiet" -c 16
 ```
 
