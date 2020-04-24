@@ -107,7 +107,7 @@ do
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
     "x" ) FLG_X="TRUE" ; MAX_ITERATION="$OPTARG";;
     "t" ) FLG_T="TRUE" ; THRESHOLD="$OPTARG";;
-    "d" ) FLG_D="TRUE" ; if [ -e `which qsub` ]; then echo NUM_OF_JOBS="$OPTARG"; else echo -v "This option is not available in Code Ocean because UGE is not installed.\nSee GitHub page: https://github.com/yachielab/FRACTAL"; fi ;;
+    "d" ) FLG_D="TRUE" ; echo -e "Because Code Ocean does not support Univa Grid Engine, the distributed computing mode is disabled in this version. If you want to use the distrubuted computing mode, please install FRACTAL from http:/github.com/yachielab/FRACTAL."; exit 1;;
     "c" ) FLG_C="TRUE" ; THREADNUM="$OPTARG";;
     "e" ) REMOVE_INTERMEDIATES="FALSE" ;;
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
@@ -134,7 +134,6 @@ if [ ! -e ${CODE_DIR} ]; then
 fi
 echo "code directory ... OK"
 
-# software tool of choice for lineage estimation
 if [ "${SOFTWARE}" = "unspecified" ]; then 
     # setting tree construction software
     # ML (RAxML)
