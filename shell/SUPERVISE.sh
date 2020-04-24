@@ -1,4 +1,4 @@
-echo -n "Lineage reconstruction started: "
+echo -n "Lineage reconstruction started:  "
 date
 
 if [ $# -ne 18 ]; then
