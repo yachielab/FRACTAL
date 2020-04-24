@@ -130,12 +130,12 @@ if [ ! -e ${INFILE} ]; then
   echo "${INFILE} was not found" 1>&2
   exit 1
 fi
-echo "Input fasta file ... OK"
+echo "Input FASTA file ... OK"
 if [ ! -e ${CODE_DIR} ]; then
   echo "executable FRACTAL.sh was not found" 1>&2
   exit 1
 fi
-echo "Code directory ... OK"
+echo "Code directory   ... OK"
 echo "################################"
 
 if [ "${SOFTWARE}" = "unspecified" ]; then 
