@@ -107,7 +107,7 @@ do
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
     "x" ) FLG_X="TRUE" ; MAX_ITERATION="$OPTARG";;
     "t" ) FLG_T="TRUE" ; THRESHOLD="$OPTARG";;
-    "d" ) FLG_D="TRUE" ; if [ -e `which qsub` ]; then echo NUM_OF_JOBS="$OPTARG"; else echo "This option is not available in this environment because qsub command was not found"; fi ;;
+    "d" ) FLG_D="TRUE" ; NUM_OF_JOBS="$OPTARG";;
     "c" ) FLG_C="TRUE" ; THREADNUM="$OPTARG";;
     "e" ) REMOVE_INTERMEDIATES="FALSE" ;;
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
