@@ -119,6 +119,9 @@ do
   esac
 done
 
+# print version
+version
+
 # checking existance of directories
 if [ ! -e ${INFILE} ]; then
   INFILE=`pwd`/${INFILE}
@@ -133,8 +136,8 @@ if [ ! -e ${CODE_DIR} ]; then
   exit 1
 fi
 echo "code directory ... OK"
+echo "################################"
 
-# software tool of choice for lineage estimation
 if [ "${SOFTWARE}" = "unspecified" ]; then 
     # setting tree construction software
     # ML (RAxML)
@@ -162,10 +165,7 @@ bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE}
 wait
 
 #show result
-echo "##############################################################"
-echo "Lineage Construction Finished ~!"
 cp ${OUT_DIR}/${NAME}/final_tree/HUGE_Result.nwk ${OUT_DIR}/${NAME}.nwk
 if [ ${REMOVE_INTERMEDIATES} = "TRUE" ]; then
   rm -r $OUT_DIR/$NAME
 fi
-echo "##############################################################"

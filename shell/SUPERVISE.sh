@@ -1,4 +1,4 @@
-echo -n "job started: "
+echo -n "Lineage reconstruction started: "
 date
 
 if [ $# -ne 18 ]; then
@@ -102,7 +102,7 @@ else # sequential mode
   done
 fi
 
-echo -n "separation part finished: "
+echo -n "All FRACTAL iterations finished: "
 date
 
 # tree infetence ended here
@@ -127,6 +127,5 @@ while [ ! -e ${ROOT_DIR}/final_tree/assembly_flag.txt ]; do
   sleep 5
 done
 
-echo ""
-echo -n "huge tree reconstruction finished: "
+echo -n "Lineage reconstruction finished: "
 date
