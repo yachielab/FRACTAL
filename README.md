@@ -20,7 +20,7 @@
 
 <h4>Required</h4>
 
-1. Python3 (version: newer than 3.7.0) with Biopython (version: 1.76) module *required*
+1. Python3 (version: 3.7.0 or later) with Biopython (version: 1.76) module *required*
 2. RAxML (raxmlHPC-PTHREADS-SSE3 and raxmlHPC-SSE3) (version: 8.2.12) *required*
 3. EPA-ng (version: 0.3.5) *required*
 4. RapidNJ (version: 2.3.2) *optional; if you want to use NJ for lineage reconstruction*
@@ -28,7 +28,7 @@
 
 ### Software installation
 
-Each installation step takes less than ~1 min
+Each installation step will take less than ~1 min
 
 
 #### Installation of FRACTAL
