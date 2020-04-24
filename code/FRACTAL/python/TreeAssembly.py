@@ -1,6 +1,5 @@
 # TreeAssembly.py
 # coded by Naoki Konno
-# latest update 2018.12.10
 
 import json
 from Bio import Phylo
@@ -15,9 +14,6 @@ def TreeAssembly(StartDIR, outfname, delete_name):
     NONTERMINALS=[tree.clade]
     i=0
     while(NONTERMINALS!=[]):
-        if(i%10==0):
-            sys.stdout.write("\rcycle: %d" % i)
-            sys.stdout.flush()
         i+=1
         cstate=NONTERMINALS.pop(0)
         WD=cstate.name

@@ -38,6 +38,9 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
     if(TREEMETHOD=="raxmlML" or TREEMETHOD=="raxmlMP"): tree_thread_num=raxml_thread_num
 
     i=1
+    print("[node, seq]")
+    print([NODE_COUNT,seq_count])
+    print(NODE_COUNT>1 and seq_count<=THRESHOLD*100)
     # call direct tree reconstruction
     if(seq_count<=THRESHOLD):
         if(seq_count<4):
@@ -56,6 +59,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         os.mkdir("PARAM")
         os.chdir(WD+"/TREE")
         if (TREEMETHOD!="unspecified"):
+            print("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e")
             subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
         else:
             subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -s "+SOFTWARE+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
@@ -133,13 +137,6 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         #delete files    #
         ##################
         os.remove("INPUT.fa")
-        os.remove("tmp.nwk")
-        shutil.rmtree("ANCSEQ")
-        shutil.rmtree("EPANG")
-        shutil.rmtree("PARAM")
-        shutil.rmtree("PARTITION")
-        shutil.rmtree("SUBSAMPLE")
-        shutil.rmtree("TREE")
     
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
@@ -147,4 +144,5 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
 
 if __name__ == "__main__":
     argvs = sys.argv
+    print(argvs)
     FRACluster(argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21])

@@ -1,0 +1,21 @@
+conda install -c anaconda wget
+
+mkdir /dependencies
+cd /dependencies
+wget https://github.com/stamatak/standard-RAxML/archive/master.zip
+unzip master.zip
+cd standard-RAxML-master
+make -f Makefile.SSE3.gcc
+rm *.o
+make -f Makefile.SSE3.PTHREADS.gcc
+rm *.o
+cp raxmlHPC-SSE3 /bin
+cp raxmlHPC-PTHREADS-SSE3 /bin
+
+cd /dependencies
+conda install -c bioconda epa-ng
+conda install -c bioconda rapidnj
+
+wget http://www.microbesonline.org/fasttree/FastTreeMP
+chmod u+x FastTreeMP
+cp FastTreeMP /bin

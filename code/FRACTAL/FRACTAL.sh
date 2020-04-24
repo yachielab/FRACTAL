@@ -119,6 +119,9 @@ do
   esac
 done
 
+# print version
+version
+
 # checking existance of directories
 if [ ! -e ${INFILE} ]; then
   INFILE=`pwd`/${INFILE}
@@ -127,12 +130,13 @@ if [ ! -e ${INFILE} ]; then
   echo "${INFILE} was not found" 1>&2
   exit 1
 fi
-echo "input fasta file ... OK"
+echo "Input fasta file ... OK"
 if [ ! -e ${CODE_DIR} ]; then
   echo "executable FRACTAL.sh was not found" 1>&2
   exit 1
 fi
-echo "code directory ... OK"
+echo "Code directory ... OK"
+echo "################################"
 
 if [ "${SOFTWARE}" = "unspecified" ]; then 
     # setting tree construction software
@@ -161,10 +165,7 @@ bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE}
 wait
 
 #show result
-echo "##############################################################"
-echo "Lineage Construction Finished ~!"
 cp ${OUT_DIR}/${NAME}/final_tree/HUGE_Result.nwk ${OUT_DIR}/${NAME}.nwk
 if [ ${REMOVE_INTERMEDIATES} = "TRUE" ]; then
   rm -r $OUT_DIR/$NAME
 fi
-echo "##############################################################"

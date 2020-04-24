@@ -13,4 +13,5 @@ def pick_up_fasta(in_file, i, x):
 
 if __name__ == "__main__":
     argvs = sys.argv
+    print([argvs[1],argvs[2],argvs[3]])
     pick_up_fasta(argvs[1],int(argvs[2]),int(argvs[3]))

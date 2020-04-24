@@ -1,0 +1,18 @@
+metadata_version: 1
+name: FRACTAL
+description: FRACTAL (framework for distributed computing to trace large accurate
+  lineages) is a new deep distributed computing framework that is designated to reconstruct
+  extremely large lineages of nucleotide sequences using a software tool of choice.
+  In brief, FRACTAL first subsamples a small number of sequences to reconstruct only
+  an upper hierarchy of a target lineage and assigns the remaining sequences to its
+  downstream clades, for each of which the same procedure is recursively iterated.
+  Since the iteration procedure can be performed in parallel in a distributed computing
+  framework, FRACTAL allows highly scalable reconstruction of an extremely large lineage
+  tree.
+authors:
+- name: Naoki Konno
+  affiliations:
+  - name: University of Tokyo
+corresponding_contributor:
+  name: Nozomu Yachie
+  email: nzmyachie@gmail.com
