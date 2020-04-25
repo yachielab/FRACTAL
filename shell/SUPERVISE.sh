@@ -108,7 +108,6 @@ date
 # tree infetence ended here
 
 # assemble the subtree .nwk files
-cp ${CODE_DIR}/txt/coloring_template.txt ${ROOT_DIR}/final_tree/coloring.txt
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
