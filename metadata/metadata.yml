@@ -1,5 +1,5 @@
 metadata_version: 1
-name: FRACTAL
+name: 'FRACTAL: framework for distributed computing to trace large accurate lineages'
 description: FRACTAL (framework for distributed computing to trace large accurate
   lineages) is a new deep distributed computing framework that is designated to reconstruct
   extremely large lineages of nucleotide sequences using a software tool of choice.

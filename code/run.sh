@@ -11,7 +11,11 @@ echo '# Please note that the deep distributed computing mode is disabled here be
 echo '# supported by Code Ocean. The original code is avaialble at https://github.com/yachielab/FRACTAL.  #'
 echo '#####################################################################################################'
 
+chmod u+x /root/capsule/code/FRACTAL/FRACTAL.sh
+export PATH=/root/capsule/code/FRACTAL:$PATH
+
 echo -e "\nRunning /code/run.sh..."
+
 echo "The expected total calculation time is 8-10 minutes."
 
 # Example code 1
