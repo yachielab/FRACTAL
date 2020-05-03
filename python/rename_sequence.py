@@ -135,9 +135,9 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                     handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng\n")
                 elif(ML_or_MP=="MP"):
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
-                    subprocess.call("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa",shell=True)
-                    subprocess.call("pwd",shell=True)
-                    subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree,shell=True) 
+                    handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa",shell=True)
+                    handle.write("pwd",shell=True)
+                    handle.write(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree,shell=True) 
                     handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa_MP\n")
                 handle.write("echo \"finished\" > "+outdir+"/epang"+str(i)+".o")
         #distribution end
