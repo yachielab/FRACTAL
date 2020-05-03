@@ -7,6 +7,7 @@ from Bio import Phylo
 from io import StringIO
 import sys
 import re
+import random
 
 def correspond(treestr):
     corr={}
@@ -33,7 +34,7 @@ def correspond(treestr):
             break
     return [corr,root]
 
-def parse_jplace(fname):
+def parse_jplace(fname, placement_method="epa-ng"):
     with open(fname,"r") as jf:
         jp = jf.read()
     # parse json format
@@ -47,10 +48,15 @@ def parse_jplace(fname):
     for i in range(len(tree.get_terminals())+len(tree.get_nonterminals())):
         placement_list.append([])
     for placement in jdict:
-        problist = list(pl[2] for pl in placement['p'])
-        maxidx=problist.index(max(problist))
-        edge = placement['p'][maxidx][0]
-        name = placement['n'][0]
+        if(placement_method=="epa-ng"):
+            problist = list(pl[2] for pl in placement['p'])
+            maxidx=problist.index(max(problist))
+            edge = placement['p'][maxidx][0]
+            name = placement['n'][0]
+        elif(placement_method=="epa_MP"):
+            equally_parsimonious_edge_list = list(pl[0] for pl in placement['p'])
+            edge = random.choice(equally_parsimonious_edge_list)
+            name = placement['n'][0]
         if(name!='root'):
             placement_list[edge].append(name)
     with open('placement_tree.out','w') as handle:

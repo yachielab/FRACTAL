@@ -111,11 +111,17 @@ def distributed_EPA_MP(WD, EPANG, refseq, reftree, model, query, outdir, threadn
     
     return
 
-def distributed_EPAng(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count):
+def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ):
     if(nodenum<=1):
-        subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
-        os.chdir(outdir)
-        jplace_parse.parse_jplace(outdir+"/epa_result.jplace")
+        if(ML_or_MP=="ML"): 
+            subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
+            os.chdir(outdir)
+            jplace_parse.parse_jplace(outdir+"/epa_result.jplace",placement_method="epa-ng")
+        if(ML_or_MP=="MP"): 
+            subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
+            subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True)
+            os.chdir(outdir)
+            jplace_parse.parse_jplace(outdir+"/RAxML_portableTree.epa_result.jplace",placement_method="epa-ng")
         os.rename(outdir+"/edge_to_seqname.out", outdir+"/edge_to_seqname_all.out")
     else:
         dname=WD.split("/").pop()
