@@ -107,8 +107,8 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
             jplace_parse.parse_jplace(outdir+"/epa_result.jplace",placement_method="epa-ng")
         if(ML_or_MP=="MP"): 
             subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
-            subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True)
             os.chdir(outdir)
+            subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True)
             jplace_parse.parse_jplace(outdir+"/RAxML_portableTree.epa_result.jplace",placement_method="epa-ng")
         os.rename(outdir+"/edge_to_seqname.out", outdir+"/edge_to_seqname_all.out")
     else:
