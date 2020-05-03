@@ -73,4 +73,4 @@ command line argument: "<input .fa file path> <output .fa file path>"
 if __name__ == "__main__":
     #main function
     argvs=sys.argv
-    parse_jplace(argvs[1])
+    parse_jplace(argvs[1],argvs[2])

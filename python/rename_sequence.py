@@ -129,9 +129,15 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                 handle.write("#$ -S /bin/bash\n")
                 handle.write("PATH={}\n".format(PATH))
                 handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
-                handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
-                handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace\n")
+                if(ML_or_MP=="ML"): 
+                    handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
+                    handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
+                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng\n")
+                elif(ML_or_MP=="MP"):
+                    subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
+                    handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
+                    subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True) 
+                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa_MP\n")
                 handle.write("echo \"finished\" > "+outdir+"/epang"+str(i)+".o")
         #distribution end
         flag=0
