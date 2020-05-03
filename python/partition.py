@@ -185,7 +185,7 @@ def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,ancseq,subt
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, DIRdict,ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD,EPANG, RAXMLSEQ, RAXMLPAR,RAPIDNJ,NODE_COUNT,INIT_SEQ_COUNT,SEED):
+def qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, DIRdict,ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD,EPANG, RAXMLSEQ, RAXMLPAR,RAPIDNJ,NODE_COUNT,INIT_SEQ_COUNT,SEED,PLACEMENT_METHOD):
     for key in DIRdict.keys():
         ls=DIRdict[key][0].split("/")
         num=ls[len(ls)-1]
@@ -198,7 +198,7 @@ def qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NU
             qf.write("#$ -S /bin/bash\n")
             qf.write("PATH={}\n".format(PATH))
             qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-            qf.write("python3 "+CODEDIR+"/python/FRACluster.py "+DIRdict[key][0]+" "+str(MAX_ITERATION)+" "+str(SUBSAMPLE_SIZE)+" "+NODESDIR+" "+str(THRESHOLD)+" "+str(THREAD_NUM)+" "+NUMFILE+" "+QSUBDIR+" "+CODEDIR+" "+ROOTING+" "+MODEL+" \""+OPTION+"\" "+TREEMETHOD+" "+ALIGNMETHOD+" "+EPANG+" "+RAXMLSEQ+" "+RAXMLPAR+" "+RAPIDNJ+" "+str(NODE_COUNT)+" "+str(INIT_SEQ_COUNT)+" \""+SEED+"\"\n") 
+            qf.write("python3 "+CODEDIR+"/python/FRACluster.py "+DIRdict[key][0]+" "+str(MAX_ITERATION)+" "+str(SUBSAMPLE_SIZE)+" "+NODESDIR+" "+str(THRESHOLD)+" "+str(THREAD_NUM)+" "+NUMFILE+" "+QSUBDIR+" "+CODEDIR+" "+ROOTING+" "+MODEL+" \""+OPTION+"\" "+TREEMETHOD+" "+ALIGNMETHOD+" "+EPANG+" "+RAXMLSEQ+" "+RAXMLPAR+" "+RAPIDNJ+" "+str(NODE_COUNT)+" "+str(INIT_SEQ_COUNT)+" \""+SEED+"\" "+PLACEMENT_METHOD+"\n") 
 
 def tiny_tree(INPUTfa,OUTPUTnwk):
     with open(INPUTfa,'r') as fa:
