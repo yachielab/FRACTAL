@@ -103,7 +103,27 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             os.chdir(WD)
             if(seq_count>10000): nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
             else: nodenum = 0
-            rename_sequence.distributed_EPAng(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count)
+
+
+            
+            
+            
+            
+
+            
+            ML_or_MP="ML" # for development
+            rename_sequence.distributed_EPAng(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count,ML_or_MP)
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             ####################
             #parse .jplace file#
             ####################
