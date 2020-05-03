@@ -59,7 +59,7 @@ echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} aligned $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\"" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} aligned $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then
