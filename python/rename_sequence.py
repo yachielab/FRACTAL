@@ -99,17 +99,17 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ,seed=SEED):
+def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ,seed):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
             subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
             os.chdir(outdir)
-            jplace_parse.parse_jplace(outdir+"/epa_result.jplace",placement_method="epa-ng")
+            jplace_parse.parse_jplace(outdir+"/epa_result.jplace","epa-ng")
         if(ML_or_MP=="MP"): 
             subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
             os.chdir(outdir)
             subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True)
-            jplace_parse.parse_jplace(outdir+"/RAxML_portableTree.epa_result.jplace",placement_method="epa_MP",seed=seed)
+            jplace_parse.parse_jplace(outdir+"/RAxML_portableTree.epa_result.jplace","epa_MP",seed)
         os.rename(outdir+"/edge_to_seqname.out", outdir+"/edge_to_seqname_all.out")
     else:
         dname=WD.split("/").pop()
