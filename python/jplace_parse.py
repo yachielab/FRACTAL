@@ -34,7 +34,7 @@ def correspond(treestr):
             break
     return [corr,root]
 
-def parse_jplace(fname, placement_method="epa-ng"):
+def parse_jplace(fname, placement_method="epa-ng",seed=SEED):
     with open(fname,"r") as jf:
         jp = jf.read()
     # parse json format
@@ -54,6 +54,7 @@ def parse_jplace(fname, placement_method="epa-ng"):
             edge = placement['p'][maxidx][0]
             name = placement['n'][0]
         elif(placement_method=="epa_MP"):
+            if(len(seed)!=0):random.seed(int(seed))
             equally_parsimonious_edge_list = list(pl[0] for pl in placement['p'])
             edge = random.choice(equally_parsimonious_edge_list)
             name = placement['n'][0]
