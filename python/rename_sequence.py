@@ -99,18 +99,6 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP):
-    if(ML_or_MP=="ML"):
-        distributed_EPAng(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count)
-    elif(ML_or_MP=="MP"):
-        distributed_EPA_MP(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count)
-    else:
-        print("Error: You might specify an invalid placement method")
-
-def distributed_EPA_MP(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count):
-    
-    return
-
 def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
