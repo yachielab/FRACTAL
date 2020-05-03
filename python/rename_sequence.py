@@ -137,7 +137,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
                     handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")
                     handle.write(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree+"\n") 
-                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa_MP\n")
+                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/RAxML_portableTree.epa_result.jplace epa_MP\n")
                 handle.write("echo \"finished\" > "+outdir+"/epang"+str(i)+".o")
         #distribution end
         flag=0
