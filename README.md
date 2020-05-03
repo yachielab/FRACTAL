@@ -212,7 +212,7 @@ Options:
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
-    -p "<String>"
+    -a "<String>"
       Options for the software corresponding to the method selected by -m
     -s <String>
       File name of a shell script used to reconstruct lineage tree in each iteration cycle.
@@ -221,10 +221,12 @@ Options:
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
+    -p <String, Permissible values: ‘ML’, ‘MP’>
+      Method for phylogenetic placement in each iteration cycle. Default: ML
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
-      Threshold number of input sequences to switch to direct lineage tree reconstruction 
+      Threshold number of input sequences to switch to direct lineage tree reconstruction
         in each iteration cycle. Default: 500
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
@@ -238,7 +240,7 @@ Options:
       Seed number for generation of random values. Default: 0
     -O "<String>"
       Options for qsub. Default: ""
-      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
+      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G"
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
