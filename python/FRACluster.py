@@ -135,7 +135,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         os.remove("INPUT.fa")
         os.remove("tmp.nwk")
         shutil.rmtree("ANCSEQ")
-        shutil.rmtree("EPANG")
+        #shutil.rmtree("EPANG")
         shutil.rmtree("PARAM")
         shutil.rmtree("PARTITION")
         shutil.rmtree("SUBSAMPLE")
