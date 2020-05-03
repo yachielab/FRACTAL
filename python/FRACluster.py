@@ -16,7 +16,7 @@ import rename_sequence
 import math
 import time
 
-def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED):
+def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED,ML_or_MP):
     start=time.time() # in order to get the time which one cycle takes
     subprocess.call("which bash",shell=True)
     os.chdir(WD) # move to Working Directory
@@ -111,7 +111,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             
 
             
-            ML_or_MP="MP" # for development
+            #ML_or_MP="MP" # for development
             rename_sequence.distributed_placement(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count,ML_or_MP,RAXMLSEQ)
             
             
@@ -167,4 +167,4 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
 
 if __name__ == "__main__":
     argvs = sys.argv
-    FRACluster(argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21])
+    FRACluster(argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21],argvs[22])

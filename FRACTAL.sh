@@ -24,12 +24,13 @@ MODEL="GTRCAT"
 QSUB_OPTION="" # option of qsub
 INIT_QSUB_OPTION="" # option of qsub
 JOB_NAME="FRACTAL"
+PLACEMENT_METHOD="ML"
 #MEM_REQ=16
 #INIT_MEM_REQ=16
 #ENVIRONMENT="unspecified"
 
 function version {
-  echo "######## FRACTAL v1.4.2 ########"
+  echo "######## FRACTAL v1.5.0 ########"
 }
 
 function usage {
@@ -58,7 +59,7 @@ Options:
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
-    -p "<String>"
+    -a "<String>"
       Options for the software corresponding to the method selected by -m
     -s <String>
       File name of a shell script used to reconstruct lineage tree in each iteration cycle.
@@ -67,6 +68,8 @@ Options:
       Number of sequences for the subsampling procedure. Default: 100
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
+    -p <String, Permissible values: ‘ML’, ‘MP’>
+      Method for phylogenetic placement in each iteration cycle. Default: ML
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
@@ -102,9 +105,10 @@ do
     "o" ) FLG_o="TRUE" ; OUT_DIR="$OPTARG";;
     "f" ) FLG_F="TRUE" ; NAME="$OPTARG";;
     "s" ) FLG_s="TRUE" ; SOFTWARE=`which $OPTARG`;;
-    "p" ) FLG_P="TRUE" ; OPTION="$OPTARG";;
+    "a" ) FLG_A="TRUE" ; OPTION="$OPTARG";;
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
+    "p" ) FLG_P="TRUE" ; PLACEMENT_METHOD="$OPTARG";;
     "x" ) FLG_X="TRUE" ; MAX_ITERATION="$OPTARG";;
     "t" ) FLG_T="TRUE" ; THRESHOLD="$OPTARG";;
     "d" ) FLG_D="TRUE" ; NUM_OF_JOBS="$OPTARG";;
@@ -161,7 +165,7 @@ else
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}"
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD}
 wait
 
 #show result

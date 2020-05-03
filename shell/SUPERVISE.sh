@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 18 ]; then
+if [ $# -ne 19 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -25,6 +25,7 @@ QSUB_OPTION=${15}
 INIT_QSUB_OPTION=${16}
 SEED=${17}
 JOB_NAME=${18}
+PLACEMENT_METHOD=${19}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 QSUB_OPTION="${QSUB_OPTION} -N ${JOB_NAME}"
 
