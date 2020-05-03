@@ -34,7 +34,7 @@ def correspond(treestr):
             break
     return [corr,root]
 
-def parse_jplace(fname, placement_method="epa-ng",seed=SEED):
+def parse_jplace(fname, placement_method,seed):
     with open(fname,"r") as jf:
         jp = jf.read()
     # parse json format
