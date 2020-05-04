@@ -104,8 +104,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             #Phylogenetic placement & visualization#
             ########################################
             os.chdir(WD)
-            if(seq_count>10000): nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
-            else: nodenum = 0
+            nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
             rename_sequence.distributed_placement(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count,ML_or_MP,RAXMLSEQ,ALIGNED, SEED,hmm_aligner=HMM_ALIGNER,hmm_profiler=HMM_PROFILER)
             ####################
             #parse .jplace file#
