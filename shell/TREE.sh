@@ -2,7 +2,7 @@ CMDNAME="TREE.sh"
 
 THREAD_NUM=4
 TREEMETHOD="unspecified"
-ALIGNMETHOD='aligned'
+ALIGNED='aligned'
 FILE='unspecified'
 CODE_DIR='unspecified'
 WD='unspecified' # working directory
@@ -10,23 +10,24 @@ OPTION=""
 MODEL="GTRCAT" # model of site heterogeneity in raxml
 SOFTWARE="unspecified"
 
-while getopts  n:m:a:f:c:w:p:d:q:r: OPT
+while getopts  n:m:a:f:c:w:p:d:q:s: OPT
 do
   case $OPT in
     "n" ) FLG_TN="TRUE" ; THREADNUM="$OPTARG";;
     "m" ) FLG_TM="TRUE" ; TREEMETHOD="$OPTARG" ;;
-    "a" ) FLG_AM="TRUE" ; ALIGNMETHOD="$OPTARG" ;;
+    "a" ) FLG_AM="TRUE" ; ALIGNED="$OPTARG" ;;
     "f" ) FLG_F="TRUE" ; FILE="$OPTARG" ;;
     "c" ) FLG_C="TRUE" ; CODE_DIR="$OPTARG" ;;
     "w" ) FLG_WD="TRUE" ; WD="$OPTARG" ;;
     "p" ) FLG_OPT="TRUE" ; OPTION="$OPTARG" ;;
     "d" ) FLG_MOD="TRUE" ; MODEL="$OPTARG" ;;
     "q" ) FLG_NJ="TRUE" ; SOFTWARE="$OPTARG" ;;
+    "s" ) FLG_S="TRUE" ; ALIGNER="$OPTARG" ;;
       * ) echo "Usage:" 1>&2
           echo $CMDNAME 1>&2
           echo "[-n number of threads]" 1>&2
           echo "[-m tree estimation method]" 1>&2
-          echo "[-a alignment method]" 1>&2
+          echo "[-a aligned or not]" 1>&2
           echo "[-f input .fa file path]" 1>&2
           echo "[-c code directory]" 1>&2
           echo "[-w working directory]" 1>&2
@@ -44,12 +45,11 @@ fi
 cd $WD
 
 # Alignment
-echo $ALIGNMETHOD
-if [ $ALIGNMETHOD = 'aligned' ]; then
+if [ $ALIGNED = 'aligned' ]; then
     echo "Already aligned!"
     mv ${FILE} ${FILE}.aligned
-elif [ $ALIGNMETHOD = "mafft" ]; then
-    mafft ${FILE} > ${FILE}.aligned
+elif [ $ALIGNED = "unaligned" ]; then
+    ${ALIGNER} ${FILE} > ${FILE}.aligned # set $PATH!!!!!!!!!!
 else
     echo "exception: Alignment method name seems wrong..."
 fi
