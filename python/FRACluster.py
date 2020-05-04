@@ -158,7 +158,6 @@ if __name__ == "__main__":
             command = command + arg + " "
         else:
             command = command + "\"\" "
-            print(command)
     if (len(argvs)==23):
         FRACluster(command, argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21],argvs[22])
     elif ((len(argvs)==23+3)):
