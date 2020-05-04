@@ -145,7 +145,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                 handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                 if(ML_or_MP=="ML"): 
                     if(ALIGNED=="unaligned"): # for unaligned sequences
-                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")   # Conduct HMM alignment
+                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+moved+"."+str(i)+" | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")   # Conduct HMM alignment
                         handle.write("python3 "+codedir+"/python/divide_ref_and_query.py "+outdir+"/ref_query.fa "+ refseq + "\n")
                         handle.write(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum)+"\n")
                     elif(ALIGNED=="aligned"): # for aligned sequences
@@ -155,7 +155,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                 elif(ML_or_MP=="MP"):
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
                     if(ALIGNED=="unaligned"): # for unaligned sequences
-                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")   # Conduct HMM alignment
+                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+moved+"."+str(i)+" | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")   # Conduct HMM alignment
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")
                     handle.write(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree+"\n") 
