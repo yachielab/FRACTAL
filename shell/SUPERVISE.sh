@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 20 ]; then
+if [ $# -ne 21 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -27,9 +27,10 @@ SEED=${17}
 JOB_NAME=${18}
 PLACEMENT_METHOD=${19}
 ALIGNED=${20}
+max_num_of_iterations=${21}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 QSUB_OPTION="${QSUB_OPTION} -N ${JOB_NAME}"
-max_num_of_iterations=10000
+
 
 # QSUB OPTION
 if [ -z "$INIT_QSUB_OPTION" ]; then

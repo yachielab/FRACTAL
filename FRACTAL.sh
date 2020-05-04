@@ -26,9 +26,7 @@ INIT_QSUB_OPTION="" # option of qsub
 JOB_NAME="FRACTAL"
 PLACEMENT_METHOD="ML"
 ALIGNED="aligned"
-#MEM_REQ=16
-#INIT_MEM_REQ=16
-#ENVIRONMENT="unspecified"
+LIMITATION=10000
 
 function version {
   echo "######## FRACTAL v1.5.0 ########"
@@ -95,11 +93,13 @@ Options:
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
+    -l "<Integer>"
+      Maximum number of FRACTAL iterations. Default: 10000
 EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:x:t:d:c:r:O:I:j:m:vheu OPT
+while getopts i:o:f:s:a:k:b:p:x:t:d:c:r:O:I:j:m:l:vheu OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -123,6 +123,7 @@ do
     "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
     "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
     "u" ) FLG_u="TRUE" ; ALIGNED="unaligned";;
+    "l" ) FLG_u="TRUE" ; LIMITATION="$OPTARG";;
     * ) usage; exit 1;;
   esac
 done
@@ -169,7 +170,7 @@ else
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION}
 wait
 
 #show result
