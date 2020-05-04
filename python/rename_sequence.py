@@ -147,7 +147,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+moved+"."+str(i)+" | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")   # Conduct HMM alignment
                         handle.write("python3 "+codedir+"/python/divide_ref_and_query.py "+outdir+"/EPANG"+str(i)+"/ref_query.fa "+ refseq + "\n")
-                        handle.write(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum)+"\n")
+                        handle.write(EPANG+" --redo -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/EPANG"+str(i)+"/ref_query.fa.query"+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
