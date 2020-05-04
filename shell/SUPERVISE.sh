@@ -26,6 +26,7 @@ INIT_QSUB_OPTION=${16}
 SEED=${17}
 JOB_NAME=${18}
 PLACEMENT_METHOD=${19}
+ALIGNED=${20}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 QSUB_OPTION="${QSUB_OPTION} -N ${JOB_NAME}"
 
@@ -47,6 +48,12 @@ EPANG=$(which epa-ng)
 RAXMLSEQ=$(which raxmlHPC-SSE3)
 RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
+if [ "$ALIGNED" = "unaligned" ]; then
+    MAFFT = $(which mafft)
+    HMM_BUILD = $(which hmmbuild)
+    HMM_ALIGN = $(which hmmalign)
+fi
+
 #setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
 cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
@@ -59,7 +66,7 @@ echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} aligned $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then

@@ -16,27 +16,10 @@ import rename_sequence
 import math
 import time
 
-def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, 
+def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, 
     CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
     INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="mafft", HMM_PROFILER="hmmbuild", HMM_ALIGNER="hmmalign"):
     
-
-
-
-
-
-
-
-
-    ALIGNED="unaligned"
-
-
-
-
-
-
-
-
     start=time.time() # in order to get the time which one cycle takes
     subprocess.call("which bash",shell=True)
     os.chdir(WD) # move to Working Directory
@@ -148,7 +131,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         ##################
         os.chdir(WD)
         DIRdict=partition.partition_fasta("INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
-        partition.qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, DIRdict,ROOTING,MODEL,OPTION,TREEMETHOD, ALIGNED,EPANG, RAXMLSEQ, RAXMLPAR,SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED,ML_or_MP)
+        partition.qsub_prep(COMMAND, QSUBDIR, DIRdict)
         ##################
         #delete files    #
         ##################
@@ -156,7 +139,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         os.remove("tmp.nwk")
         '''
         shutil.rmtree("ANCSEQ")
-        #shutil.rmtree("EPANG")
+        shutil.rmtree("EPANG")
         shutil.rmtree("PARAM")
         shutil.rmtree("PARTITION")
         shutil.rmtree("SUBSAMPLE")
@@ -169,4 +152,10 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
 
 if __name__ == "__main__":
     argvs = sys.argv
-    FRACluster(argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21],argvs[22])
+    command = "python3 "
+    for arg in argvs:
+        command += command + arg + " "
+    if (len(argvs)==24):
+        FRACluster(command, argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21],argvs[22])
+    elif ((len(argvs)==24+3)):
+        FRACluster(command, argvs[1],int(argvs[2]),int(argvs[3]),argvs[4],int(argvs[5]),int(argvs[6]),argvs[7],argvs[8], argvs[9],argvs[10],argvs[11],argvs[12],argvs[13],argvs[14],argvs[15],argvs[16],argvs[17],argvs[18],int(argvs[19]),int(argvs[20]),argvs[21],argvs[22], ALIGNER=argvs[23], HMM_PROFILER=argvs[24], HMM_ALIGNER=argvs[25])

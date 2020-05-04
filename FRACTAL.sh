@@ -25,6 +25,7 @@ QSUB_OPTION="" # option of qsub
 INIT_QSUB_OPTION="" # option of qsub
 JOB_NAME="FRACTAL"
 PLACEMENT_METHOD="ML"
+ALIGNED="aligned"
 #MEM_REQ=16
 #INIT_MEM_REQ=16
 #ENVIRONMENT="unspecified"
@@ -56,6 +57,8 @@ Options:
       Output directory path. Default: current working directory
     -f <String>
       Output file name. Default: FRACTALout
+    -u
+      Reconstuct a lineage from unaligned sequences
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
@@ -96,7 +99,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:x:t:d:c:r:O:I:j:m:vhe OPT
+while getopts i:o:f:s:a:k:b:p:x:t:d:c:r:O:I:j:m:vheu OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -119,6 +122,7 @@ do
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
     "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
     "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
+    "u" ) FLG_u="TRUE" ; ALIGNED="unaligned"
     * ) usage; exit 1;;
   esac
 done
@@ -165,7 +169,7 @@ else
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED}
 wait
 
 #show result
