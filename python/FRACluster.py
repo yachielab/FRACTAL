@@ -24,7 +24,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
     subprocess.call("which bash",shell=True)
     os.chdir(WD) # move to Working Directory
     # check if outgroup exists or not (sequence named "root")
-    if rename_sequence.outgroup_check_fast("INPUT.fa"):
+    if rename_sequence.outgroup_check_fast(WD+"/INPUT.fa"):
         print("INPUT.fa properly include outgroup sequence.")
     else:
         print("No sequence named \"root\" in INPUT.fa! INPUT.fa should include outgroup sequence named \"root\".")
