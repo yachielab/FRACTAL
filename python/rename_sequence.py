@@ -102,7 +102,7 @@ def decompose_fasta(in_file, x,seq_count):
 def divide_fasta_into_ref_and_query(ref_query, ref):
     with open(ref,'r') as ihandle:
         refseq_itr = SeqIO.parse(ihandle, "fasta")
-        refseq_name_set={}
+        refseq_name_set=set()
         for record in refseq_itr:
             refseq_name_set.add(record.name)
     with open(ref_query,'r') as ihandle, open(ref_query+".ref",'w') as ohandle_ref, open(ref_query+".query",'r') as ohandle_query:
