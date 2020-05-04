@@ -110,12 +110,12 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             #parse .jplace file#
             ####################
             os.chdir(WD)
-            para=partition.partition(WD+"/EPANG/placement_tree.out",WD+"/EPANG/edge_to_seqname_all.out",WD+"/PARTITION/partition"+str(i)+".out",depth)
+            para, Nseq_in_largest_subclade = partition.partition(WD+"/EPANG/placement_tree.out",WD+"/EPANG/edge_to_seqname_all.out",WD+"/PARTITION/partition"+str(i)+".out",depth)
             print("detected "+str(para)+" paraphyletic sequences")
             ##################################################
             #get paraphyletic sequences and make ITERATION.fa#
             ##################################################
-            if(para>prev_para):
+            if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
                 i-=1 # previous subsample achieved minimum number of paraphyletic groups
                 break
             if(para!=0):

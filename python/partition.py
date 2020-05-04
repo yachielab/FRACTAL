@@ -26,7 +26,7 @@ def rooting_and_remove(nwkfilepath,newnwkpath,root):
     Phylo.write(tree2,newnwkpath,"newick")
 
 def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
-    partition={}
+    partition={}; leaf_to_Nseq={}
     paraphyletic=[]
     stack=[]
     leaves={}
@@ -73,6 +73,8 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
                 for seqname in place_list[edge]:
                     if seqname != "root":
                         partition[seqname]=cedge
+                        if(cedge in leaf_to_Nseq.keys()): leaf_to_Nseq[cedge]+=1
+                        else: leaf_to_Nseq[cedge]=0
             cstate.clades=[]
     tree=Phylo.BaseTree.Tree(ref_tree.clade.clades[0])
     Phylo.write(tree, 'tmp.nwk', 'newick')
@@ -86,7 +88,7 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     outputdict["corr"]=corr
     with open(jpartitionfname,'w') as out:
         out.write(json.dumps(outputdict))
-    return len(paraphyletic)
+    return len(paraphyletic), max(list(leaf_to_Nseq.values()))
 
 def add_paraphyletic_fa(jpartfname, outputfname, all_fa,subsample_size,num_of_para):
     # open .jpart file
