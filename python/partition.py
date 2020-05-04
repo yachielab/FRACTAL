@@ -198,7 +198,10 @@ def qsub_prep(COMMAND, QSUBDIR, DIRdict):
             qf.write("#$ -S /bin/bash\n")
             qf.write("PATH={}\n".format(PATH))
             qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-            qf.write(COMMAND) 
+            command_list=COMMAND.split()[0:1]+[DIRdict[key][0]]+COMMAND.split()[3:]
+            command=""
+            for arg in command: command += arg + " "
+            qf.write(command) 
 
 def tiny_tree(INPUTfa,OUTPUTnwk):
     with open(INPUTfa,'r') as fa:

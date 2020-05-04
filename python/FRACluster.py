@@ -130,7 +130,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
         #partition .fasta#
         ##################
         os.chdir(WD)
-        DIRdict=partition.partition_fasta("INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
+        DIRdict=partition.partition_fasta(WD+"/INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
         partition.qsub_prep(COMMAND, QSUBDIR, DIRdict)
         ##################
         #delete files    #
