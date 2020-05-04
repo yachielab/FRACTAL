@@ -5,6 +5,7 @@ import shutil
 import os
 import subprocess
 import jplace_parse
+import divide_ref_and_query
 
 def rename_sequence(in_fname,out_fname):
     with open(in_fname) as origin, open(out_fname, 'w') as renamed:
@@ -99,20 +100,6 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def divide_fasta_into_ref_and_query(ref_query, ref):
-    with open(ref,'r') as ihandle:
-        refseq_itr = SeqIO.parse(ihandle, "fasta")
-        refseq_name_set=set()
-        for record in refseq_itr:
-            refseq_name_set.add(record.name)
-    with open(ref_query,'r') as ihandle, open(ref_query+".ref",'w') as ohandle_ref, open(ref_query+".query",'r') as ohandle_query:
-        ref_query_itr = SeqIO.parse(ihandle,"fasta")
-        ref_query_name_set={}
-        for record in ref_query_itr:
-            if(record.name in refseq_name_set):
-                SeqIO.write(record, ohandle_ref, "fasta")
-            else:
-                SeqIO.write(record, ohandle_query, "fasta")
 
 
 def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, ALIGNED, seed, hmm_aligner="", hmm_profiler=""):
@@ -121,7 +108,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
                 subprocess.call(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa",shell=True)   # Conduct HMM alignment
-                divide_fasta_into_ref_and_query(outdir+"/ref_query.fa", refseq)
+                divide_ref_and_query.divide_fasta_into_ref_and_query(outdir+"/ref_query.fa", refseq)
                 subprocess.call(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum),shell=True)
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
@@ -156,14 +143,20 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                 handle.write("PATH={}\n".format(PATH))
                 handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                 if(ML_or_MP=="ML"): 
-                    handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
+                    if(ALIGNED=="unaligned"): # for unaligned sequences
+                        handle.write(hmm_profiler+" "+refseq+".hmm "+refseq+"\n") # Build HMM profile
+                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa\n")   # Conduct HMM alignment
+                        handle.write("python3 "+codedir+"/python/divide_ref_and_query.py "+outdir+"/ref_query.fa "+ refseq + "\n")
+                        handle.write(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum)+"\n")
+                    elif(ALIGNED=="aligned"): # for aligned sequences
+                        handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
                     handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng\n")
                 elif(ML_or_MP=="MP"):
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
                     if(ALIGNED=="unaligned"): # for unaligned sequences
-                        handle.write(hmm_profiler+" "+refseq+".hmm "+refseq+"\n") # Build HMM profile
-                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa\n")   # Conduct HMM alignment
+                        handle.write(hmm_profiler+" "+moved+"."+str(i)+".hmm "+moved+"."+str(i)+"\n") # Build HMM profile
+                        handle.write(hmm_aligner+" --outformat afa --mapali "+moved+"."+str(i)+" "+moved+"."+str(i)+".hmm "+moved+"."+str(i)+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa\n")   # Conduct HMM alignment
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")
                     handle.write(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree+"\n") 
