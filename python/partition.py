@@ -201,7 +201,10 @@ def qsub_prep(COMMAND, QSUBDIR, DIRdict):
             command_list=COMMAND.split()[0:1]+[DIRdict[key][0]]+COMMAND.split()[3:]
             command=""
             for arg in command_list: command += arg + " "
-            qf.write(command) 
+            qf.write(command)
+            print(COMMAND)
+            print(command_list)
+            print(command)
 
 def tiny_tree(INPUTfa,OUTPUTnwk):
     with open(INPUTfa,'r') as fa:
