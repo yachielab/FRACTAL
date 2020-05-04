@@ -160,7 +160,7 @@ Output:
 Lineage estimation by ML using FastTreeMP with its option `-fastest -quiet` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
 
 ```shell
-FRACTAL.sh -i test.fa -f FRACTAL_ML -m fasttreeML -p "-fastest -quiet" -c 16
+FRACTAL.sh -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest -quiet" -c 16
 ```
 
 Input:    

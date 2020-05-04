@@ -1,5 +1,9 @@
 ### Update Log
 
+<h5> 5/3/2020 Version 1.5.0 </h5>
+
+1. option : -p option was released
+
 <h4> 4/13/2020 Version 1.4.0 </h4>
 
 1. option : -s option was released to use a lineage estimation software of choice
