@@ -99,7 +99,7 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, seed, ALIGNED, hmm_aligner="", hmm_profiler=""):
+def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, ALIGNED, seed, hmm_aligner="", hmm_profiler=""):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
             subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
