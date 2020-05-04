@@ -67,10 +67,10 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             os.mkdir("TREE")
             os.mkdir("PARAM")
             os.chdir(WD+"/TREE")
-            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNED+" -f "+WD+"/INPUT.fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE,shell=True)
+            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNED+" -f "+WD+"/INPUT.fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE +" -s "+ALIGNER,shell=True)
             partition.rooting_and_remove(WD+"/INPUT.fa.aligned.tree",WD+"/TERMINAL.nwk","root")
 
-    # call fractal FRACTAL
+    # call fractal FRACTAL # don't forget to change!!!!!
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): # quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.mkdir("PARAM")

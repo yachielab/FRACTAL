@@ -139,7 +139,11 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                     handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng\n")
                 elif(ML_or_MP=="MP"):
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
-                    handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")
+                    if(ALIGNED=="unaligned"): # for unaligned sequences
+                        handle.write(hmm_profiler+" "+refseq+".hmm "+refseq+"\n") # Build HMM profile
+                        handle.write(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa\n")   # Conduct HMM alignment
+                    elif(ALIGNED=="aligned"): # for aligned sequences
+                        handle.write("cat "+refseq+" "+moved+"."+str(i)+" > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n")
                     handle.write(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa"+" -t "+reftree+"\n") 
                     handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/RAxML_portableTree.epa_result.jplace epa_MP "+seed+"\n")
                 handle.write("echo \"finished\" > "+outdir+"/epang"+str(i)+".o")

@@ -9,6 +9,7 @@ WD='unspecified' # working directory
 OPTION=""
 MODEL="GTRCAT" # model of site heterogeneity in raxml
 SOFTWARE="unspecified"
+ALIGNER="unspecified"
 
 while getopts  n:m:a:f:c:w:p:d:q:s: OPT
 do
