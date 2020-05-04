@@ -126,7 +126,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
             os.chdir(outdir)
-            jplace_parse.parse_jplace(outdir+"/epa_result.jplace","epa-ng")
+            jplace_parse.parse_jplace(outdir+"/epa_result.jplace","epa-ng",seed)
         if(ML_or_MP=="MP"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
