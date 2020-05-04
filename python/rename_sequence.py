@@ -121,6 +121,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
                 subprocess.call(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa",shell=True)   # Conduct HMM alignment
+                divide_fasta_into_ref_and_query(outdir+"/ref_query.fa", refseq)
                 subprocess.call(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum),shell=True)
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
