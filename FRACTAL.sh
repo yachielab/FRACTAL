@@ -122,7 +122,7 @@ do
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
     "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
     "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
-    "u" ) FLG_u="TRUE" ; ALIGNED="unaligned"
+    "u" ) FLG_u="TRUE" ; ALIGNED="unaligned";;
     * ) usage; exit 1;;
   esac
 done
