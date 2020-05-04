@@ -1,11 +1,11 @@
 <h2>FRACTAL Installation and User Manual</h2>
 
-- [Overview of FRACTAL](###Overview of FRACTAL)
-- [Supported Environment](###Supported Environment)
-- [Software Dependency](###Software Dependency)
-- [Software installation](###Software installation)
-- [Sample Codes](###Sample Codes)
-- [FRACTAL Usage](###FRACTAL Usage)
+- [Overview of FRACTAL](### Overview of FRACTAL)
+- [Supported Environment](### Supported Environment)
+- [Software Dependency](### Software Dependency)
+- [Software installation](### Software installation)
+- [Sample Codes](### Sample Codes)
+- [FRACTAL Usage](### FRACTAL Usage)
 
 ### Overview of FRACTAL
 
