@@ -117,7 +117,7 @@ else # sequential mode
       wait
       mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
     done
-    NUMBER_OF_ITERATIONS=$(ls ${ROOT_DIR}/nodes)
+    NUMBER_OF_ITERATIONS=$(ls ${ROOT_DIR}/nodes | wc -l)
     if [ $NUMBER_OF_ITERATIONS -gt ${max_num_of_iterations} ]; then
         echo "Number of FRACTAL iterations > "${max_num_of_iterations}"!"
         echo "FRACTAL gives up the lineage reconstruction to avoid generating too much intermediate files."
