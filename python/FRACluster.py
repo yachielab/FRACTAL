@@ -17,9 +17,26 @@ import math
 import time
 
 def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, 
-    CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNMETHOD, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-    INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified"):
+    CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
+    INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="mafft", HMM_PROFILER="hmmbuild", HMM_ALIGNER="hmmprofile"):
     
+
+
+
+
+
+
+
+
+    ALIGNED="unaligned"
+
+
+
+
+
+
+
+
     start=time.time() # in order to get the time which one cycle takes
     subprocess.call("which bash",shell=True)
     os.chdir(WD) # move to Working Directory
@@ -50,7 +67,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             os.mkdir("TREE")
             os.mkdir("PARAM")
             os.chdir(WD+"/TREE")
-            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNMETHOD+" -f "+WD+"/INPUT.fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE,shell=True)
+            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNED+" -f "+WD+"/INPUT.fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE,shell=True)
             partition.rooting_and_remove(WD+"/INPUT.fa.aligned.tree",WD+"/TERMINAL.nwk","root")
 
     # call fractal FRACTAL
@@ -94,7 +111,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             #construct subsample tree as reference#
             #######################################
             os.chdir(WD+"/TREE")
-            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNMETHOD+" -f "+WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE+" -s "+ALIGNER,shell=True)
+            subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNED+" -f "+WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE+" -s "+ALIGNER,shell=True)
             os.chdir(WD+"/PARAM")
             if(seq_count>=30):
                 subprocess.call(RAXMLPAR+" -T "+str(raxml_thread_num)+" -f e -s "+WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned -t "+WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree -n PARAM_"+str(i)+" -m " +MODEL,shell=True)
@@ -106,7 +123,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
             os.chdir(WD)
             if(seq_count>10000): nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
             else: nodenum = 0
-            rename_sequence.distributed_placement(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count,ML_or_MP,RAXMLSEQ,seed=SEED,hmm_aligner=HMM_ALIGNER,hmm_profiler=HMM_PROFILER)
+            rename_sequence.distributed_placement(WD, EPANG, WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned", WD+"/PARAM/RAxML_result.PARAM_"+str(i), WD+"/PARAM/RAxML_info.PARAM_"+str(i), WD+"/INPUT.fa", WD+"/EPANG", THREAD_NUM, nodenum,CODEDIR,seq_count,ML_or_MP,RAXMLSEQ,ALIGNED,seed=SEED,hmm_aligner=HMM_ALIGNER,hmm_profiler=HMM_PROFILER)
             ####################
             #parse .jplace file#
             ####################
@@ -131,7 +148,7 @@ def FRACluster(WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NU
         ##################
         os.chdir(WD)
         DIRdict=partition.partition_fasta("INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
-        partition.qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, DIRdict,ROOTING,MODEL,OPTION,TREEMETHOD, ALIGNMETHOD,EPANG, RAXMLSEQ, RAXMLPAR,SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED,ML_or_MP)
+        partition.qsub_prep(MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, DIRdict,ROOTING,MODEL,OPTION,TREEMETHOD, ALIGNED,EPANG, RAXMLSEQ, RAXMLPAR,SOFTWARE,NODE_COUNT,INIT_SEQ_COUNT,SEED,ML_or_MP)
         ##################
         #delete files    #
         ##################

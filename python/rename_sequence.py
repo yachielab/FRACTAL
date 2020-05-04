@@ -99,17 +99,18 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, seed, hmm_aligner="", hmm_profiler=""):
+def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, seed, ALIGNED, hmm_aligner="", hmm_profiler=""):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
-            if(hmm_profiler!=""): subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
-            if(hmm_aligner!=""): subprocess.call(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query,shell=True)   # Conduct HMM alignment
-            return
             subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
             os.chdir(outdir)
             jplace_parse.parse_jplace(outdir+"/epa_result.jplace","epa-ng")
         if(ML_or_MP=="MP"): 
-            subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
+            if(ALIGNED=="unaligned"): # for unaligned sequences
+                subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
+                subprocess.call(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" > "+outdir+"/ref_query.fa",shell=True)   # Conduct HMM alignment
+            elif(ALIGNED=="aligned"): # for aligned sequences
+                subprocess.call("cat "+refseq+" "+query+" > "+outdir+"/ref_query.fa",shell=True)
             os.chdir(outdir)
             subprocess.call(RAXMLSEQ+" -n epa_result -f y -m GTRCAT -s "+outdir+"/ref_query.fa"+" -t "+reftree,shell=True)
             jplace_parse.parse_jplace(outdir+"/RAxML_portableTree.epa_result.jplace","epa_MP",seed)
