@@ -99,10 +99,31 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
+def divide_fasta_into_ref_and_query(ref_query, ref):
+    with open(ref,'r') as ihandle:
+        refseq_itr = SeqIO.parse(ihandle, "fasta")
+        refseq_name_set={}
+        for record in refseq_itr:
+            refseq_name_set.add(record.name)
+    with open(ref_query,'r') as ihandle, open(ref_query+".ref",'w') as ohandle_ref, open(ref_query+".query",'r') as ohandle_query:
+        ref_query_itr = SeqIO.parse(ihandle,"fasta")
+        ref_query_name_set={}
+        for record in ref_query_itr:
+            if(record.name in refseq_name_set):
+                SeqIO.write(record, ohandle_ref, "fasta")
+            else:
+                SeqIO.write(record, ohandle_query, "fasta")
+
+
 def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count, ML_or_MP, RAXMLSEQ, ALIGNED, seed, hmm_aligner="", hmm_profiler=""):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
-            subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
+            if(ALIGNED=="unaligned"): # for unaligned sequences
+                subprocess.call(hmm_profiler+" "+refseq+".hmm "+refseq,shell=True) # Build HMM profile
+                subprocess.call(hmm_aligner+" --outformat afa --mapali "+refseq+" "+refseq+".hmm "+query+" | sed 's/\./N/g'> "+outdir+"/ref_query.fa",shell=True)   # Conduct HMM alignment
+                subprocess.call(EPANG+" --redo -s "+outdir+"/ref_query.fa.ref"+" -t "+reftree+" --model "+model+" -q "+outdir+"/ref_query.fa.query"+" -w "+outdir+" -T "+str(threadnum),shell=True)
+            elif(ALIGNED=="aligned"): # for aligned sequences
+                subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
             os.chdir(outdir)
             jplace_parse.parse_jplace(outdir+"/epa_result.jplace","epa-ng")
         if(ML_or_MP=="MP"): 
