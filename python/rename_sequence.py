@@ -151,7 +151,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model, query, outdir, thre
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
-                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng\n")
+                    handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace epa-ng "+seed+"\n")
                 elif(ML_or_MP=="MP"):
                     handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
                     if(ALIGNED=="unaligned"): # for unaligned sequences
