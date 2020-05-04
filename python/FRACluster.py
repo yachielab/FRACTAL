@@ -155,7 +155,7 @@ if __name__ == "__main__":
     command = "python3 "
     for arg in argvs:
         if(arg!=""):
-            command = command + arg + " "
+            command = command + "\""+arg + "\" "
         else:
             command = command + "\"\" "
     if (len(argvs)==23):
