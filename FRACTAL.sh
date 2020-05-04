@@ -29,7 +29,7 @@ ALIGNED="aligned"
 LIMITATION=10000
 
 function version {
-  echo "######## FRACTAL v1.6.1 ########"
+  echo "######## FRACTAL v2.0.0 ########"
 }
 
 function usage {
