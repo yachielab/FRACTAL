@@ -74,7 +74,7 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
                     if seqname != "root":
                         partition[seqname]=cedge
                         if(cedge in leaf_to_Nseq.keys()): leaf_to_Nseq[cedge]+=1
-                        else: leaf_to_Nseq[cedge]=0
+                        else: leaf_to_Nseq[cedge]=1
             cstate.clades=[]
     tree=Phylo.BaseTree.Tree(ref_tree.clade.clades[0])
     Phylo.write(tree, 'tmp.nwk', 'newick')
