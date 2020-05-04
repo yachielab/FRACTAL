@@ -190,6 +190,8 @@ Lineage estimation with a software tool of choice and user defined parameters.
 ### FRACTAL Usage
 
 ```
+$(basename ${0}) is a tool for lineage estimation from massive number of DNA sequences.
+
 Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
@@ -209,6 +211,8 @@ Options:
       Output directory path. Default: current working directory
     -f <String>
       Output file name. Default: FRACTALout
+    -u
+      Reconstuct a lineage from unaligned sequences
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
@@ -226,7 +230,7 @@ Options:
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
-      Threshold number of input sequences to switch to direct lineage tree reconstruction
+      Threshold number of input sequences to switch to direct lineage tree reconstruction 
         in each iteration cycle. Default: 500
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
@@ -240,11 +244,13 @@ Options:
       Seed number for generation of random values. Default: 0
     -O "<String>"
       Options for qsub. Default: ""
-      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G"
+      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
+    -l "<Integer>"
+      Maximum number of FRACTAL iterations. Default: 10000
 ```
 
 
