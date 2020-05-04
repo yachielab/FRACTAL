@@ -1,25 +1,31 @@
 ### Update Log
 
-<h5> 5/3/2020 Version 1.5.0 </h5>
+<h4> 5/4/2020 Version 1.6.0 </h4>
 
-1. option : -p option was released
+1. Option : -u option was released to treat unaligned sequences
+2. Option : -l option was released to set the upper limit of FRACTAL iteration to avoid generating too much intermediate files
+
+<h4> 5/3/2020 Version 1.5.0 </h4>
+
+1. Option : -p option was released to select a method for phylogenetic placement
+2. Option : previous -p option was replaced with -a option
 
 <h4> 4/13/2020 Version 1.4.0 </h4>
 
-1. option : -s option was released to use a lineage estimation software of choice
+1. Option : -s option was released to use a lineage estimation software of choice
 
 <h4> 3/8/2020 Version 1.3.0 </h4>
 
-1. option : names of some options were changed
+1. Option : names of some options were changed
 
 <h4> 10/15/2019 Version 1.2.0 </h4>
 
-1. option : Setting job name was enabled
+1. Option : Setting job name was enabled
 
 <h4> 8/3/2019 Version 1.1.0 </h4>
 
-1. option : options were changed
+1. Option : options were changed
 
 <h4> 8/1/2019 Version 1.0.0 </h4>
 
-1. first release of FRACTAL
+1. First release of FRACTAL

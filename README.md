@@ -1,13 +1,17 @@
 <h2>FRACTAL Installation and User Manual</h2>
 
+- [Overview of FRACTAL](#Overview of FRACTAL)
+- [Supported Environment](#Supported Environment)
+- [Software Dependency](#Software Dependency)
+- [Software installation](#Software installation)
+- [Sample Codes](#Sample Codes)
+- [FRACTAL Usage](#FRACTAL Usage)
 
 ### Overview of FRACTAL
-
 
 **FRACTAL** (framework for distributed computing to trace large accurate lineages) is a new deep distributed computing framework that is designated to reconstruct extremely large lineages of nucleotide sequences using a software tool of choice. In brief, FRACTAL first subsamples a small number of sequences to reconstruct only an upper hierarchy of a target lineage and assigns the remaining sequences to its downstream clades, for each of which the same procedure is recursively iterated. Since the iteration procedure can be performed in parallel in a distributed computing framework, FRACTAL allows highly scalable reconstruction of an extremely large lineage tree.
 
 <img src=images/fractal_concept.jpg width=10000x3000>
-
 
 **Figure 1. Schematic diagram of FRACTAL.** From an input sequence pool, a given number of sequences are first randomly subsampled (Step 1) and their sample lineage tree is reconstructed with a rooting or provisional rooting sequence by lineage estimation software of choice (Step 2). Note that while an outgroup is preferred as the rooting sequence if available, any sequence can be used for unrooted tree estimation. The remaining input sequences are then mapped to the branches of the sample tree by phylogenetic placement (Step 3). If all of the input sequences are mapped on downstream branches of the sample tree so as to separate them into multiple distinct clades, their upstream lineage is considered to be true and fixed (Step 4), and the sequence group in each downstream clade is recursively subjected to the first process in a distributed computing node (Step 5). If any sequence(s) mapped on the root branch does not allow the grouping of input sequences into clades, the phylogenetic placement is repeated against a new sample tree generated for sequences randomly chosen from a union of the previous subsampled sequences and the “problematic” sequences (Step 6). This process generates a new sample tree in a biased manner such that it harbors the previous problematic sequences in its leaves and decreases the likelihood of acquiring problematic sequences in the following phylogenetic placement step. This procedure is repeated until the problem is solved, but only up to a given threshold number of times as long as the number of problematic sequences continues to be reduced in every retrial step. When the retrial cycle stops without solving the problem, the remaining problematic sequences are discarded, and the other sequence sets are separated into distinct clades and subjected to the first process. Accordingly, FRACTAL hierarchically generates expanding parallel computing trajectories, where each distributed computing job recursively generates a large set of successive jobs. When the number of input sequences is reduced to a certain threshold (hereafter called the naïve computing threshold) while the FRACTAL iteration cycles, the remaining marginal lineage is directly reconstructed by using the software of choice and the operation terminates for this computing trajectory (Step 7). For unrooted lineage estimation, the provisional rooting sequence can be removed after completion of the whole computation. Accordingly, FRACTAL enables efficient reconstruction of a large lineage by distributed computing while utilizing limited computing power and memory per node. FRACTAL is also effective even for a single computing node because its memory consumption level can be kept down for large lineage reconstructions.
 
@@ -18,13 +22,13 @@
 
 ### Software Dependency
 
-<h4>Required</h4>
-
 1. Python3 (version: 3.7.0 or later) with Biopython (version: 1.76) module *required*
 2. RAxML (raxmlHPC-PTHREADS-SSE3 and raxmlHPC-SSE3) (version: 8.2.12) *required*
 3. EPA-ng (version: 0.3.5) *required*
 4. RapidNJ (version: 2.3.2) *optional; if you want to use NJ for lineage reconstruction*
 5. FastTreeMP (version: 2.1.10) *optional; if you want to use ML for lineage reconstruction*
+6. MAFFT (version: 7.464) *optional; if you want to reconstruct a lineage from unaligned sequences*
+7. HMMER (version: 3.3) *optional; if you want to reconstruct a lineage from unaligned sequences*
 
 ### Software installation
 
@@ -117,6 +121,22 @@ Each installation step will take less than ~1 min
    ```
 
 2. Please set `$PATH` to `FastTreeMP` executable.
+
+#### Installation of [MAFFT](https://mafft.cbrc.jp/alignment/software/) (optional)
+
+1. Install MAFFT
+
+   ```shell
+   conda install -c bioconda mafft
+   ```
+
+#### Installation of [HMMER](http://hmmer.org/) (optional)
+
+1. Install HMMER
+
+   ```shell
+   conda install -c bioconda hmmer
+   ```
 
 ### Sample Codes
 
