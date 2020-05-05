@@ -201,7 +201,7 @@ def qsub_prep(COMMAND, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT):
             qf.write("PATH={}\n".format(PATH))
             qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
             command_list=COMMAND.split()[0:2]+[DIRdict[key][0]]+COMMAND.split()[3:]
-            command_list[20]=INITIAL_SEQ_COUNT
+            command_list[21]=INITIAL_SEQ_COUNT
             command=""
             for arg in command_list: command += str(arg) + " "
             qf.write(command)
