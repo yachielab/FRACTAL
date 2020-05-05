@@ -187,7 +187,7 @@ def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,ancseq,subt
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(COMMAND, QSUBDIR, DIRdict):
+def qsub_prep(COMMAND, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT):
     for key in DIRdict.keys():
         ls=DIRdict[key][0].split("/")
         num=ls[len(ls)-1]
@@ -201,6 +201,7 @@ def qsub_prep(COMMAND, QSUBDIR, DIRdict):
             qf.write("PATH={}\n".format(PATH))
             qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
             command_list=COMMAND.split()[0:2]+[DIRdict[key][0]]+COMMAND.split()[3:]
+            command_list[20]=INITIAL_SEQ_COUNT
             command=""
             for arg in command_list: command += arg + " "
             qf.write(command)

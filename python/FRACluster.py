@@ -17,8 +17,8 @@ import placement
 import math
 import time
 
-def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, 
-    CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
+def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
+    ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
     INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified"):
     
     start=time.time() # in order to get the time which one cycle takes
@@ -42,8 +42,8 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
     if(TREEMETHOD=="raxmlML" or TREEMETHOD=="raxmlMP"): tree_thread_num=raxml_thread_num
 
     i=1
+    
     # call direct tree reconstruction
-
     print("FOR DEBUG",seq_count,INIT_SEQ_COUNT,NODE_COUNT)
 
 
@@ -138,9 +138,9 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
         ##################
         os.chdir(WD)
         print("<Sequence count> Input:"+str(seq_count)+" Largest subclade:"+str(Nseq_in_largest_subclade)+" Problematic:"+str(para))
-        if(i==-1): "Error: FRACluster.py cannot divide sequences into multiple subclades"
+        if(i==-1): "Error: FRACluster.py cannot divide sequences into multiple subclades"; sys.exit()
         DIRdict=partition.partition_fasta(WD+"/INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
-        partition.qsub_prep(COMMAND, QSUBDIR, DIRdict)
+        partition.qsub_prep(COMMAND, QSUBDIR, DIRdict, INIT_SEQ_COUNT)
         ##################
         #delete files    #
         ##################
