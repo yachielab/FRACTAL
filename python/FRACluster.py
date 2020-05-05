@@ -19,7 +19,7 @@ import time
 
 def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, 
     CODEDIR, ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-    INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="mafft", HMM_PROFILER="hmmbuild", HMM_ALIGNER="hmmalign"):
+    INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified"):
     
     start=time.time() # in order to get the time which one cycle takes
     subprocess.call("which bash",shell=True)
@@ -59,10 +59,14 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
         os.mkdir("TREE")
         os.mkdir("PARAM")
         os.chdir(WD+"/TREE")
-        if (TREEMETHOD!="unspecified"):
-            subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -m "+TREEMETHOD+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
+        FRACTAL_COMMAND = "bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -b "+MODEL+" -c "+str(THREAD_NUM) + " -p " + ML_or_MP + " -a " + OPTION + " -r " + SEED
+        if (TREEMETHOD!="unspecified"): 
+            FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
         else:
-            subprocess.call("bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -s "+SOFTWARE+" -b "+MODEL+" -c "+str(THREAD_NUM)+" -e",shell=True)
+            FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
+        if (ALIGNED=='unaligned'):
+            FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
+        subprocess.call(FRACTAL_COMMAND,shell=True)
         shutil.move(WD+"/TREE/FRACTALout.nwk",WD+"/TERMINAL.nwk")
 
     # call FRACTAL cycle
