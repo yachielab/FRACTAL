@@ -18,8 +18,6 @@ def decompose_fasta(in_file, x,seq_count):
         m=0 # inclement for each sequence, but become 0 after m reaches k
         i=0 # 
         while(l<n):
-            sys.stdout.write("\rsequence: %d" % l)
-            sys.stdout.flush()
             for record in allseq_itr:
                 if(m<k):
                     m+=1
