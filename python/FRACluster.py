@@ -117,6 +117,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             ##################################################
             if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
                 i-=1 # previous subsample achieved minimum number of paraphyletic groups
+                para=prev_para
                 break
             if(para!=0):
                 shutil.copyfile("SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned","ITERATION.fa")
@@ -129,7 +130,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
         #partition .fasta#
         ##################
         os.chdir(WD)
-        print("sequence count",seq_count,Nseq_in_largest_subclade)
+        print("<Sequence count> Input:"+str(seq_count)+" Largest subclade:"+str(Nseq_in_largest_subclade)+" Problematic:"+str(para))
         if(i==-1): "Error: FRACluster.py cannot divide sequences into multiple subclades"
         DIRdict=partition.partition_fasta(WD+"/INPUT.fa",NUMFILE,NODESDIR,WD,WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out","PARTITION.info","UPSTREAM.nwk",WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ", WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ", WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",ROOTING)
         partition.qsub_prep(COMMAND, QSUBDIR, DIRdict)
