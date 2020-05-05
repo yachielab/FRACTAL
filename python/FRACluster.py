@@ -43,13 +43,16 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
 
     i=1
     # call direct tree reconstruction
+
+    print("FOR DEBUG",seq_count,INIT_SEQ_COUNT,NODE_COUNT)
+
+
     if(seq_count<=THRESHOLD):
         if(seq_count<4):
             partition.tiny_tree("INPUT.fa","TERMINAL.nwk")
             print("seq_count < 4!")
         else:
             os.mkdir("TREE")
-            os.mkdir("PARAM")
             os.chdir(WD+"/TREE")
             subprocess.call("bash "+CODEDIR+"/shell/TREE.sh -n "+str(tree_thread_num)+" -m "+TREEMETHOD+" -a "+ALIGNED+" -f "+WD+"/INPUT.fa -c "+CODEDIR+" -w "+WD+"/TREE -p \""+str(OPTION)+"\" -d "+MODEL+" -q "+SOFTWARE +" -s "+ALIGNER,shell=True)
             partition.rooting_and_remove(WD+"/INPUT.fa.aligned.tree",WD+"/TERMINAL.nwk","root")
@@ -57,7 +60,6 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
     # call fractal FRACTAL # don't forget to change!!!!!
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): # quit distribution after the available computer node saturated 
         os.mkdir("TREE")
-        os.mkdir("PARAM")
         os.chdir(WD+"/TREE")
         FRACTAL_COMMAND = "bash "+CODEDIR+"/FRACTAL.sh "+"-x "+str(MAX_ITERATION)+" -k "+str(SUBSAMPLE_SIZE)+" -i "+WD+"/INPUT.fa" +" -t "+str(THRESHOLD)+" -b "+MODEL+" -c "+str(THREAD_NUM) + " -p " + ML_or_MP + " -a " + OPTION + " -r " + SEED
         if (TREEMETHOD!="unspecified"): 
