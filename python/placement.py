@@ -1,6 +1,7 @@
 from Bio import SeqIO
 import jplace_parse
 import divide_ref_and_query
+import subprocess
 
 # decompose fasta file (in_file) into x fasta files.
 def decompose_fasta(in_file, x,seq_count):
