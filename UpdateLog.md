@@ -1,5 +1,9 @@
 ### Update Log
 
+<h4> 5/5/2020 Version 2.0.0 </h4>
+
+1. Debug for avoiding an possible inifinite loop
+
 <h4> 5/4/2020 Version 1.6.0 </h4>
 
 1. Option : -u option was released to treat unaligned sequences
