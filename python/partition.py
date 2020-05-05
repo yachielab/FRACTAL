@@ -203,7 +203,7 @@ def qsub_prep(COMMAND, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT):
             command_list=COMMAND.split()[0:2]+[DIRdict[key][0]]+COMMAND.split()[3:]
             command_list[20]=INITIAL_SEQ_COUNT
             command=""
-            for arg in command_list: command += arg + " "
+            for arg in command_list: command += str(arg) + " "
             qf.write(command)
 
 def tiny_tree(INPUTfa,OUTPUTnwk):
