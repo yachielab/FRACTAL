@@ -53,10 +53,10 @@ Each installation step will take less than ~1 min
 
 2. Add the absolute path of `FRACTAL` directory to `$PATH`
 
-3. Make `FRACTAL.sh` executable
+3. Make `FRACTAL` executable
 
    ```shell
-   chmod u+x FRACTAL.sh
+   chmod u+x FRACTAL
    ```
 
 #### Installation of [Anaconda](https://www.anaconda.com/distribution/) (required)

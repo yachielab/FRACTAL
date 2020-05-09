@@ -1,7 +1,7 @@
 #!/bin/bash
 #$ -S /bin/bash
 
-CMDNAME="FRACTAL.sh"
+CMDNAME="FRACTAL"
 #setting defalt parameter
 
 MAX_ITERATION=5             #Integer
