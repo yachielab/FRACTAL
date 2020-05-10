@@ -228,6 +228,8 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
 
             command="python3 "
             for arg in ARGVS: 
+                if str(arg)=="":
+                    arg="\"\""
                 command += str(arg) + " "
             qf.write(command)
 
