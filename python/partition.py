@@ -189,23 +189,46 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(COMMAND, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT):
+def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned):
     for key in DIRdict.keys():
         ls=DIRdict[key][0].split("/")
         num=ls[len(ls)-1]
-        PATH = (subprocess.Popen('echo $PATH', stdout=subprocess.PIPE,shell=True).communicate()[0]).decode('utf-8')
+        
+        PATH = (
+            subprocess.Popen(
+                'echo $PATH',
+                stdout=subprocess.PIPE,
+                shell=True)
+                .communicate()[0]
+                ).decode('utf-8')
+
         PATH = PATH.split('\n')[0]
-        LD_LIBRARY_PATH = (subprocess.Popen('echo $LD_LIBRARY_PATH', stdout=subprocess.PIPE,shell=True).communicate()[0]).decode('utf-8')
+        
+        LD_LIBRARY_PATH = (
+            subprocess.Popen(
+                'echo $LD_LIBRARY_PATH',
+                stdout=subprocess.PIPE,
+                shell=True
+                ).communicate()[0]
+                ).decode('utf-8')
+        
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
+        
         with open(QSUBDIR+"/qsub_"+num+".sh", 'w') as qf:
             qf.write("#!/bin/bash\n")
             qf.write("#$ -S /bin/bash\n")
             qf.write("PATH={}\n".format(PATH))
             qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-            command_list=COMMAND.split()[0:2]+[DIRdict[key][0]]+COMMAND.split()[3:]
-            command_list[21]=INITIAL_SEQ_COUNT
-            command=""
-            for arg in command_list: command += str(arg) + " "
+            
+            # change arguments for the next FRACTAL iteration
+            ARGVS[1]  = DIRdict[key][0]
+            ARGVS[20] = INITIAL_SEQ_COUNT
+            ARGVS[26] = seq_count_when_aligned
+
+
+            command="python3 "
+            for arg in ARGVS: 
+                command += str(arg) + " "
             qf.write(command)
 
 def tiny_tree(INPUTfa,OUTPUTnwk):

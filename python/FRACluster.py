@@ -17,10 +17,17 @@ import placement
 import math
 import time
 
-def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
+def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-               INIT_SEQ_COUNT,SEED,ML_or_MP, ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified"):
+               INIT_SEQ_COUNT,SEED,ML_or_MP, 
+               ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
+               seq_count_when_aligned=None
+               ):
     
+    ######## parameter ########
+    ALIGNMENT_TIMING_PARAMETER = 0.5
+    ###########################
+
     start = time.time() # in order to get the time which one cycle takes
     
     os.chdir(WD) # move to Working Directory
@@ -38,6 +45,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
     seq_count                 = seq_array[0]
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
+        seq_count_when_aligned= None
     seq_length                = seq_array[1]
     raxml_thread_num          = min(max(seq_length//500,2),THREAD_NUM) # use 1 thread per 500 bp in RAxML
     depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
@@ -46,6 +54,18 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
        TREEMETHOD=="raxmlMP"    ): 
         tree_thread_num       = raxml_thread_num
 
+    # check if aligned
+    if (ALIGNED=="unaligned"):
+        if(os.path.isfile(WD+"/INPUT.fa.aligned")):
+            if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
+                shutil.remove(WD+"/INPUT.fa.aligned")
+                seq_count_when_aligned = seq_count
+            else:
+                INPUT_FA = WD+"/INPUT.fa.aligned"
+                ALIGNED  = "aligned"
+        else:
+            INPUT_FA               = WD+"/INPUT.fa"
+            seq_count_when_aligned = seq_count
     i=1
     
     # call direct tree reconstruction
@@ -113,6 +133,9 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             #################
             #random sampling#
             #################
+            if(os.path.isfile(WD+"/INPUT.fa.aligned")):
+                INPUT_FA = WD+"/INPUT.fa.aligned"
+
             if(os.path.isfile("ITERATION.fa")):
                 rename_sequence.random_sampling(
                     "ITERATION.fa"             ,
@@ -125,11 +148,6 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
             else:
-                if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                    INPUT_FA = WD+"/INPUT.fa.aligned"
-                    ALIGNED = "aligned"
-                else:
-                    INPUT_FA = WD+"/INPUT.fa"
                 rename_sequence.random_sampling(
                     INPUT_FA                   ,
                     "SUBSAMPLE/SUBSAMPLE.fa"   ,
@@ -137,7 +155,6 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                     seed=SEED                  ,
                     n = seq_count
                 )
-            
             
             #################
             #rename sequence#
@@ -277,7 +294,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                     ALIGNED_ALL                             ,
                     SUBSAMPLE_SIZE                          ,
                     para
-                )
+                    )
                 i+=1
                 prev_para=para
             else:
@@ -311,10 +328,11 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             )
         
         partition.qsub_prep(
-            COMMAND,
+            ARGVS,
             QSUBDIR, 
             DIRdict, 
-            INIT_SEQ_COUNT
+            INIT_SEQ_COUNT,
+            seq_count_when_aligned
         )
         ##################
         #delete files    #
@@ -351,7 +369,7 @@ if __name__ == "__main__":
             command = command + "\"\" "
     if (len(argvs)==23):
         FRACluster(
-            command,
+            argvs,
             argvs[1],
             int(argvs[2]),
             int(argvs[3]),
@@ -374,7 +392,7 @@ if __name__ == "__main__":
             int(argvs[20]),
             argvs[21],
             argvs[22])
-    elif ((len(argvs)==23+3)):
+    elif ((len(argvs)==23+4)):
         FRACluster(
             command,
             argvs[1],
@@ -401,7 +419,8 @@ if __name__ == "__main__":
             argvs[22], 
             ALIGNER=argvs[23],
             HMM_PROFILER=argvs[24],
-            HMM_ALIGNER=argvs[25]
+            HMM_ALIGNER=argvs[25],
+            seq_count_when_aligned=int(argvs[26])
         )
     else:
         print("Error: Number of arguments: "+str(len(argvs))+" for FRACluster.py is wrong!")
