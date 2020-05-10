@@ -120,7 +120,7 @@ def get_ancseq(ancseq,ancnum):
                 return ls[1]
     print("no sequence named "+ancname)
 
-def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,ancseq,subtreefile,subsamplefa,ROOTING):
+def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING):
     # open .jpart file
     with open(jpart,"r") as jf:
         jp = jf.read()
@@ -160,8 +160,8 @@ def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,ancseq,subt
         i=i+1
     ost=[]
     for i in range(num_mono):
-        ost.append(open(OUT_DIR+"/d"+str(num+i)+"/INPUT.fa",'w'))
-    para=open(wd+"/paraphyletic.fa",'w')
+        ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
+    para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
     with open(in_fasta,'r') as in_handle:
         record = SeqIO.parse(in_handle, "fasta")
         i=0

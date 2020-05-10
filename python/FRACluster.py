@@ -164,7 +164,9 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             )
             
             os.chdir(WD+"/PARAM")
-            if(seq_count>=30):
+            
+            #if(seq_count>=30):
+            if(raxml_thread_num>1):
                 subprocess.call(
                     RAXMLPAR                                                        +
                     " -T "   + str(raxml_thread_num)                                +
@@ -272,7 +274,6 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                     SUBSAMPLE_SIZE                          ,
                     para
                 )
-
                 i+=1
                 prev_para=para
             else:
@@ -291,19 +292,20 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
             sys.exit()
         
-        DIRdict = partition.partition_fasta(
-            WD+"/INPUT.fa",
-            NUMFILE,
-            NODESDIR,
-            WD,
-            WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
-            "PARTITION.info",
-            "UPSTREAM.nwk",
-            WD+"/ANCSEQ/RAxML_marginalAncestralStates.ANCSEQ",
-            WD+"/ANCSEQ/RAxML_nodeLabelledRootedTree.ANCSEQ",
-            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
-            ROOTING
-        )
+        FASTAS=[WD+"/INPUT.fa"]
+        if os.path.isfile(WD+"/INPUT.fa.aligned"): FASTAS.append(WD+"/INPUT.fa.aligned")
+        for FASTA_FILE in FASTAS:
+            DIRdict = partition.partition_fasta(
+                FASTA_FILE,
+                NUMFILE,
+                NODESDIR,
+                WD,
+                WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
+                "PARTITION.info",
+                "UPSTREAM.nwk",
+                WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
+                ROOTING
+                )
         
         partition.qsub_prep(
             COMMAND,
@@ -315,6 +317,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
         #delete files    #
         ##################
         os.remove("INPUT.fa")
+        os.remove("INPUT.aligned.fa")
         os.remove("tmp.nwk")
         '''
         shutil.rmtree("ANCSEQ")
