@@ -259,8 +259,8 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 )
                 
                 # select all sequence file
-                if os.path.isfile("EPANG/ref_query.fa.query"):
-                    ALIGNED_ALL = "EPANG/ref_query.fa.query"
+                if os.path.isfile(WD+"/INPUT.fa.aligned"):
+                    ALIGNED_ALL = WD+"/INPUT.fa.aligned"
                     ALIGNED     = "aligned"
                 else:
                     ALIGNED_ALL = "INPUT.fa" 
