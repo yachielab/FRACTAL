@@ -51,7 +51,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                     "--outformat afa"     +
                     "--mapali "           +
                     refseq+" "            +
-                    "--trim "             + # for trimming insersions
+                    #"--trim "             + # for trimming insersions
                     refseq+".hmm "        +
                     query +" "            +
                     "| sed 's/\./N/g'> "  +
