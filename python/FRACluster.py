@@ -110,7 +110,6 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
 
         while i<MAX_ITERATION:
             
-            
             #################
             #random sampling#
             #################
@@ -292,20 +291,19 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
             sys.exit()
         
-        FASTAS=[WD+"/INPUT.fa"]
-        if os.path.isfile(WD+"/INPUT.fa.aligned"): FASTAS.append(WD+"/INPUT.fa.aligned")
-        for FASTA_FILE in FASTAS:
-            DIRdict = partition.partition_fasta(
-                FASTA_FILE,
-                NUMFILE,
-                NODESDIR,
-                WD,
-                WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
-                "PARTITION.info",
-                "UPSTREAM.nwk",
-                WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
-                ROOTING
-                )
+        FASTA_LIST=[WD+"/INPUT.fa"]
+        if os.path.isfile(WD+"/INPUT.fa.aligned"): FASTA_LIST.append(WD+"/INPUT.fa.aligned")
+        DIRdict = partition.partition_fasta(
+            FASTA_LIST,
+            NUMFILE,
+            NODESDIR,
+            WD,
+            WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
+            "PARTITION.info",
+            "UPSTREAM.nwk",
+            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
+            ROOTING
+            )
         
         partition.qsub_prep(
             COMMAND,

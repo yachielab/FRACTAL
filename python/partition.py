@@ -120,7 +120,7 @@ def get_ancseq(ancseq,ancnum):
                 return ls[1]
     print("no sequence named "+ancname)
 
-def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING):
+def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING):
     # open .jpart file
     with open(jpart,"r") as jf:
         jp = jf.read()
@@ -159,26 +159,28 @@ def partition_fasta(in_fasta,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
     ost=[]
-    for i in range(num_mono):
-        ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
-    para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
-    with open(in_fasta,'r') as in_handle:
-        record = SeqIO.parse(in_handle, "fasta")
-        i=0
-        for s in record:
-            if(s.id=="root"):
-                for st in ost: #ROOTING=="Origin"
-                    SeqIO.write(s, st, "fasta")
-            elif(js["partition"][s.id]=="paraphyletic"):
-                SeqIO.write(s, para, "fasta")
-            else:
-                l = NUMdict[str(js["partition"][s.id])]
-                DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
-                SeqIO.write(s, ost[l], "fasta")
-            i=i+1
-    for st in ost:
-        st.close()
-    para.close()
+
+    for in_fasta in in_fasta_list:
+        for i in range(num_mono):
+            ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
+        para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
+        with open(in_fasta,'r') as in_handle:
+            record = SeqIO.parse(in_handle, "fasta")
+            i=0
+            for s in record:
+                if(s.id=="root"):
+                    for st in ost: #ROOTING=="Origin"
+                        SeqIO.write(s, st, "fasta")
+                elif(js["partition"][s.id]=="paraphyletic"):
+                    SeqIO.write(s, para, "fasta")
+                else:
+                    l = NUMdict[str(js["partition"][s.id])]
+                    DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
+                    SeqIO.write(s, ost[l], "fasta")
+                i=i+1
+        for st in ost:
+            st.close()
+        para.close()
     with open(info, 'w') as out:
         out.write(json.dumps(DIRdict))
     for leaf in tree.get_terminals():
