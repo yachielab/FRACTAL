@@ -147,7 +147,7 @@ The FRACTAL package contains an example input file in the `examples` directory s
 Lineage estimation of the sequences in the test input file `test.fa` with the default parameter set without distributed computing. The computation will take several minutes.
 
 ```shell
-FRACTAL.sh -i test.fa
+FRACTAL -i test.fa
 ```
 
 
@@ -164,7 +164,7 @@ Output:
 Lineage estimation by NJ using RapidNJ with distributed computing where the maximum number of computing nodes is set to 100. The output file name is set to `FRACTAL_NJ`. The computation will take several minutes.
 
 ```shell
-FRACTAL.sh -i test.fa -f FRACTAL_NJ -m rapidnjNJ -d 100
+FRACTAL -i test.fa -f FRACTAL_NJ -m rapidnjNJ -d 100
 ```
 
 Input:
@@ -180,7 +180,7 @@ Output:
 Lineage estimation by ML using FastTreeMP with its option `-fastest -quiet` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
 
 ```shell
-FRACTAL.sh -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest -quiet" -c 16
+FRACTAL -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest -quiet" -c 16
 ```
 
 Input:    
@@ -204,7 +204,7 @@ Lineage estimation with a software tool of choice and user defined parameters.
 4. Execute FRACTAL as follows. The example shell script file [`ml_raxml.sh`](https://github.com/yachielab/FRACTAL/blob/hotfix/example/script/ml_raxml.sh) below is prepared and provided in the installation package for ML method with GTR-Gamma model by RAxML. The maximum number of computing nodes is set to 100 in the following command. The computation will take 20~30 min.
 
    ```shell
-   FRACTAL.sh -i test.fa -f FRACTAL_raxml -s ml_raxml.sh -d 100
+   FRACTAL -i test.fa -f FRACTAL_raxml -s ml_raxml.sh -d 100
    ```
 
 ### FRACTAL Usage
