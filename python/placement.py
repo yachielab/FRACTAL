@@ -48,10 +48,10 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                 # One-by-one HMM alignment
                 subprocess.call(
                     hmm_aligner+" "       +
-                    "--outformat afa"     +
+                    "--outformat afa "    +
                     "--mapali "           +
                     refseq+" "            +
-                    #"--trim "             + # for trimming insersions
+                    "--trim "             + # for trimming insersions
                     refseq+".hmm "        +
                     query +" "            +
                     "| sed 's/\./N/g'> "  +
