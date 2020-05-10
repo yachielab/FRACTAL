@@ -61,7 +61,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                 print(WD,seq_count,seq_count_when_aligned,"alignment needed!!")
 
-                shutil.remove(WD+"/INPUT.fa.aligned")
+                os.remove(WD+"/INPUT.fa.aligned")
+                INPUT_FA               = WD+"/INPUT.fa"
                 seq_count_when_aligned = seq_count
                 
             else:
@@ -79,7 +80,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     if(seq_count<=THRESHOLD):
         if(seq_count<4):
-            partition.tiny_tree("INPUT.fa","TERMINAL.nwk")
+            partition.tiny_tree(INPUT_FA,"TERMINAL.nwk")
             print("seq_count < 4!")
         else:
             os.mkdir(    "TREE")
@@ -88,7 +89,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -n "  + str(tree_thread_num)       +
                             " -m "  + TREEMETHOD                 +
                             " -a "  + ALIGNED                    +
-                            " -f "  + WD+"/INPUT.fa"             +
+                            " -f "  + INPUT_FA                   +
                             " -c "  + CODEDIR                    +
                             " -w "  + WD+"/TREE"                 +
                             " -p \""+ str(OPTION)+"\""           +
@@ -106,7 +107,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         FRACTAL_COMMAND = "bash "+ CODEDIR + "/FRACTAL.sh"  + \
                           " -x " + str(MAX_ITERATION)       + \
                           " -k " + str(SUBSAMPLE_SIZE)      + \
-                          " -i " + WD + "/INPUT.fa"         + \
+                          " -i " + INPUT_FA                 + \
                           " -t " + str(THRESHOLD)           + \
                           " -b " + MODEL                    + \
                           " -c " + str(THREAD_NUM)          + \
