@@ -58,12 +58,19 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     if (ALIGNED=="unaligned"):
         if(os.path.isfile(WD+"/INPUT.fa.aligned")):
             if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
+
+                print(WD,seq_count,seq_count_when_aligned,"alignment needed!!")
+
                 shutil.remove(WD+"/INPUT.fa.aligned")
                 seq_count_when_aligned = seq_count
+                
             else:
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED  = "aligned"
         else:
+
+            print(WD,seq_count,seq_count_when_aligned,"alignment needed!!")
+
             INPUT_FA               = WD+"/INPUT.fa"
             seq_count_when_aligned = seq_count
     i=1
