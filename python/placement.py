@@ -50,7 +50,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                     hmm_aligner+" "       +
                     "--outformat afa"     +
                     "--mapali "           +
-                    "-m "                 + # for trimming insersions
+                    "--trim "                 + # for trimming insersions
                     refseq+" "            +
                     refseq+".hmm "        +
                     query +" "            +
