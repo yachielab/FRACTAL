@@ -50,7 +50,7 @@ if [ $ALIGNED = 'aligned' ]; then
     echo "Already aligned!"
     mv ${FILE} ${FILE}.aligned
 elif [ $ALIGNED = "unaligned" ]; then
-    ${ALIGNER} ${FILE} --quiet > ${FILE}.aligned # set $PATH!!!!!!!!!!
+    ${ALIGNER} --quiet ${FILE} > ${FILE}.aligned # set $PATH!!!!!!!!!!
 else
     echo "exception: Alignment method name seems wrong..."
 fi
