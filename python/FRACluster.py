@@ -125,8 +125,13 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
             else:
+                if(os.path.isfile(WD+"/INPUT.fa.aligned")):
+                    INPUT_FA = WD+"/INPUT.fa.aligned"
+                    ALIGNED = "aligned"
+                else:
+                    INPUT_FA = WD+"/INPUT.fa"
                 rename_sequence.random_sampling(
-                    "INPUT.fa"                 ,
+                    INPUT_FA                   ,
                     "SUBSAMPLE/SUBSAMPLE.fa"   ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED                  ,
@@ -194,7 +199,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             os.chdir(WD)
             nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
-            # chose Sequence file to place
+            # select sequence file to place
             if(os.path.isfile(WD+"/INPUT.fa.aligned")):
                 QUERY_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED_FOR_PLACEMENT = "aligned"

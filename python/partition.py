@@ -158,9 +158,9 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         DIRdict[leaf.name] = [OUT_DIR+"/d"+str(num+i),0]
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
-    ost=[]
 
     for in_fasta in in_fasta_list:
+        ost=[]
         for i in range(num_mono):
             ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
         para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
