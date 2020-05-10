@@ -192,13 +192,23 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             ########################################
             os.chdir(WD)
             nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
+
+            # chose Sequence file to place
+            if(os.exists(WD+"/INPUT.fa.aligned")):
+                INPUT_FA = WD+"/INPUT.fa.aligned"
+                ALIGNED_FOR_PLACEMENT = "aligned"
+            else:
+                INPUT_FA = WD+"/INPUT.fa"
+                ALIGNED_FOR_PLACEMENT = ALIGNED
+
+            # conduct placement
             placement.distributed_placement(
                 WD                                                  , 
                 EPANG                                               ,  
                 WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
                 WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                 WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
-                WD+"/INPUT.fa"                                      , 
+                INPUT_FA                                            , 
                 WD+"/EPANG"                                         , 
                 THREAD_NUM                                          , 
                 nodenum                                             ,
@@ -206,7 +216,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 seq_count                                           ,
                 ML_or_MP                                            ,
                 RAXMLSEQ                                            ,
-                ALIGNED                                             ,
+                ALIGNED_FOR_PLACEMENT                               ,
                 SEED                                                ,
                 hmm_aligner=HMM_ALIGNER                             ,
                 hmm_profiler=HMM_PROFILER

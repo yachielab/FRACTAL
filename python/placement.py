@@ -50,6 +50,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                     hmm_aligner+" "       +
                     "--outformat afa"     +
                     "--mapali "           +
+                    "-m "                 + # for trimming insersions
                     refseq+" "            +
                     refseq+".hmm "        +
                     query +" "            +
@@ -73,6 +74,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                     " -T "+str(threadnum)               ,
                     shell=True
                 )
+                shutil.move(outdir+"/ref_query.fa", WD+"/INPUT.fa.aligned")
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(
                     EPANG                  +
@@ -102,13 +104,13 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                 )
                 # One-by-one HMM alignment
                 subprocess.call(
-                    hmm_aligner+
-                    " --outformat afa"+
-                    " --mapali "+refseq+" "+
-                    refseq+".hmm "+
-                    query+
-                    " | sed 's/\./N/g'> "+
-                    outdir+"/ref_query.fa",
+                    hmm_aligner                +
+                    " --outformat afa"         +
+                    " --mapali "+refseq+" "    +
+                    refseq+".hmm "             +
+                    query                      +
+                    " | sed 's/\./N/g'> "      +
+                    outdir+"/ref_query.fa"     ,
                     shell=True
                 )  
             elif(ALIGNED=="aligned"): # for aligned sequences
