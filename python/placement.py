@@ -73,7 +73,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                     " -T "+str(threadnum)               ,
                     shell=True
                 )
-                shutil.move(outdir+"/ref_query.fa", WD+"/INPUT.fa.aligned")
+                shutil.move(outdir+"/ref_query.fa.query", WD+"/INPUT.fa.aligned")
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(
                     EPANG                  +
@@ -91,7 +91,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                 outdir+"/epa_result.jplace",
                 "epa-ng",
                 seed
-            )
+                )
         if(ML_or_MP=="MP"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 # Build HMM profile
@@ -136,7 +136,7 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
         os.rename(
             outdir+"/edge_to_seqname.out",
             outdir+"/edge_to_seqname_all.out"
-        )
+            )
     else:
         dname=WD.split("/").pop()
         moved=outdir+"/query.fa"
@@ -147,12 +147,12 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
             refseq+".hmm "+
             refseq,
             shell=True
-        )
+            )
         decompose_fasta(
             moved,
             nodenum, 
             seq_count
-        )
+            )
 
         #distribution start
         for i in range(nodenum):
@@ -185,7 +185,8 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                             hmm_aligner+
                             " --outformat afa"                         +
                             " --mapali "                               +
-                            refseq         +" "                        +
+                            " --trim "                                 + # for trimming insersions
+                            refseq +" "                                +
                             refseq+".hmm "                             +
                             moved+"."+str(i)                           +
                             " | sed 's/\./N/g'> "                      +

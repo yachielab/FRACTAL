@@ -195,10 +195,10 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
 
             # chose Sequence file to place
             if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                INPUT_FA = WD+"/INPUT.fa.aligned"
+                QUERY_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED_FOR_PLACEMENT = "aligned"
             else:
-                INPUT_FA = WD+"/INPUT.fa"
+                QUERY_FA = WD+"/INPUT.fa"
                 ALIGNED_FOR_PLACEMENT = ALIGNED
 
             # conduct placement
@@ -208,7 +208,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
                 WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                 WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
-                INPUT_FA                                            , 
+                QUERY_FA                                            , 
                 WD+"/EPANG"                                         , 
                 THREAD_NUM                                          , 
                 nodenum                                             ,
@@ -246,14 +246,29 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
                 para  = prev_para
                 break
             if(para!=0):
+                
+                # select subsample sequence file
+                if os.path.isfile("EPANG/ref_query.fa.ref"):
+                    ALIGNED_SUBSAMPLE = "EPANG/ref_query.fa.ref"
+                else:
+                    ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"
+
                 shutil.copyfile(
-                    "SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned",
+                    ALIGNED_SUBSAMPLE,
                     "ITERATION.fa"
                 )
+                
+                # select all sequence file
+                if os.path.isfile("EPANG/ref_query.fa.query"):
+                    ALIGNED_ALL = "EPANG/ref_query.fa.query"
+                    ALIGNED     = "aligned"
+                else:
+                    ALIGNED_ALL = "INPUT.fa" 
+
                 partition.add_paraphyletic_fa(
                     WD+"/PARTITION/partition"+str(i)+".out" ,
                     "ITERATION.fa"                          ,
-                    "INPUT.fa"                              ,
+                    ALIGNED_ALL                             ,
                     SUBSAMPLE_SIZE                          ,
                     para
                 )
