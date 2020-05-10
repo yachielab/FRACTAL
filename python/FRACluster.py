@@ -194,7 +194,7 @@ def FRACluster(COMMAND, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, 
             nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
             # chose Sequence file to place
-            if(os.exists(WD+"/INPUT.fa.aligned")):
+            if(os.path.isfile(WD+"/INPUT.fa.aligned")):
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED_FOR_PLACEMENT = "aligned"
             else:
