@@ -368,12 +368,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 if __name__ == "__main__":
     argvs = sys.argv
-    command = "python3 "
-    for arg in argvs:
-        if(arg!=""):
-            command = command + "\""+arg + "\" "
-        else:
-            command = command + "\"\" "
     if (len(argvs)==23):
         FRACluster(
             argvs,
@@ -401,7 +395,7 @@ if __name__ == "__main__":
             argvs[22])
     elif ((len(argvs)==23+4)):
         FRACluster(
-            command,
+            argvs,
             argvs[1],
             int(argvs[2]),
             int(argvs[3]),
