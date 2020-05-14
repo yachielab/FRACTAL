@@ -1,11 +1,11 @@
 '''
-Until no paraphyletics, repeat:
-    i) repeat 1-4 several times
-        1. random sampling (in : FASTA, out : FASTA)
-        2. RAxML phylogeny inference (in : FASTA, out : tree)
+While there are any problematic sequences,
+    i) repeat 1-4 up to 5 times
+        1. Random sampling (in : FASTA, out : FASTA)
+        2. Phylogeny inference (in : FASTA, out : tree)
         3. RAxML parameter optimization (in : FASTA, tree, out RAxML log file)
-        4. phylogenetic placement (in : FASTA, Tree, RAxML log file, Query FASTA, out : .jplace file)
-    ii) partition.py (in : .jplace files, out : divided FASTAs, directory info file)
+        4. Phylogenetic placement (in : FASTA, Tree, RAxML log file, Query FASTA, out : .jplace file)
+    ii) try to classify sequences into subclade (in : .jplace files, out : divided FASTAs, directory info file)
 '''
 import sys
 import os
@@ -272,12 +272,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #get paraphyletic sequences and make ITERATION.fa#
             ##################################################
             if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
+                
                 # The previous subsample achieved minimum number of paraphyletic groups
                 i    -= 1 
                 para  = prev_para
                 break
+
             if(para!=0):
-                
+
                 # select subsample sequence file
                 if os.path.isfile("EPANG/ref_query.fa.ref"):
                     ALIGNED_SUBSAMPLE = "EPANG/ref_query.fa.ref"
@@ -307,6 +309,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 prev_para=para
             else:
                 break
+
         ##################
         #partition .fasta#
         ##################
@@ -342,6 +345,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             INIT_SEQ_COUNT,
             seq_count_when_aligned
         )
+        
         ##################
         #delete files    #
         ##################

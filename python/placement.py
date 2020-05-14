@@ -31,10 +31,10 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
-def distributed_placement(WD, EPANG, refseq, reftree, model, 
-                         query, outdir, threadnum, nodenum, 
-                         codedir, seq_count, ML_or_MP, RAXMLSEQ, 
-                         ALIGNED, seed, hmm_aligner="", hmm_profiler=""):
+def distributed_placement(  WD, EPANG, refseq, reftree, model, 
+                            query, outdir, threadnum, nodenum, 
+                            codedir, seq_count, ML_or_MP, RAXMLSEQ, 
+                            ALIGNED, seed, hmm_aligner="", hmm_profiler=""  ):
     if(nodenum<=1):
         if(ML_or_MP=="ML"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
@@ -47,13 +47,13 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                 ) 
                 # One-by-one HMM alignment
                 subprocess.call(
-                    hmm_aligner+" "       +
-                    "--outformat afa "    +
-                    "--mapali "+refseq+" "+
-                    "--trim "            + # for trimming insersions
-                    refseq+".hmm "        +
-                    query +" "            +
-                    "| sed 's/\./N/g'> "  +
+                    hmm_aligner+" "        +
+                    "--outformat afa "     +
+                    "--mapali "+refseq+" " +
+                    "--trim "              + # for trimming insersions
+                    refseq+".hmm "         +
+                    query +" "             +
+                    "| sed 's/\./N/g'> "   +
                     outdir+"/ref_query.fa"
                     ,shell=True
                 )
@@ -181,14 +181,12 @@ def distributed_placement(WD, EPANG, refseq, reftree, model,
                 if(ML_or_MP=="ML"): 
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         # Conduct HMM alignment
-                        handle.write(
-                            hmm_aligner+
+                        handle.write(hmm_aligner+
                             " --outformat afa"                         +
-                            " --mapali "                               +
+                            " --mapali " + refseq + " "                +
                             " --trim "                                 + # for trimming insersions
-                            refseq +" "                                +
                             refseq+".hmm "                             +
-                            moved+"."+str(i)                           +
+                            moved +"."+str(i)                          +
                             " | sed 's/\./N/g'> "                      +
                             outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                             )   
