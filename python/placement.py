@@ -265,7 +265,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o"
                     )
-        #distribution end
+            # end of a distributed task
+        # check if all placement tasks ended
         flag = 0
         while(flag==0):
             i=0
@@ -275,10 +276,25 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 i+=1
             if i == nodenum:
                 flag=1
+        
+        # remove unnecessary files
         for i in range(nodenum):
             os.remove(outdir+"/epang"+str(i)+".o")
             os.remove(outdir+"/query.fa."+str(i))
+        
         shutil.move(moved,query)
+
+        # (If HMM alignments were conducted) concat aligned sequences
+        if(ALIGNED=="unaligned"):
+            subprocess.call(
+                "cat "+
+                outdir+"/EPANG*/ref_query.fa.ref "+
+                "> "+
+                WD+"/INPUT.fa.aligned",
+                shell=True
+            )
+
+        # merge results
         shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
         my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
 
