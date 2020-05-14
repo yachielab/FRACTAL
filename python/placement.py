@@ -288,7 +288,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         if(ALIGNED=="unaligned"):
             subprocess.call(
                 "cat "+
-                outdir+"/EPANG*/ref_query.fa.ref "+
+                outdir+"/EPANG*/ref_query.fa.query "+
                 "> "+
                 WD+"/INPUT.fa.aligned",
                 shell=True
