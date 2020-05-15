@@ -278,11 +278,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 para  = prev_para
                 break
 
-
-            return
-
-
-
             if(para!=0):
 
                 # select subsample sequence file
