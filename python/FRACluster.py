@@ -350,6 +350,17 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ##################
         #delete files    #
         ##################
+        
+
+
+        
+        
+        return
+        
+        
+        
+        
+        
         os.remove("INPUT.fa")
         os.remove("INPUT.fa.aligned")
         os.remove("tmp.nwk")

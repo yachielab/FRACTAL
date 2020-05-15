@@ -72,6 +72,8 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
                         i+=1
                     k+=1
 
+
+
 '''
 command line argument: "<input .fa file path> <output .fa file path>"
 '''
