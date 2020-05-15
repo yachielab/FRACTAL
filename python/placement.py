@@ -183,11 +183,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         # Conduct HMM alignment
                         handle.write(hmm_aligner+
                             " --outformat Phylip"                      +
-                            " -m "                                     +
+                            #" -m "                                     +
                             " --mapali " + refseq + " "                +
                             refseq+".hmm "                             +
                             moved +"."+str(i)                          +
-                            " | sed 's/\./N/g'> "                      +
+                            #" | sed 's/\./N/g' "                      +
+                            " > "                                      +
                             outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                             )   
                         handle.write(
