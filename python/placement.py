@@ -184,7 +184,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         handle.write(hmm_aligner+
                             #" --outformat Phylip"                      +
                             " -m "                                     +
-                            " --mapali " + refseq + " "                +
+                            #" --mapali " + refseq + " "                +
                             refseq+".hmm "                             +
                             moved +"."+str(i)                          +
                             #" | sed 's/\./N/g' "                      +
