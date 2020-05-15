@@ -29,6 +29,7 @@
 5. FastTreeMP (version: 2.1.10) *optional; if you want to use ML for lineage reconstruction*
 6. MAFFT (version: 7.464) *optional; if you want to reconstruct a lineage from unaligned sequences*
 7. HMMER (version: 3.3) *optional; if you want to reconstruct a lineage from unaligned sequences*
+8. Trimal (version: 1.4.1) *optional; if you want to reconstruct a lineage from unaligned sequences*
 
 ### Software installation
 
@@ -136,6 +137,14 @@ Each installation step will take less than ~1 min
 
    ```shell
    conda install -c bioconda hmmer
+   ```
+
+#### Installation of [trimAl](http://trimal.cgenomics.org/) (optional)
+
+1. Install trimAl
+
+   ```shell
+   conda install -c bioconda trimal
    ```
 
 ### Sample Codes
