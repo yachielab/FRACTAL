@@ -352,9 +352,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #delete files    #
         ##################
 
-        '''
         os.remove("INPUT.fa")
         os.remove("INPUT.fa.aligned")
+        os.remove("INPUT.fa.aligned.problematic")
+        os.remove("ITERATION.fa")
+        os.remove("SUBSAMPLE.fa.aligned")
         os.remove("tmp.nwk")
         shutil.rmtree("ANCSEQ")
         shutil.rmtree("EPANG")
@@ -362,7 +364,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         shutil.rmtree("PARTITION")
         shutil.rmtree("SUBSAMPLE")
         shutil.rmtree("TREE")
-        '''
+        
     
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
