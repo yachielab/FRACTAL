@@ -146,7 +146,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED  = "aligned" 
 
-            if(os.path.isfile(WD+"ITERATION.fa")     ):
+            if(os.path.isfile("ITERATION.fa")):
                 rename_sequence.random_sampling(
                     "ITERATION.fa"             ,
                     "SUBSAMPLE/SUBSAMPLE.fa"   ,
@@ -177,8 +177,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #######################################
             #construct subsample tree as reference#
             #######################################
-            shutil.tree(WD+"/TREE")
-            os.mkdir(WD+"/TREE")
             os.chdir(WD+"/TREE")
             
             subprocess.call(
