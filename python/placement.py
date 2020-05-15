@@ -199,15 +199,15 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             refseq + "\n"
                             )
                         handle.write(
-                            "trimal "                                           +
-                            " -in " + outdir+"/EPANG"+str(i)+"/ref_query.fa "   +
-                            "-selectcols { "                                    +
-                            "   `trimal -sgc "                                  +
-                            "    -in " +outdir+"/EPANG"+str(i)+"/ref_query.fa " +
-                            "    |awk ' { if( $2==100 ){ print $1 }}'"          +
-                            "    |tr \"\n\" \",\" ` "                           +
-                            "    } "                                            +
-                            "> "+outdir+"/EPANG"+str(i)+"/ref_query.fa.selectcols"
+                            "trimal "                                                  +
+                            " -in " + outdir+"/EPANG"+str(i)+"/ref_query.fa.ref "      +
+                            "-selectcols { "                                           +
+                            "   `trimal -sgc "                                         +
+                            "    -in " +outdir+"/EPANG"+str(i)+"/ref_query.fa "        +
+                            "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
+                            "    |tr \"\\n\" \",\" ` "                                 +
+                            "    } "                                                   +
+                            "> "+outdir+"/EPANG"+str(i)+"/ref_query.fa.selectcols\n"
                             )
                         handle.write(
                             "python3 "                                          +
