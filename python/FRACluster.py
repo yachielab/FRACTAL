@@ -145,7 +145,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED  = "aligned" 
 
-            if(os.path.isfile("ITERATION.fa")):
+            if(os.path.isfile(WD+"ITERATION.fa")     ):
                 rename_sequence.random_sampling(
                     "ITERATION.fa"             ,
                     "SUBSAMPLE/SUBSAMPLE.fa"   ,
@@ -173,7 +173,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 "SUBSAMPLE/RENAMED_"+str(i)+".fa"
             )
             
-            
             #######################################
             #construct subsample tree as reference#
             #######################################
@@ -189,7 +188,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -p \""+ str(OPTION) + "\""                    +
                 " -d "  + MODEL                                 + 
                 " -q "  + SOFTWARE                              +
-                " -s "  +ALIGNER                                ,
+                " -s "  + ALIGNER                               ,
                 shell=True
             )
             
@@ -267,7 +266,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     depth
                 )
             print("detected "+str(para)+" paraphyletic sequences")
-            
+
             ##################################################
             #get paraphyletic sequences and make ITERATION.fa#
             ##################################################

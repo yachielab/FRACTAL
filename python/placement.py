@@ -313,6 +313,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 WD+"/INPUT.fa.aligned",
                 shell=True
             )
+            shutil.copy(outdir+"/EPANG0/ref_query.fa.selectcols.ref", outdir+"/EPANG/ref_query.fa.ref")
+
 
         # merge results
         shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
