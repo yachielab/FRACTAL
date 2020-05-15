@@ -199,6 +199,24 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             refseq + "\n"
                             )
                         handle.write(
+                            "trimal "                                           +
+                            " -in " + outdir+"/EPANG"+str(i)+"/ref_query.fa "   +
+                            "-selectcols { "                                    +
+                            "   `trimal -sgc "                                  +
+                            "    -in " +outdir+"/EPANG"+str(i)+"/ref_query.fa " +
+                            "    |awk ' { if( $2==100 ){ print $1 }}'"          +
+                            "    |tr \"\n\" \",\"` "                            +
+                            "    } "                          +
+                            "> "+outdir+"/EPANG"+str(i)+"/ref_query.fa.selectcols"
+                            )
+                        handle.write(
+                            "python3 "                                          +
+                            codedir +"/python/divide_ref_and_query.py "         +
+                            outdir  +"/EPANG"+str(i)+"/ref_query.fa.selectcols "+
+                            refseq  + "\n"
+                            )
+                        
+                        handle.write(
                             EPANG                                               + 
                             " --redo"                                           +
                             " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.ref"   +
@@ -290,7 +308,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         if(ALIGNED=="unaligned"):
             subprocess.call(
                 "cat "+
-                outdir+"/EPANG*/ref_query.fa.query "+
+                outdir+"/EPANG*/ref_query.fa.selectcols.query "+
                 "> "+
                 WD+"/INPUT.fa.aligned",
                 shell=True
