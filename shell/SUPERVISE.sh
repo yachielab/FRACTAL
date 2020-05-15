@@ -52,8 +52,8 @@ RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
 if [ "$ALIGNED" = "unaligned" ]; then
     MAFFT=$(which mafft)
-    HMM_BUILD=$(which hmmbuild)
-    HMM_ALIGN=$(which hmmalign)
+    HMM_BUILD=$(which hmmbuild2)
+    HMM_ALIGN=$(which hmmalign2)
 fi
 
 #setting for the 1st qsub
