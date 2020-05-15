@@ -151,7 +151,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     "ITERATION.fa"             ,
                     "SUBSAMPLE/SUBSAMPLE.fa"   ,
                     SUBSAMPLE_SIZE             ,
-                    seed=SEED                  
+                    seed=SEED
                 )
                 shutil.rmtree ("EPANG")
                 os    .mkdir  ("EPANG")
@@ -352,10 +352,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #delete files    #
         ##################
 
+        '''
         os.remove("INPUT.fa")
         os.remove("INPUT.fa.aligned")
         os.remove("tmp.nwk")
-        '''
         shutil.rmtree("ANCSEQ")
         shutil.rmtree("EPANG")
         shutil.rmtree("PARAM")
