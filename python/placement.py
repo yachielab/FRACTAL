@@ -205,8 +205,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             "   `trimal -sgc "                                  +
                             "    -in " +outdir+"/EPANG"+str(i)+"/ref_query.fa " +
                             "    |awk ' { if( $2==100 ){ print $1 }}'"          +
-                            "    |tr \"\n\" \",\"` "                            +
-                            "    } "                          +
+                            "    |tr \"\n\" \",\" ` "                           +
+                            "    } "                                            +
                             "> "+outdir+"/EPANG"+str(i)+"/ref_query.fa.selectcols"
                             )
                         handle.write(
@@ -255,12 +255,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         # Conduct HMM alignment
                         handle.write(
-                            hmm_aligner+
-                            " --outformat afa"+
-                            " --mapali "+refseq+" "+
-                            refseq+".hmm "+moved+"."+str(i)+
-                            " | sed 's/\./N/g'> "+
-                            outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
+                            hmm_aligner                                 +
+                            " --outformat afa"                          +
+                            " --mapali "+refseq+" "                     +
+                            refseq+".hmm "+moved+"."+str(i)             +
+                            " | sed 's/\./N/g'"                         +
+                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )   
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(
