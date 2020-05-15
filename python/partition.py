@@ -159,7 +159,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
 
-    for in_fasta in in_fasta_list:
+    for fasta_count, in_fasta in enumerate(in_fasta_list):
         ost=[]
         for i in range(num_mono):
             ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
@@ -175,7 +175,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                     SeqIO.write(s, para, "fasta")
                 else:
                     l = NUMdict[str(js["partition"][s.id])]
-                    DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
+                    if( fasta_count == 0 ):
+                        DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
                     SeqIO.write(s, ost[l], "fasta")
                 i=i+1
         for st in ost:
