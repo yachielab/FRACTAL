@@ -182,16 +182,16 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         # Conduct HMM alignment
                         handle.write(hmm_aligner+
-                            " --outformat Phylip"                      +
+                            " --outformat afa"                         +
                             " -q "                                     +
                             #" -m "                                     +
                             " --mapali " + refseq + " "                +
                             refseq+".hmm "                             +
                             moved +"."+str(i)                          +
-                            #" | sed 's/\./N/g' "                      +
+                            " | sed 's/\./-/g' "                       +
                             " > "                                      +
                             outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
-                            )   
+                            )
                         handle.write(
                             "python3 "                                 +
                             codedir+"/python/divide_ref_and_query.py " +
