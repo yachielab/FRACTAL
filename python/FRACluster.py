@@ -269,6 +269,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print("detected "+str(para)+" paraphyletic sequences")
             
             
+
+            return
+
+
+
+
+
+
             ##################################################
             #get paraphyletic sequences and make ITERATION.fa#
             ##################################################
