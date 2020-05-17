@@ -356,6 +356,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     #delete files    #
     ##################
 
+    os.chdir(WD)
+
     filenames = [
         "INPUT.fa",
         "ITERATION.fa",
