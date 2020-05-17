@@ -362,7 +362,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "tmp.nwk",
         "INPUT.fa.aligned",
         "INPUT.fa.aligned.problematic",
-        "SUBSAMPLE.fa.aligned"]
+        "SUBSAMPLE.fa.aligned"
+        ]
     
     dirnames = [
         "ANCSEQ",
@@ -370,15 +371,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "PARAM",
         "PARTITION",
         "SUBSAMPLE",
-        "TREE"]
+        "TREE"
+        ]
 
     for filename in filenames:
-        try: 
-            os.remove(filename)
-        
+        try: os.remove(filename)
+
     for dirname in dirnames:
-        try: 
-            shutil.rmtree(dirname)
+        try: shutil.rmtree(dirname)
         
     
     elapsed_time=time.time()-start
