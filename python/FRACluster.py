@@ -362,17 +362,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "tmp.nwk",
         "INPUT.fa.aligned",
         "INPUT.fa.aligned.problematic",
-        "SUBSAMPLE.fa.aligned",
-    ]
-
+        "SUBSAMPLE.fa.aligned"]
+    
     dirnames = [
         "ANCSEQ",
         "EPANG",
         "PARAM",
         "PARTITION",
         "SUBSAMPLE",
-        "TREE",
-    ]
+        "TREE"]
 
     for filename in filenames:
         try: 
