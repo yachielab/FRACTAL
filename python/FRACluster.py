@@ -375,10 +375,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
 
     for filename in filenames:
-        os.remove(filename)
+        try:
+            os.remove(filename)
+        except:
+            None
 
     for dirname in dirnames:
-        try: shutil.rmtree(dirname)
+        try: 
+            shutil.rmtree(dirname)
+        except:
+            None
         
     
     elapsed_time=time.time()-start
