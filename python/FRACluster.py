@@ -108,15 +108,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
-        FRACTAL_COMMAND = "bash "+ CODEDIR + "/FRACTAL.sh"  + \
-                          " -x " + str(MAX_ITERATION)       + \
-                          " -k " + str(SUBSAMPLE_SIZE)      + \
+        FRACTAL_COMMAND = "bash "+ CODEDIR + "/FRACTAL"     + \
                           " -i " + INPUT_FA                 + \
-                          " -t " + str(THRESHOLD)           + \
-                          " -b " + MODEL                    + \
-                          " -c " + str(THREAD_NUM)          + \
-                          " -p " + ML_or_MP                 + \
                           " -a " + OPTION                   + \
+                          " -k " + str(SUBSAMPLE_SIZE)      + \
+                          " -b " + MODEL                    + \
+                          " -p " + ML_or_MP                 + \
+                          " -t " + str(THRESHOLD)           + \
+                          " -x " + str(MAX_ITERATION)       + \
+                          " -c " + str(THREAD_NUM)          + \
                           " -r " + SEED
         
         if (TREEMETHOD!="unspecified"): 
