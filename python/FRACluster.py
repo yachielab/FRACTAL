@@ -375,7 +375,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
 
     for filename in filenames:
-        try: os.remove(filename)
+        os.remove(filename)
 
     for dirname in dirnames:
         try: shutil.rmtree(dirname)
