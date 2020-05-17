@@ -72,7 +72,7 @@ elif [ $TREEMETHOD = "raxmlMP" ]; then
 elif [ $TREEMETHOD = "fasttreeML" ]; then
     export OMP_NUM_THREADS=$THREADNUM
     time $SOFTWARE -gtr -nt ${OPTION} -seed 111 < ${FILE}.aligned > ${FILE}.aligned.tree
-# others
+# Others
 elif [ $TREEMETHOD = "unspecified" ]; then
     time $SOFTWARE ${FILE}.aligned
 else

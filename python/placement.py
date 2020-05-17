@@ -92,6 +92,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 "epa-ng",
                 seed
                 )
+            
         if(ML_or_MP=="MP"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 # Build HMM profile
@@ -137,6 +138,19 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             outdir+"/edge_to_seqname.out",
             outdir+"/edge_to_seqname_all.out"
             )
+        # If HMM alignments were conducted
+        if(ALIGNED=="unaligned"):
+            subprocess.call(
+                "cat "+
+                outdir+"/ref_query.fa.query "+
+                "> "+
+                WD+"/INPUT.fa.aligned",
+                shell=True
+                )
+            shutil.copy(
+                outdir+"/ref_query.fa.ref", 
+                WD+"/SUBSAMPLE.fa.aligned"
+                )
     else:
         dname=WD.split("/").pop()
         moved=outdir+"/query.fa"
@@ -313,8 +327,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 WD+"/INPUT.fa.aligned",
                 shell=True
             )
-            shutil.copy(outdir+"/EPANG0/ref_query.fa.selectcols.ref", WD+"/SUBSAMPLE.fa.aligned")
-
+            shutil.copy(
+                outdir+"/EPANG0/ref_query.fa.selectcols.ref", 
+                WD+"/SUBSAMPLE.fa.aligned"
+                )
 
         # merge results
         shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")

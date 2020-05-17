@@ -136,7 +136,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         os.mkdir("PARAM")
         os.mkdir("EPANG")
         os.mkdir("PARTITION")
-        os.mkdir("ANCSEQ")
         
         prev_para = seq_count
 
@@ -368,7 +367,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
     
     dirnames = [
-        "ANCSEQ",
         "EPANG",
         "PARAM",
         "PARTITION",
