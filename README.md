@@ -278,7 +278,7 @@ Options:
       Options especially for the first qsub. Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
-    -l "<Integer>"
+    -l <Integer>
       Maximum number of FRACTAL iterations. Default: 10000
 ```
 

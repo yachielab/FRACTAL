@@ -399,7 +399,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 if __name__ == "__main__":
     argvs = sys.argv
-    if (len(argvs)==23):
+    if (len(argvs)==24):
         FRACluster(
             argvs,
             argvs[1],
