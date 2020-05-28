@@ -50,13 +50,16 @@ EPANG=$(which epa-ng)
 RAXMLSEQ=$(which raxmlHPC-SSE3)
 RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
-if [ "$ALIGNED" = "unaligned" ]; then
-    MAFFT=$(which mafft)
-    HMM_BUILD=$(which hmmbuild)
-    HMM_ALIGN=$(which hmmalign)
+# if users want to show the calculation progress
+if [ "${PROGRESS}" = "TRUE" ]; 
+    while true; do 
+        echo -n "Number of remaining sequences: "
+        cat FRACTAL_ML4/nodes/d*/INPUT.fa | grep '>' | wc -l
+        sleep 60
+    done &
 fi
 
-#setting for the 1st qsub
+# setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
 cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
 while [ ! -e ${ROOT_DIR}/nodes/d0/INPUT.fa ]; do
