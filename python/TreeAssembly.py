@@ -41,7 +41,7 @@ main function
 
 if __name__ == "__main__":
 
-    sys.setrecursionlimit(sys.maxsize)
+    sys.setrecursionlimit(1000000000)
 
     argvs = sys.argv
     TreeAssembly(argvs[1],argvs[2],argvs[3])
