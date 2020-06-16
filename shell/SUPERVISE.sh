@@ -50,6 +50,11 @@ EPANG=$(which epa-ng)
 RAXMLSEQ=$(which raxmlHPC-SSE3)
 RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
+if [ "$ALIGNED" = "unaligned" ]; then
+    MAFFT=$(which mafft)
+    HMM_BUILD=$(which hmmbuild)
+    HMM_ALIGN=$(which hmmalign)
+fi
 
 # if users want to show the calculation progress
 #if [ "${PROGRESS}" = "TRUE" ]; 
