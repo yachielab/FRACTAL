@@ -50,16 +50,16 @@ EPANG=$(which epa-ng)
 RAXMLSEQ=$(which raxmlHPC-SSE3)
 RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
-'''
+
 # if users want to show the calculation progress
-if [ "${PROGRESS}" = "TRUE" ]; 
-    while true; do 
-        echo -n "Number of remaining sequences: "
-        cat FRACTAL_ML4/nodes/d*/INPUT.fa | grep '>' | wc -l
-        sleep 60
-    done &
-fi
-'''
+#if [ "${PROGRESS}" = "TRUE" ]; 
+#    while true; do 
+#        echo -n "Number of remaining sequences: "
+#        cat FRACTAL_ML4/nodes/d*/INPUT.fa | grep '>' | wc -l
+#        sleep 60
+#    done &
+#fi
+
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
