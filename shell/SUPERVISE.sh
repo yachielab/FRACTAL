@@ -50,6 +50,7 @@ EPANG=$(which epa-ng)
 RAXMLSEQ=$(which raxmlHPC-SSE3)
 RAXMLPAR=$(which raxmlHPC-PTHREADS-SSE3)
 
+'''
 # if users want to show the calculation progress
 if [ "${PROGRESS}" = "TRUE" ]; 
     while true; do 
@@ -58,6 +59,7 @@ if [ "${PROGRESS}" = "TRUE" ];
         sleep 60
     done &
 fi
+'''
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
