@@ -59,6 +59,8 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
             for s in allseq_itr:
                 if(s.id=="root"):
                     SeqIO.write(s, subs, "fasta")
+        
+        added_seqs = {}
         with open(in_fname) as allseq:
             allseq_itr = SeqIO.parse(allseq, "fasta")
             i=0 # index on rand_idx
@@ -67,8 +69,9 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
                 if(i>=len(rand_idx)):
                     break
                 if(s.id!="root"):
-                    if(k==rand_idx[i]):
+                    if(k==rand_idx[i] and (s.seq not in added_seqs)):
                         SeqIO.write(s, subs, "fasta")
+                        added_seqs.add(s.seq)
                         i+=1
                     k+=1
 
