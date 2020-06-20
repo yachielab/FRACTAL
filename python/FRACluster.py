@@ -76,7 +76,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             seq_count_when_aligned = seq_count
     elif (ALIGNED=="aligned"):
         INPUT_FA               = WD+"/INPUT.fa"
-        
+
     i=1
     
     # call direct tree reconstruction
@@ -224,97 +224,111 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     shell=True
                 )
             
-            
-            ########################################
-            #Phylogenetic placement & visualization#
-            ########################################
-            os.chdir(WD)
-            nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
+            # if parameter optimization failed
+            if (not os.path.isfile(WD+"/PARAM/RAxML_result.PARAM_"+str(i))):
 
-            # select sequence file to place
-            if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                QUERY_FA = WD+"/INPUT.fa.aligned"
-                ALIGNED_FOR_PLACEMENT = "aligned"
-            else:
-                QUERY_FA = WD+"/INPUT.fa"
-                ALIGNED_FOR_PLACEMENT = ALIGNED
+                print("Parameter optimization failed...")
 
-            # conduct placement
-            placement.distributed_placement(
-                WD                                                  , 
-                EPANG                                               ,  
-                WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
-                WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
-                WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
-                QUERY_FA                                            , 
-                WD+"/EPANG"                                         , 
-                THREAD_NUM                                          , 
-                nodenum                                             ,
-                CODEDIR                                             ,
-                seq_count                                           ,
-                ML_or_MP                                            ,
-                RAXMLSEQ                                            ,
-                ALIGNED_FOR_PLACEMENT                               ,
-                SEED                                                ,
-                hmm_aligner=HMM_ALIGNER                             ,
-                hmm_profiler=HMM_PROFILER
-            )
+                # if i == 0, start from random sampling again
+                if (i == 0): 
+                    i += 1
+                else       : 
+                    i -= 1
+                    para  = prev_para
+                    break
             
-            
-            ####################
-            #parse .jplace file#
-            ####################
-            os.chdir(WD)
-            para, Nseq_in_largest_subclade = \
-                partition.partition(
-                    WD+"/EPANG/placement_tree.out"          ,
-                    WD+"/EPANG/edge_to_seqname_all.out"     ,
-                    WD+"/PARTITION/partition"+str(i)+".out" ,
-                    depth
-                )
-            print("detected "+str(para)+" paraphyletic sequences")
-
-            ##################################################
-            #get paraphyletic sequences and make ITERATION.fa#
-            ##################################################
-            if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
+            else: # if parameter optimization succeeded
                 
-                # The previous subsample achieved minimum number of paraphyletic groups
-                i    -= 1 
-                para  = prev_para
-                break
+                ########################################
+                #Phylogenetic placement & visualization#
+                ########################################
+                os.chdir(WD)
+                nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
-            if(para!=0):
-
-                # select subsample sequence file
-                if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
-                    ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
+                # select sequence file to place
+                if(os.path.isfile(WD+"/INPUT.fa.aligned")):
+                    QUERY_FA = WD+"/INPUT.fa.aligned"
+                    ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
-                    ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"
+                    QUERY_FA = WD+"/INPUT.fa"
+                    ALIGNED_FOR_PLACEMENT = ALIGNED
 
-                shutil.copyfile(
-                    ALIGNED_SUBSAMPLE,
-                    "ITERATION.fa"
+                # conduct placement
+                placement.distributed_placement(
+                    WD                                                  , 
+                    EPANG                                               ,  
+                    WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
+                    WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
+                    WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
+                    QUERY_FA                                            , 
+                    WD+"/EPANG"                                         , 
+                    THREAD_NUM                                          , 
+                    nodenum                                             ,
+                    CODEDIR                                             ,
+                    seq_count                                           ,
+                    ML_or_MP                                            ,
+                    RAXMLSEQ                                            ,
+                    ALIGNED_FOR_PLACEMENT                               ,
+                    SEED                                                ,
+                    hmm_aligner=HMM_ALIGNER                             ,
+                    hmm_profiler=HMM_PROFILER
                 )
                 
-                # select all sequence file
-                if os.path.isfile(WD+"/INPUT.fa.aligned"):
-                    ALIGNED_ALL = WD+"/INPUT.fa.aligned"
-                    ALIGNED     = "aligned"
-                else:
-                    ALIGNED_ALL = "INPUT.fa" 
-
-                partition.add_paraphyletic_fa(
-                    WD+"/PARTITION/partition"+str(i)+".out" ,
-                    "ITERATION.fa"                          ,
-                    ALIGNED_ALL                             ,
-                    SUBSAMPLE_SIZE                          ,
-                    para
+                
+                ####################
+                #parse .jplace file#
+                ####################
+                os.chdir(WD)
+                para, Nseq_in_largest_subclade = \
+                    partition.partition(
+                        WD+"/EPANG/placement_tree.out"          ,
+                        WD+"/EPANG/edge_to_seqname_all.out"     ,
+                        WD+"/PARTITION/partition"+str(i)+".out" ,
+                        depth
                     )
-                i+=1
-                prev_para=para
-            else:
-                break
+                print("detected "+str(para)+" paraphyletic sequences")
+
+                ##################################################
+                #get paraphyletic sequences and make ITERATION.fa#
+                ##################################################
+                if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
+                    
+                    # The previous subsample achieved minimum number of paraphyletic groups
+                    i    -= 1 
+                    para  = prev_para
+                    break
+
+                if(para!=0): # if problematic sequences remained
+
+                    # select subsample sequence file
+                    if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
+                        ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
+                    else:
+                        ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"
+
+                    shutil.copyfile(
+                        ALIGNED_SUBSAMPLE,
+                        "ITERATION.fa"
+                    )
+                    
+                    # select all sequence file
+                    if os.path.isfile(WD+"/INPUT.fa.aligned"):
+                        ALIGNED_ALL = WD+"/INPUT.fa.aligned"
+                        ALIGNED     = "aligned"
+                    else:
+                        ALIGNED_ALL = "INPUT.fa" 
+
+                    partition.add_paraphyletic_fa(
+                        WD+"/PARTITION/partition"+str(i)+".out" ,
+                        "ITERATION.fa"                          ,
+                        ALIGNED_ALL                             ,
+                        SUBSAMPLE_SIZE                          ,
+                        para
+                        )
+                    i+=1
+                    prev_para=para
+                else:
+                    break
 
         ##################
         #partition .fasta#
