@@ -203,7 +203,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             
             os.chdir(WD+"/PARAM")
             
-            #if(seq_count>=30):
             if(raxml_thread_num>1):
                 subprocess.call(
                     RAXMLPAR                                                        +
