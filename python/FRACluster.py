@@ -219,7 +219,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -f e"                                                         +
                     " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       + 
                     " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
-                    " -n "   + "PARAM_"+str(i)                                      +
+                    #" -n "   + "PARAM_"+str(i)                                      +
+                    " -n "   + "PARAM_"+str(i-i%2)                                  +
                     " -m "   + MODEL                                                ,
                     shell=True
                 )
@@ -229,7 +230,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                 print("Parameter optimization failed...")
 
-                # if i == 0, start from random sampling again
+                # if i == 0, start from random sampling again, else use the result of previous i
                 if (i == 0): 
                     i += 1
                 else       : 
@@ -238,7 +239,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     break
             
             else: # if parameter optimization succeeded
-                
+
                 ########################################
                 #Phylogenetic placement & visualization#
                 ########################################
