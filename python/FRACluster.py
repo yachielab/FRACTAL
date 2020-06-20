@@ -144,8 +144,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #random sampling#
             #################
+            INPUT_FA = WD+"/INPUT.fa"
             if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                print("True")
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED  = "aligned" 
 
