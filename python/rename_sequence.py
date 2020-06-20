@@ -60,7 +60,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
                 if(s.id=="root"):
                     SeqIO.write(s, subs, "fasta")
         
-        added_seqs = {}
+        added_seqs = set()
         with open(in_fname) as allseq:
             allseq_itr = SeqIO.parse(allseq, "fasta")
             i=0 # index on rand_idx
