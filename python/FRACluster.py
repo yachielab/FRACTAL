@@ -231,9 +231,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 print("Parameter optimization failed...")
 
                 # if i == 0, start from random sampling again, else use the result of previous i
-                if (i == 0): 
+                if (i == 1): 
                     i += 1
-                else       : 
+                elif(i > 1): 
                     i -= 1
                     para  = prev_para
                     break
