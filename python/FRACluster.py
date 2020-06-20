@@ -74,6 +74,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             INPUT_FA               = WD+"/INPUT.fa"
             seq_count_when_aligned = seq_count
+    elif (ALIGNED=="aligned"):
+        INPUT_FA               = WD+"/INPUT.fa"
+        
     i=1
     
     # call direct tree reconstruction
@@ -144,7 +147,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #random sampling#
             #################
-            INPUT_FA = WD+"/INPUT.fa"
             if(os.path.isfile(WD+"/INPUT.fa.aligned")):
                 INPUT_FA = WD+"/INPUT.fa.aligned"
                 ALIGNED  = "aligned" 
