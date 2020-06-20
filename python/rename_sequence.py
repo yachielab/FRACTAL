@@ -51,8 +51,11 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
     else:print("-r Error: invalid random seed!")
     if (n==None):
         n=count_sequence_fast(in_fname)[0]
-    rand_idx=random.sample(range(n-1),subsample_size)
-    rand_idx.sort()
+    if (n > subsample_size):
+        rand_idx=random.sample(range(n-1),subsample_size)
+        rand_idx.sort()
+    else:
+        rand_idx=list(range(n-1))
     with open(out_fname, 'w') as subs:
         with open(in_fname) as allseq:
             allseq_itr = SeqIO.parse(allseq, "fasta")
