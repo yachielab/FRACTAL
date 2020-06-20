@@ -224,7 +224,8 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
             # change arguments for the next FRACTAL iteration
             ARGVS[1]  = DIRdict[key][0]
             ARGVS[20] = INITIAL_SEQ_COUNT
-            ARGVS[26] = seq_count_when_aligned
+            if (ARGVS[14] == "unaligned"):
+                ARGVS[26] = seq_count_when_aligned
 
 
             command="python3 "

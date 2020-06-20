@@ -69,9 +69,9 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
                 if(i>=len(rand_idx)):
                     break
                 if(s.id!="root"):
-                    if(k==rand_idx[i] and (s.seq not in added_seqs)):
+                    if(k==rand_idx[i] and (str(s.seq) not in added_seqs)):
                         SeqIO.write(s, subs, "fasta")
-                        added_seqs.add(s.seq)
+                        added_seqs.add(str(s.seq))
                         i+=1
                     k+=1
 
