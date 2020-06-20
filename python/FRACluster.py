@@ -144,6 +144,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
         while i<MAX_ITERATION:
             
+            os.chdir(WD)
+
             #################
             #random sampling#
             #################
