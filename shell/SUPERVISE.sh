@@ -29,7 +29,6 @@ PLACEMENT_METHOD=${19}
 ALIGNED=${20}
 max_num_of_iterations=${21}
 ROOT_DIR=${DATA_DIR}/${exp_num}
-QSUB_OPTION="${QSUB_OPTION} -N ${JOB_NAME}"
 
 
 # QSUB OPTION
@@ -102,7 +101,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
-        qsub ${QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/${file}
+        qsub ${QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/${file}
         wait
         mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
       fi
@@ -158,7 +157,7 @@ echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "python3 ${CODE_DIR}/python/TreeAssembly.py ${ROOT_DIR}/nodes/d0 ${ROOT_DIR}/final_tree/HUGE_Result.nwk TRUE" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "echo \"finished\" > ${ROOT_DIR}/final_tree/assembly_flag.txt" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub ${QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
+  qsub ${QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
