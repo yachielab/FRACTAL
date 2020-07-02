@@ -338,11 +338,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #partition .fasta#
         ##################
         os.chdir(WD)
-        print(
-            "<Sequence count> Input:" + str(seq_count)                + "\n" +
-            "  Largest subclade    :" + str(Nseq_in_largest_subclade) + "\n" +
-            "  Problematic         :" + str(para)
-        )
+        try:
+            print(
+                "<Sequence count> Input:" + str(seq_count)                + "\n" +
+                "  Largest subclade    :" + str(Nseq_in_largest_subclade) + "\n" +
+                "  Problematic         :" + str(para)
+            )
+        except:
+            None
         
         if(i==-1): 
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
