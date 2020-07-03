@@ -34,7 +34,7 @@ function version {
 
 function usage {
     cat <<EOF
-$(basename ${0}) is a tool for lineage estimation from massive number of DNA sequences.
+FRACTAL is a tool for lineage estimation from massive number of DNA sequences.
 
 Usage:
     FRACTAL.sh
