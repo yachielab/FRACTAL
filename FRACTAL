@@ -8,7 +8,7 @@ MAX_ITERATION=5             #Integer
 SUBSAMPLE_SIZE=100          #Integer
 INFILE="unspecified"        #Absolute Path of .fa file
 NAME="FRACTALout"           #Experiment No.
-CODE_DIR=`dirname $0 | sed -e "s/\/FRACTAL.sh//"` #Absolute path of FRACTAL-X.X.X directory
+CODE_DIR=`dirname $0`       #Absolute path of FRACTAL directory
 OUT_DIR="`pwd`"             #output dir should be ${OUT_DIR}/${NAME}
 SOFTWARE="unspecified"      #Absolute Path of the executable file for lineage reconstruction
 THRESHOLD=500
@@ -29,7 +29,7 @@ ALIGNED="aligned"
 LIMITATION=10000
 
 function version {
-  echo "######## FRACTAL v2.1.3 ########"
+  echo "######## FRACTAL v2.2.1 ########"
 }
 
 function usage {
@@ -38,11 +38,11 @@ $(basename ${0}) is a tool for lineage estimation from massive number of DNA seq
 
 Usage:
     FRACTAL.sh
-    [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
-    [-m method] [-p "options"] [-k sequence_number] [-b model_name]
-    [-x iteration_number] [-t sequence_number]
-    [-d job_number] [-c thread_number] [-e]
-    [-r integer] [-O qsub_option] [-I first_qsub_option] [-j job_name]
+    [-v] [-h] [-i input_file] [-f output_file_path] [-f output_file_name]
+    [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
+    [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
+    [-d job_number] [-c thread_number] [-e] [-r integer] [-O qsub_option] 
+    [-I first_qsub_option] [-j job_name] [-l iteration_upper_limit]
 
 Options:
     -v
@@ -170,6 +170,8 @@ else
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
+echo "Command:"
+echo $#
 bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION}
 wait
 

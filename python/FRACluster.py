@@ -105,32 +105,32 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 WD+"/TERMINAL.nwk"           ,
                 "root"
             )
-
+    
     # call fractal FRACTAL # don't forget to change!!!!!
-    elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): 
-        # Quit distribution after the available computer node saturated 
-        os.mkdir("TREE")
-        os.chdir(WD+"/TREE")
-        FRACTAL_COMMAND = "bash "+ CODEDIR + "/FRACTAL"     + \
-                          " -i " + INPUT_FA                 + \
-                          " -a " + OPTION                   + \
-                          " -k " + str(SUBSAMPLE_SIZE)      + \
-                          " -b " + MODEL                    + \
-                          " -p " + ML_or_MP                 + \
-                          " -t " + str(THRESHOLD)           + \
-                          " -x " + str(MAX_ITERATION)       + \
-                          " -c " + str(THREAD_NUM)          + \
-                          " -r " + SEED
+    #elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): 
+    #    # Quit distribution after the available computer node saturated 
+    #    os.mkdir("TREE")
+    #    os.chdir(WD+"/TREE")
+    #    FRACTAL_COMMAND = "bash "+ CODEDIR + "/FRACTAL"     + \
+    #                      " -i " + INPUT_FA                 + \
+    #                      " -a " + OPTION                   + \
+    #                      " -k " + str(SUBSAMPLE_SIZE)      + \
+    #                      " -b " + MODEL                    + \
+    #                      " -p " + ML_or_MP                 + \
+    #                      " -t " + str(THRESHOLD)           + \
+    #                      " -x " + str(MAX_ITERATION)       + \
+    #                      " -c " + str(THREAD_NUM)          + \
+    #                      " -r " + SEED
+    #    
+    #    if (TREEMETHOD!="unspecified"): 
+    #        FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
+    #    else: 
+    #        FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
+    #    if (ALIGNED=='unaligned'):
+    #        FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
         
-        if (TREEMETHOD!="unspecified"): 
-            FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
-        else: 
-            FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
-        if (ALIGNED=='unaligned'):
-            FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
-        
-        subprocess.call(FRACTAL_COMMAND,shell=True)
-        shutil.move(WD+"/TREE/FRACTALout.nwk",WD+"/TERMINAL.nwk")
+    #    subprocess.call(FRACTAL_COMMAND,shell=True)
+    #    shutil.move(WD+"/TREE/FRACTALout.nwk",WD+"/TERMINAL.nwk")
 
     # call FRACTAL cycle
     else:
