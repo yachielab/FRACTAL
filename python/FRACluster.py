@@ -120,7 +120,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                           " -t " + str(THRESHOLD)           + \
                           " -x " + str(MAX_ITERATION)       + \
                           " -c " + str(THREAD_NUM)          + \
-                          " -r " + SEED
+                          " -r " + SEED                     + \
+                          " -e "
         
         if (TREEMETHOD!="unspecified"): 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
