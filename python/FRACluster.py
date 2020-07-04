@@ -113,7 +113,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         os.chdir(WD+"/TREE")
         FRACTAL_COMMAND = "FRACTAL"                         + \
                           " -i " + INPUT_FA                 + \
-                          " -a " + OPTION                   + \
                           " -k " + str(SUBSAMPLE_SIZE)      + \
                           " -b " + MODEL                    + \
                           " -p " + ML_or_MP                 + \
@@ -129,6 +128,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
         if (ALIGNED=='unaligned'):
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
+        if (OPTION!=""):
+            FRACTAL_COMMAND = FRACTAL_COMMAND+" -a " + OPTION
         
         subprocess.call(FRACTAL_COMMAND,shell=True)
         shutil.move(WD+"/TREE/FRACTALout.nwk",WD+"/TERMINAL.nwk")
