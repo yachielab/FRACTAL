@@ -90,7 +90,7 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
         out.write(json.dumps(outputdict))
     return len(paraphyletic), max(list(leaf_to_Nseq.values()))
 
-def add_paraphyletic_fa(jpartfname, outputfname, all_fa,subsample_size,num_of_para):
+def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_para, file_format = "fasta"):
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
@@ -105,11 +105,18 @@ def add_paraphyletic_fa(jpartfname, outputfname, all_fa,subsample_size,num_of_pa
     '''
     # add paraphyletic sequences into subsample
     with open(all_fa,'r') as allfa, open(outputfname,'a') as out:
-        handle = SeqIO.parse(allfa, "fasta")
-        for record in handle:
-            if(record.id!="root"):
-                if(js["partition"][record.id]=="paraphyletic"):
-                    SeqIO.write(record, out, "fasta")
+        if (file_format == "fasta"):
+            handle = SeqIO.parse(allfa, "fasta")
+            for record in handle:
+                if(record.id!="root"):
+                    if(js["partition"][record.id]=="paraphyletic"):
+                        SeqIO.write(record, out, "fasta")
+        elif (file_format=="edit"):
+            for line in allfa:
+                name         = line.split()[0]
+                editlist_str = line.split()[1]
+                if(js["partition"][name]=="paraphyletic"):
+                    out.write(line)
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
@@ -120,7 +127,7 @@ def get_ancseq(ancseq,ancnum):
                 return ls[1]
     print("no sequence named "+ancname)
 
-def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING):
+def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING,file_format="fasta"):
     # open .jpart file
     with open(jpart,"r") as jf:
         jp = jf.read()
@@ -164,21 +171,37 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         for i in range(num_mono):
             ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
         para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
-        with open(in_fasta,'r') as in_handle:
-            record = SeqIO.parse(in_handle, "fasta")
-            i=0
-            for s in record:
-                if(s.id=="root"):
-                    for st in ost: #ROOTING=="Origin"
-                        SeqIO.write(s, st, "fasta")
-                elif(js["partition"][s.id]=="paraphyletic"):
-                    SeqIO.write(s, para, "fasta")
-                else:
-                    l = NUMdict[str(js["partition"][s.id])]
-                    if( fasta_count == 0 ):
-                        DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
-                    SeqIO.write(s, ost[l], "fasta")
-                i=i+1
+
+        if (file_format=="fasta"):
+            with open(in_fasta,'r') as in_handle:
+                record = SeqIO.parse(in_handle, "fasta")
+                i=0
+                for s in record:
+                    if(s.id=="root"):
+                        for st in ost: #ROOTING=="Origin"
+                            SeqIO.write(s, st, "fasta")
+                    elif(js["partition"][s.id]=="paraphyletic"):
+                        SeqIO.write(s, para, "fasta")
+                    else:
+                        l = NUMdict[str(js["partition"][s.id])]
+                        if( fasta_count == 0 ):
+                            DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
+                        SeqIO.write(s, ost[l], "fasta")
+                    i=i+1
+        elif(file_format=="edit"):
+            with open(in_fasta,'r') as in_handle:
+                for line in in_handle:
+                    name = line.split()[0]
+                    if(name=="root"):
+                        for st in ost: #ROOTING=="Origin"
+                            st.write(line)
+                    elif(js["partition"][name]=="paraphyletic"):
+                        para.write(line)
+                    else:
+                        l = NUMdict[str(js["partition"][name])]
+                        if( fasta_count == 0 ):
+                            DIRdict['{'+str(js["partition"][name])+'}'][1]+=1
+                        ost[l].write(line)
         for st in ost:
             st.close()
         para.close()
@@ -235,21 +258,27 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
                 command += str(arg) + " "
             qf.write(command)
 
-def tiny_tree(INPUTfa,OUTPUTnwk):
-    with open(INPUTfa,'r') as fa:
+def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
+    with open(INPUTfile,'r') as handle:
         names=[]
-        handle = SeqIO.parse(fa, "fasta")
-        for record in handle:
-            if(record.id!="root"):
-                names.append(record.id)
-        if(len(names)==1):
-            init_clade = Phylo.BaseTree.Clade(name=names[0])
-            tree = Phylo.BaseTree.Tree(init_clade)
-        elif(len(names)==2):
-            init_clade = Phylo.BaseTree.Clade()
-            tree = Phylo.BaseTree.Tree(init_clade)
-            tree.clade.clades.extend(list(Phylo.BaseTree.Clade(name=name) for name in names))
-        else:
-            print("tiny_tree() Error : len(names)=")
-            print(len(names))
+        if (file_format == "fasta"):
+            records = SeqIO.parse(handle, "fasta")
+            for record in records:
+                if(record.id!="root"):
+                    names.append(record.id)
+        elif(file_format == "edit"):
+            for line in handle:
+                name = line.split()[0]
+                if (name != "root"): names.append(name)
+
+    if(len(names)==1):
+        init_clade = Phylo.BaseTree.Clade(name=names[0])
+        tree = Phylo.BaseTree.Tree(init_clade)
+    elif(len(names)==2):
+        init_clade = Phylo.BaseTree.Clade()
+        tree = Phylo.BaseTree.Tree(init_clade)
+        tree.clade.clades.extend(list(Phylo.BaseTree.Clade(name=name) for name in names))
+    else:
+        print("tiny_tree() Error : len(names)=")
+        print(len(names))
     Phylo.write(tree, OUTPUTnwk, 'newick')

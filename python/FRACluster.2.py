@@ -14,10 +14,12 @@ import subprocess
 import shutil
 import rename_sequence
 import placement
+import manage_edits
 import math
 import time
+import gzip
 
-def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
+def FRACluster2(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
                INIT_SEQ_COUNT,SEED,ML_or_MP, 
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
@@ -33,46 +35,20 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     os.chdir(WD) # move to Working Directory
     
     # check if outgroup exists or not (sequence named "root")
-    if rename_sequence.outgroup_check_fast(WD+"/INPUT.fa"):
-        print("INPUT.fa properly include outgroup sequence")
+    if rename_sequence.outgroup_check_fast(WD+"/INPUT.edit"):
+        print("INPUT.edit properly include outgroup sequence")
     else:
-        print("No sequence named \"root\" in INPUT.fa!\
-               INPUT.fa should include outgroup sequence named \"root\"")
+        print("No sequence named \"root\" in INPUT.edit!\
+               INPUT.edit should include outgroup sequence named \"root\"")
         return
     
     # check number of sequences
-    seq_array                 = rename_sequence.count_sequence_fast("INPUT.fa")
-    seq_count                 = seq_array[0]
+    seq_count                 = int(subprocess.check_output(['wc', '-l', 'INPUT.edit']).decode().split(' ')[0])
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
-    seq_length                = seq_array[1]
-    raxml_thread_num          = min(max(seq_length//500,2),THREAD_NUM) # use 1 thread per 500 bp in RAxML
     depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
     tree_thread_num           = THREAD_NUM
-
-    # check if aligned
-    if (ALIGNED=="unaligned"):
-        if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-            if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
-
-                print(WD,seq_count, seq_count_when_aligned, "alignment needed!!")
-
-                os.remove(WD+"/INPUT.fa.aligned")
-                INPUT_FA               = WD+"/INPUT.fa"
-                seq_count_when_aligned = seq_count
-                
-            else:
-                INPUT_FA = WD+"/INPUT.fa.aligned"
-                ALIGNED  = "aligned"
-        else:
-
-            print(WD,seq_count,seq_count_when_aligned,"alignment needed!!")
-
-            INPUT_FA               = WD+"/INPUT.fa"
-            seq_count_when_aligned = seq_count
-    elif (ALIGNED=="aligned"):
-        INPUT_FA               = WD+"/INPUT.fa"
 
     i=1
     
@@ -80,16 +56,18 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     if(seq_count<=THRESHOLD):
         if(seq_count<4):
-            partition.tiny_tree(INPUT_FA,"TERMINAL.nwk")
+            partition.tiny_tree("INPUT.edit","TERMINAL.nwk", file_format == "edit")
             print("seq_count < 4!")
         else:
             os.mkdir(    "TREE")
             os.chdir(WD+"/TREE")
+            edit_list = manage_edits.edit2editlist(WD+"/INPUT.edit")
+            edit2fasta(WD+"/INPUT.edit", edit_list)
             subprocess.call("bash " + CODEDIR + "/shell/TREE.sh" +
                             " -n "  + str(tree_thread_num)       +
                             " -m "  + TREEMETHOD                 +
                             " -a "  + ALIGNED                    +
-                            " -f "  + INPUT_FA                   +
+                            " -f "  + WD+"/INPUT.edit.fa"        +
                             " -c "  + CODEDIR                    +
                             " -w "  + WD+"/TREE"                 +
                             " -p \""+ str(OPTION)+"\""           +
@@ -103,7 +81,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 "root"
             )
     
-    # call fractal FRACTAL # don't forget to change!!!!!
+    # call fractal FRACTAL
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): 
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
@@ -148,14 +126,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #random sampling#
             #################
-            if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                INPUT_FA = WD+"/INPUT.fa.aligned"
-                ALIGNED  = "aligned" 
 
-            if(os.path.isfile("ITERATION.fa")):
+            if(os.path.isfile("ITERATION.edit")):
                 rename_sequence.random_sampling(
-                    "ITERATION.fa"             ,
-                    "SUBSAMPLE/SUBSAMPLE.fa"   ,
+                    "ITERATION.edit"           ,
+                    "SUBSAMPLE/SUBSAMPLE.edit" ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED
                 )
@@ -166,17 +141,21 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             else:
                 rename_sequence.random_sampling(
                     INPUT_FA                   ,
-                    "SUBSAMPLE/SUBSAMPLE.fa"   ,
+                    "SUBSAMPLE/SUBSAMPLE.edit" ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED                  ,
-                    n = seq_count
+                    n = seq_count              ,
+                    file_format = "edit"
                 )
+            
+            edit_list = edit2editlist(WD+"/SUBSAMPLE.edit")
+            edit2fasta(WD+"/SUBSAMPLE.edit", edit_list)
             
             #################
             #rename sequence#
             #################
             rename_sequence.rename_sequence(
-                "SUBSAMPLE/SUBSAMPLE.fa"           , 
+                "SUBSAMPLE/SUBSAMPLE.edit.fa"       , 
                 "SUBSAMPLE/RENAMED_"+str(i)+".fa"
             )
             
@@ -220,7 +199,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       + 
                     " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
                     " -n "   + "PARAM_"+str(i)                                      +
-                    # " -n "   + "PARAM_"+str(i-i%2)                                  + # for test
                     " -m "   + MODEL                                                ,
                     shell=True
                 )
@@ -236,8 +214,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     para  = prev_para
                     break
                 else:
-                    if(os.path.isfile(WD+"/ITERATION.fa")):
-                        os.remove(WD+"/ITERATION.fa")
+                    if(os.path.isfile(WD+"/ITERATION.edit")):
+                        os.remove(WD+"/ITERATION.edit")
                     i += 1
             
             else: # if parameter optimization succeeded
@@ -249,12 +227,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
                 # select sequence file to place
-                if(os.path.isfile(WD+"/INPUT.fa.aligned")):
-                    QUERY_FA = WD+"/INPUT.fa.aligned"
-                    ALIGNED_FOR_PLACEMENT = "aligned"
-                else:
-                    QUERY_FA = WD+"/INPUT.fa"
-                    ALIGNED_FOR_PLACEMENT = ALIGNED
+                QUERY_EDITS = WD+"/INPUT.edit"
+                ALIGNED_FOR_PLACEMENT = ALIGNED
 
                 # conduct placement
                 placement.distributed_placement(
@@ -263,7 +237,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
                     WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
-                    QUERY_FA                                            , 
+                    QUERY_EDITS                                         , 
                     WD+"/EPANG"                                         , 
                     THREAD_NUM                                          , 
                     nodenum                                             ,
@@ -274,7 +248,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     ALIGNED_FOR_PLACEMENT                               ,
                     SEED                                                ,
                     hmm_aligner=HMM_ALIGNER                             ,
-                    hmm_profiler=HMM_PROFILER
+                    hmm_profiler=HMM_PROFILER                           ,
+                    file_format="edit"                                  ,
+                    edit_list = edit_list
                 )
                 
                 
@@ -291,9 +267,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
                 print("detected "+str(para)+" paraphyletic sequences")
 
-                ##################################################
-                #get paraphyletic sequences and make ITERATION.fa#
-                ##################################################
+                ####################################################
+                #get paraphyletic sequences and make ITERATION.edit#
+                ####################################################
                 if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
                     
                     # The previous subsample achieved minimum number of paraphyletic groups
@@ -303,30 +279,18 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                 if(para!=0): # if problematic sequences remained
 
-                    # select subsample sequence file
-                    if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
-                        ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
-                    else:
-                        ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"
-
                     shutil.copyfile(
-                        ALIGNED_SUBSAMPLE,
-                        "ITERATION.fa"
+                        WD+"/SUBSAMPLE/SUBSAMPLE.edit",
+                        WD+"/ITERATION.edit"
                     )
-                    
-                    # select all sequence file
-                    if os.path.isfile(WD+"/INPUT.fa.aligned"):
-                        ALIGNED_ALL = WD+"/INPUT.fa.aligned"
-                        ALIGNED     = "aligned"
-                    else:
-                        ALIGNED_ALL = "INPUT.fa" 
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
-                        "ITERATION.fa"                          ,
-                        ALIGNED_ALL                             ,
+                        "ITERATION.edit"                        ,
+                        "INPUT.edit"                            ,
                         SUBSAMPLE_SIZE                          ,
-                        para
+                        para                                    ,
+                        file_format = "edit"
                         )
                     i+=1
                     prev_para=para
@@ -350,11 +314,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
             sys.exit()
         
-        FASTA_LIST = [ WD+"/INPUT.fa" ]
-        if os.path.isfile(WD+"/INPUT.fa.aligned"):
-            FASTA_LIST.append(WD+"/INPUT.fa.aligned")
+        EDIT_LIST = [ WD+"/INPUT.edit" ]
         DIRdict = partition.partition_fasta(
-            FASTA_LIST,
+            EDIT_LIST,
             NUMFILE,
             NODESDIR,
             WD,
@@ -362,7 +324,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             "PARTITION.info",
             "UPSTREAM.nwk",
             WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
-            ROOTING
+            ROOTING,
+            file_format = "edit"
             )
         
         partition.qsub_prep(
@@ -385,12 +348,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     os.chdir(WD)
 
     filenames = [
-        "INPUT.fa",
-        "ITERATION.fa",
+        "INPUT.edit",
+        "ITERATION.edit",
         "tmp.nwk",
-        "INPUT.fa.aligned",
-        "INPUT.fa.aligned.problematic",
-        "SUBSAMPLE.fa.aligned"
+        "INPUT.edit.aligned",
+        "INPUT.edit.aligned.problematic",
+        "SUBSAMPLE.edit.agned"
         ]
     
     dirnames = [

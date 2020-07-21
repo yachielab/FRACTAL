@@ -28,6 +28,7 @@ JOB_NAME=${18}
 PLACEMENT_METHOD=${19}
 ALIGNED=${20}
 max_num_of_iterations=${21}
+FASTA_or_EDIT=${22}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
@@ -67,17 +68,28 @@ fi
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
-cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
-while [ ! -e ${ROOT_DIR}/nodes/d0/INPUT.fa ]; do
-  echo "${ROOT_DIR}/nodes/d0/INPUT.fa was not found" 1>&2
-  cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
-done
+
+if [ "$FASTA_or_EDIT" = "fasta" ]; then
+    cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
+    wait
+elif [ "$FASTA_or_EDIT" = "edit" ]; then
+    cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit
+    wait
+
+#while [ ! -e ${ROOT_DIR}/nodes/d0/INPUT.fa ]; do
+#  echo "${ROOT_DIR}/nodes/d0/INPUT.fa was not found" 1>&2
+#  cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
+#done
 
 echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-echo "python3 ${CODE_DIR}/python/FRACluster.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+if [ "$FASTA_or_EDIT" = "fasta" ]; then
+    echo "python3 ${CODE_DIR}/python/FRACluster.py   ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+elif [ "$FASTA_or_EDIT" = "edit" ]; then
+    echo "python3 ${CODE_DIR}/python/FRACluster.2.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then

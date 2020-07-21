@@ -1,5 +1,13 @@
 ### Update Log
 
+<h4> 7/21/2020 Version 2.3.0 </h4>
+
+1. Option: -E option was released. FRACTAL was enabled to treat edit list.
+
+<h4> Version 2.1.0-2.2.0 </h4>
+
+1. Small debugs
+
 <h4> 5/5/2020 Version 2.0.0 </h4>
 
 1. Debug for avoiding an possible inifinite loop

@@ -1,6 +1,7 @@
 from Bio import SeqIO
 import jplace_parse
 import divide_ref_and_query
+import manage_edits
 import subprocess
 import os
 import shutil
@@ -19,7 +20,7 @@ def decompose_fasta(in_file, x,seq_count):
         l=0 # inclement constantly
         m=0 # inclement for each sequence, but become 0 after m reaches k
         i=0 # 
-        while(l<n):
+        if(True):
             for record in allseq_itr:
                 if(m<k):
                     m+=1
@@ -31,11 +32,41 @@ def decompose_fasta(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
+def decompose_edit(in_file, x,seq_count):
+    n=seq_count
+    k=n//x + 1 # each decomposed file has k sequences
+    ohandle=[]
+    for i in range(x):
+        ohandle.append(
+            open(in_file+"."+str(i), 'w')
+        ) 
+    with open(in_file,'r') as ihandle:
+        l=0 # inclement constantly
+        m=0 # inclement for each sequence, but become 0 after m reaches k
+        i=0 # 
+        if(True):
+            for line in ihandle:
+                if(m<k):
+                    m+=1
+                else:
+                    i+=1
+                    m=0
+                ohandle[i].write(line)
+                l+=1
+    for i in range(x):
+        ohandle[i].close()
+
 def distributed_placement(  WD, EPANG, refseq, reftree, model, 
                             query, outdir, threadnum, nodenum, 
                             codedir, seq_count, ML_or_MP, RAXMLSEQ, 
-                            ALIGNED, seed, hmm_aligner="", hmm_profiler=""  ):
+                            ALIGNED, seed, hmm_aligner="", hmm_profiler="",
+                            file_format = "fasta", edit_list = None ):
     if(nodenum<=1):
+
+        if (file_format == "edit"):
+            manage_edits.edit2fasta(refseq, edit_list)
+            refseq = refseq + ".fa"
+
         if(ML_or_MP=="ML"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 # Build HMM profile
@@ -147,22 +178,38 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 outdir+"/ref_query.fa.ref", 
                 WD+"/SUBSAMPLE.fa.aligned"
                 )
-    else:
+
+    else: # in distributed computing mode
         dname=WD.split("/").pop()
-        moved=outdir+"/query.fa"
-        shutil.move(query, moved)
-        # Build HMM profile
-        subprocess.call(
-            hmm_profiler+" "+
-            refseq+".hmm "+
-            refseq,
-            shell=True
+
+        if ( file_format == "fasta" ):
+            moved=outdir+"/query.fa"
+            shutil.move(query, moved)
+
+            if(ALIGNED=="unaligned"):
+                # Build HMM profile
+                subprocess.call(
+                    hmm_profiler+" "+
+                    refseq+".hmm "+
+                    refseq,
+                    shell=True
+                    )
+            decompose_fasta(
+                moved,
+                nodenum, 
+                seq_count
+                )
+        elif ( file_format == "edit" ):
+            moved=outdir+"/query.edit"
+            shutil.move(query, moved)
+            decompose_edit(
+                moved,
+                nodenum, 
+                seq_count
             )
-        decompose_fasta(
-            moved,
-            nodenum, 
-            seq_count
-            )
+            with open(outdir+"/editlist.txt") as handle:
+                for edit in edit_list:
+                    handle.write(edit + "\n")
 
         #distribution start
         for i in range(nodenum):
@@ -188,6 +235,22 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 handle.write("#$ -S /bin/bash\n")
                 handle.write("PATH={}\n".format(PATH))
                 handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+
+                if (file_format == "edit"):
+                    handle.write(
+                        "python3 "                             +
+                        codedir+"/python/manage_edits.py "     +
+                        outdir+"/query.edit."+str(i)+" "        +
+                        outdir+"/editlist.txt\n"
+                        )
+                    moved = outdir+"/query.edit.fa"
+                    handle.write(
+                        "mv "                               + \
+                        outdir+"/query.edit."+str(i)+".fa " + \
+                        moved + "." + str(i) + "\n"
+                        )
+
+
                 if(ML_or_MP=="ML"): 
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         # Conduct HMM alignment
