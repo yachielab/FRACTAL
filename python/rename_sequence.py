@@ -83,6 +83,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                         k += 1
     elif (file_format=="edit"):
         with open(in_fname, 'r') as rhandle, open(out_fname, 'w') as whandle:
+            i = 0
             k = 0
             edits_str_set = set()
             for line in rhandle:
