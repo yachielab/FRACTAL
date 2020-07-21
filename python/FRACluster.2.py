@@ -63,7 +63,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             os.mkdir(    "TREE")
             os.chdir(WD+"/TREE")
             edit_list = manage_edits.edit2editlist(WD+"/INPUT.edit")
-            edit2fasta(WD+"/INPUT.edit", edit_list)
+            manage_edits.edit2fasta(WD+"/INPUT.edit", edit_list)
             subprocess.call("bash " + CODEDIR + "/shell/TREE.sh" +
                             " -n "  + str(tree_thread_num)       +
                             " -m "  + TREEMETHOD                 +
