@@ -47,12 +47,12 @@ def edit2fasta(edit_file, edit_list):
             seq_str       = ""
             seq_half_pos  = len(edit_list)//2 + 1
             for edit in edit_list[:seq_half_pos]:
-                if (edit in edit_list):
+                if (edit in seq_edit_set):
                     seq_str = seq_str + "T"
                 else:
                     seq_str = seq_str + "C"
             for edit in edit_list[seq_half_pos:]:
-                if (edit in edit_list):
+                if (edit in seq_edit_set):
                     seq_str = seq_str + "A"
                 else:
                     seq_str = seq_str + "G"
