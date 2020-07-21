@@ -148,8 +148,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     file_format = "edit"
                 )
             
-            edit_list = manage_edits.edit2editlist(WD+"/SUBSAMPLE.edit")
-            manage_edits.edit2fasta(WD+"/SUBSAMPLE.edit", edit_list)
+            edit_list = manage_edits.edit2editlist(WD+"/SUBSAMPLE/SUBSAMPLE.edit")
+            manage_edits.edit2fasta(WD+"/SUBSAMPLE/SUBSAMPLE.edit", edit_list)
             
             #################
             #rename sequence#
