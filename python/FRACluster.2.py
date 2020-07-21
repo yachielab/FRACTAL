@@ -49,6 +49,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         seq_count_when_aligned= None
     depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
     tree_thread_num           = THREAD_NUM
+    raxml_thread_num          = 1
 
     i=1
     
