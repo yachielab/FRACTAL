@@ -77,7 +77,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -s "  + ALIGNER                    ,
                             shell   = True                       )
             partition.rooting_and_remove(
-                INPUT_FA+".aligned.tree"     ,
+                WD+"/INPUT.edit.aligned.tree",
                 WD+"/TERMINAL.nwk"           ,
                 "root"
             )
