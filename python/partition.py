@@ -114,12 +114,13 @@ def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_
         elif (file_format=="edit"):
             for line in allfa:
                 name         = line.split()[0]
-                if (len(line.split())>1):
-                    editlist_str = line.split()[1]
-                else:
-                    editlist_str = ""
-                if(js["partition"][name]=="paraphyletic"):
-                    out.write(line)
+                if (name != "root"):
+                    if (len(line.split())>1):
+                        editlist_str = line.split()[1]
+                    else:
+                        editlist_str = ""
+                    if(js["partition"][name]=="paraphyletic"):
+                        out.write(line)
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
