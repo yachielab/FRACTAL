@@ -88,7 +88,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
         FRACTAL_COMMAND = "FRACTAL"                         + \
-                          " -i " + INPUT_FA                 + \
+                          " -i " + WD+"/INPUT.edit"         + \
                           " -k " + str(SUBSAMPLE_SIZE)      + \
                           " -b " + MODEL                    + \
                           " -p " + ML_or_MP                 + \
@@ -96,7 +96,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                           " -x " + str(MAX_ITERATION)       + \
                           " -c " + str(THREAD_NUM)          + \
                           " -r " + SEED                     + \
-                          " -e "
+                          " -e -E"
         
         if (TREEMETHOD!="unspecified"): 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD

@@ -14,7 +14,10 @@ def edit2editlist(edit_file):
     for line in inhandle:
         total_seqcount+= 1
         seq_name      = line.split()[0]
-        seq_edit_list = line.split()[1].split(";")
+        if (len(line.split()) > 1):
+            seq_edit_list = line.split()[1].split(";")
+        else:
+            seq_edit_list = []
         for seq_edit in seq_edit_list:
             if seq_edit in edit2seqcount.keys():
                 edit2seqcount[seq_edit] += 1
