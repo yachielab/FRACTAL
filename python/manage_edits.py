@@ -56,11 +56,7 @@ def edit2fasta(edit_file, edit_list):
                     seq_str = seq_str + "A"
                 else:
                     seq_str = seq_str + "G"
-            seq = Seq.Seq(seq_str)
-            seq.id          = seq_name
-            seq.description = seq_name
-            seq.name        = seq_name
-            SeqIO.write(seq, outhandle, "fasta")
+            outhandle.write(">"+seq_name+"\n"+seq_str+"\n")
             
     inhandle.close()
 
