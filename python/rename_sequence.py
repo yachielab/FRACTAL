@@ -86,8 +86,8 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
             k = 0
             edits_str_set = set()
             for line in rhandle:
+                name      = line.split()[0]
                 if ( name != "root"):
-                    name      = line.split()[0]
                     if ( k==rand_idx[i] ):
                         edits_str = line.split()[1]
                         if edits_str not in edits_str_set:
