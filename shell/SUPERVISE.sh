@@ -75,6 +75,7 @@ if [ "$FASTA_or_EDIT" = "fasta" ]; then
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
     cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit
     wait
+fi
 
 #while [ ! -e ${ROOT_DIR}/nodes/d0/INPUT.fa ]; do
 #  echo "${ROOT_DIR}/nodes/d0/INPUT.fa was not found" 1>&2
@@ -89,7 +90,7 @@ if [ "$FASTA_or_EDIT" = "fasta" ]; then
     echo "python3 ${CODE_DIR}/python/FRACluster.py   ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
     echo "python3 ${CODE_DIR}/python/FRACluster.2.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-
+fi
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then
