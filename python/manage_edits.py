@@ -60,7 +60,7 @@ def edit2fasta(edit_file, edit_list):
             seq.id          = seq_name
             seq.description = seq_name
             seq.name        = seq_name
-            SeqIO.write(seq_str, outhandle, "fasta")
+            SeqIO.write(seq, outhandle, "fasta")
             
     inhandle.close()
 
