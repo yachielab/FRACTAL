@@ -1,4 +1,4 @@
-
+from Bio import SeqIO
 
 
 def edit2editlist(edit_file):
