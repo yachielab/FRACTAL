@@ -42,7 +42,10 @@ def edit2fasta(edit_file, edit_list):
 
         for line in inhandle:
             seq_name      = line.split()[0]
-            seq_edit_list = line.split()[1].split(";")
+            if len(line.split()) > 1:
+                seq_edit_list = line.split()[1].split(";")
+            else:
+                seq_edit_list = []
             seq_edit_set  = set(seq_edit_list)
             seq_str       = ""
             seq_half_pos  = len(edit_list)//2 + 1
