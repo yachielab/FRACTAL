@@ -1,4 +1,4 @@
-from Bio import SeqIO
+from Bio import SeqIO, Seq
 
 
 def edit2editlist(edit_file):
@@ -56,6 +56,10 @@ def edit2fasta(edit_file, edit_list):
                     seq_str = seq_str + "A"
                 else:
                     seq_str = seq_str + "G"
+            seq = Seq.Seq(seq_str)
+            seq.id          = seq_name
+            seq.description = seq_name
+            seq.name        = seq_name
             SeqIO.write(seq_str, outhandle, "fasta")
             
     inhandle.close()
