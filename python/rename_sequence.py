@@ -86,6 +86,8 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
             i = 0
             k = 0
             edits_str_set = set()
+            whandle.write("root\n")
+                    
             for line in rhandle:
                 name      = line.split()[0]
                 if ( name != "root"):
