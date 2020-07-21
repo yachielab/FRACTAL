@@ -19,7 +19,7 @@ def edit2editlist(edit_file):
             if seq_edit in edit2seqcount.keys():
                 edit2seqcount[seq_edit] += 1
             else:
-                edit2seqcount[seq_edit] += 0
+                edit2seqcount[seq_edit] = 1
 
     editlist = []
     for key_edit in edit2seqcount:
