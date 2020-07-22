@@ -207,7 +207,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 nodenum, 
                 seq_count
             )
-            with open(outdir+"/editlist.txt") as handle:
+            with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
 

@@ -19,7 +19,7 @@ def rename_sequence(in_fname,out_fname):
 
 def outgroup_check_fast(in_fname):
     exist_root = False
-    with open(in_fname) as origin:
+    with open(in_fname, 'r') as origin:
         for line in origin:
             if (line           == ">root\n"): exist_root = True; break
             if (line.split()[0]== "root"   ): exist_root = True; break
