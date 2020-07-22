@@ -242,8 +242,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 QUERY_EDITS = WD+"/INPUT.edit"
                 ALIGNED_FOR_PLACEMENT = ALIGNED
 
-                WD+"/PARAM/RAxML_result.PARAM_"+str(i)
-
                 # conduct placement
                 placement.distributed_placement(
                     WD                                                  , 
