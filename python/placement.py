@@ -151,6 +151,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     shell=True
                 )
             os.chdir(outdir)
+            print (
+                RAXMLSEQ                      +
+                " -n epa_result"              +
+                " -f y -m GTRCAT"             +
+                " -s "+outdir+"/ref_query.fa" +
+                " -t "+reftree                
+            )
             subprocess.call(
                 RAXMLSEQ                      +
                 " -n epa_result"              +
