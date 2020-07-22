@@ -1,13 +1,10 @@
 from Bio import SeqIO, Seq
 import sys
+import gzip
 
 def edit2editlist(edit_file):
     
-    is_gzipped = (edit_file.split(".")[-1] == "gz")
-    if ( is_gzipped ):
-        inhandle = gzip.open(edit_file, 'rt')
-    else:
-        inhandle = open(edit_file, 'r')
+    inhandle = gzip.open(edit_file, 'rt')
     
     edit2seqcount  = {}
     total_seqcount = 0
