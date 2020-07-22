@@ -181,29 +181,30 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 shell=True
             )
             
-            os.chdir(WD+"/PARAM")
-            
-            if(raxml_thread_num>1):
-                subprocess.call(
-                    RAXMLPAR                                                        +
-                    " -T "   + str(raxml_thread_num)                                +
-                    " -f e"                                                         +
-                    " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"      +
-                    " -t "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree" +
-                    " -n "   + "PARAM_"+str(i)                                      +
-                    " -m "   + MODEL                                                ,
-                    shell=True
-                )
-            else:
-                subprocess.call(
-                    RAXMLSEQ                                                        +
-                    " -f e"                                                         +
-                    " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       + 
-                    " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
-                    " -n "   + "PARAM_"+str(i)                                      +
-                    " -m "   + MODEL                                                ,
-                    shell=True
-                )
+            if (ML_or_MP=="ML"):
+                os.chdir(WD+"/PARAM")
+                
+                if(raxml_thread_num>1):
+                    subprocess.call(
+                        RAXMLPAR                                                        +
+                        " -T "   + str(raxml_thread_num)                                +
+                        " -f e"                                                         +
+                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"      +
+                        " -t "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree" +
+                        " -n "   + "PARAM_"+str(i)                                      +
+                        " -m "   + MODEL                                                ,
+                        shell=True
+                    )
+                else:
+                    subprocess.call(
+                        RAXMLSEQ                                                        +
+                        " -f e"                                                         +
+                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       + 
+                        " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
+                        " -n "   + "PARAM_"+str(i)                                      +
+                        " -m "   + MODEL                                                ,
+                        shell=True
+                    )
             
             # if parameter optimization failed
             if (not os.path.isfile(WD+"/PARAM/RAxML_result.PARAM_"+str(i))):
