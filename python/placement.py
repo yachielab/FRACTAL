@@ -34,7 +34,7 @@ def decompose_fasta(in_file, x,seq_count):
 
 def decompose_edit(in_file, x,seq_count):
     n=seq_count
-    k=n//x + 1 # each decomposed file has k sequences
+    k=n//x # each decomposed file has k sequences
     ohandle=[]
     for i in range(x):
         ohandle.append(
@@ -42,15 +42,9 @@ def decompose_edit(in_file, x,seq_count):
         ) 
     with open(in_file,'r') as ihandle:
         l=0 # inclement constantly
-        m=0 # inclement for each sequence, but become 0 after m reaches k
-        i=0 # 
         if(True):
             for line in ihandle:
-                if(m<k):
-                    m+=1
-                else:
-                    i+=1
-                    m=0
+                i = min(l//k, x-1)
                 ohandle[i].write(line)
                 l+=1
     for i in range(x):
@@ -375,7 +369,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             os.remove(outdir+"/epang"+str(i)+".o")
             os.remove(moved +"."+str(i))
         
-        shutil.move(moved,query)
+        if (file_format == "fasta"):
+            shutil.move(moved,query)
+        elif (file_format == "edit"):
+            shutil.move(outdir+"/query.edit",query)
 
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
