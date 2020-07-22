@@ -40,6 +40,21 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     root=relation[1]
     ref_tree=Phylo.read(treefile,'newick')
     ref_tree.root_with_outgroup(root)
+    
+    
+    
+    
+    
+    
+    print(ref_tree)
+    
+    
+    
+    
+    
+    
+    
+    
     # place list
     place_list=[]
     with open(edge_to_sequence_file,'r') as handle:
