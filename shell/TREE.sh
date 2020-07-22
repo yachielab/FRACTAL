@@ -55,8 +55,6 @@ else
     echo "exception: Alignment method name seems wrong..."
 fi
 
-gzip -k ${FILE}.aligned
-
 # Tree construction
 # ML (RAxML)
 if [ $TREEMETHOD = "raxmlML" ]; then
@@ -80,3 +78,5 @@ elif [ $TREEMETHOD = "unspecified" ]; then
 else
     echo "exception: Tree construction method name seems wrong..."
 fi
+
+gzip ${FILE}.aligned
