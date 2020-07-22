@@ -1,5 +1,5 @@
 from Bio import SeqIO, Seq
-
+import sys
 
 def edit2editlist(edit_file):
     
