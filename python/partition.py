@@ -24,7 +24,7 @@ def rooting_and_remove(nwkfilepath,newnwkpath,root):
         tree1.root_with_outgroup(root)
         tree2=Phylo.BaseTree.Tree(tree1.clade[0])
     Phylo.write(tree2,newnwkpath,"newick")
-'''
+
 def make_unrooted(treefile,new_treefile):
     ref_tree=Phylo.read(treefile,'newick')
     if len(ref_tree.clade.clades) == 2:
@@ -35,7 +35,7 @@ def make_unrooted(treefile,new_treefile):
             ref_tree.clade = ref_tree.clade.clades[1]
             ref_tree.clade.clades.append(ref_tree.clade.clades[0])
     Phylo.write(ref_tree,new_treefile,"newick")
-'''
+
 def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     partition={}; leaf_to_Nseq={}
     paraphyletic=[]
