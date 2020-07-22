@@ -57,7 +57,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     if(seq_count<=THRESHOLD):
         if(seq_count<4):
-            partition.tiny_tree("INPUT.edit","TERMINAL.nwk", file_format == "edit")
+            partition.tiny_tree("INPUT.edit","TERMINAL.nwk", file_format = "edit")
             print("seq_count < 4!")
         else:
             os.mkdir(    "TREE")
