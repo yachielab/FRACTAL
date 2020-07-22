@@ -58,23 +58,23 @@ fi
 # Tree construction
 # ML (RAxML)
 if [ $TREEMETHOD = "raxmlML" ]; then
-    time ${SOFTWARE} -s ${FILE}.aligned -n raxml -T $THREAD_NUM ${OPTION} -m ${MODEL} -p 12345
+    ${SOFTWARE} -s ${FILE}.aligned -n raxml -T $THREAD_NUM ${OPTION} -m ${MODEL} -p 12345
     wait
     mv RAxML_bestTree.raxml ${FILE}.aligned.tree
 # NJ
 elif [ $TREEMETHOD = "rapidnjNJ" ]; then
-    time $SOFTWARE -c ${THREADNUM} ${FILE}.aligned -i fa ${OPTION} > ${FILE}.aligned.tree
+    $SOFTWARE -c ${THREADNUM} ${FILE}.aligned -i fa ${OPTION} > ${FILE}.aligned.tree
 # MP
 elif [ $TREEMETHOD = "raxmlMP" ]; then
-    time ${SOFTWARE} -s ${FILE}.aligned -y -n raxml -T $THREAD_NUM -m ${MODEL} -p 12345 # -y : only compute maximum parsimony!
+    ${SOFTWARE} -s ${FILE}.aligned -y -n raxml -T $THREAD_NUM -m ${MODEL} -p 12345 # -y : only compute maximum parsimony!
     mv RAxML_parsimonyTree.raxml ${FILE}.aligned.tree
 # ML (fasttree)
 elif [ $TREEMETHOD = "fasttreeML" ]; then
     export OMP_NUM_THREADS=$THREADNUM
-    time $SOFTWARE -gtr -nt -seed 111 -quiet ${OPTION}  < ${FILE}.aligned > ${FILE}.aligned.tree
+    $SOFTWARE -gtr -nt -seed 111 -quiet ${OPTION}  < ${FILE}.aligned > ${FILE}.aligned.tree
 # Others
 elif [ $TREEMETHOD = "unspecified" ]; then
-    time $SOFTWARE ${FILE}.aligned
+    $SOFTWARE ${FILE}.aligned
 else
     echo "exception: Tree construction method name seems wrong..."
 fi
