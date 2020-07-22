@@ -130,7 +130,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             if(os.path.isfile(WD+"/ITERATION.edit")):
                 rename_sequence.random_sampling(
-                    WD+"ITERATION.edit"        ,
+                    WD+"/ITERATION.edit"        ,
                     "SUBSAMPLE/SUBSAMPLE.edit" ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED                  ,
