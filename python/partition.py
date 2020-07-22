@@ -70,7 +70,13 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     while(stack!=[]):
         cstate=stack.pop()
         d=len(ref_tree.get_path(cstate)) # current depth
-        if (cstate.name != None):
+        if (cstate.name == None):
+            if(d<depth):
+                if(len(cstate.clades)!=0):
+                    stack.extend(cstate.clades)
+                else:
+                    leaves[cstate.name]=[cstate.name]
+        else:
             cedge =int(cstate.name.strip('{').strip('}'))
             if(place_list[cedge]==[] and d<depth):
                 if(len(cstate.clades)!=0):
