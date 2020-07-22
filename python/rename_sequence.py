@@ -63,7 +63,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         rand_idx=list(range(n-1))
 
     if ( file_format == "fasta" ):
-        with gzip.open(out_fname, 'w') as subs:
+        with gzip.open(out_fname, 'wt') as subs:
             with open(in_fname) as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 for s in allseq_itr:
@@ -71,7 +71,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                         SeqIO.write(s, subs, "fasta")
             
             added_seqs = set()
-            with gzip.open(in_fname) as allseq:
+            with gzip.open(in_fname, 'rt') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 i=0 # index on rand_idx
                 k=0 # index on record
@@ -86,7 +86,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                             i += 1
                         k += 1
     elif (file_format=="edit"):
-        with gzip.open(in_fname, 'r') as rhandle, gzip.open(out_fname, 'w') as whandle:
+        with gzip.open(in_fname, 'rt') as rhandle, gzip.open(out_fname, 'wt') as whandle:
             i = 0
             k = 0
             edits_str_set = set()
