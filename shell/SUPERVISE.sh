@@ -73,14 +73,14 @@ if [ "$FASTA_or_EDIT" = "fasta" ]; then
     if [ $( echo ${input_faname} | sed 's/\.[^\.]*$//') = "gz" ]; then
         cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
     else
-        gzip -c ${input_faname} > ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
+        cat ${input_faname} | gzip > ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
     fi
     wait
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
     if [ $( echo ${input_faname} | sed 's/\.[^\.]*$//') = "gz" ]; then
         cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit
     else
-        gzip -c ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
+        cat${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
     fi
     wait
 fi
