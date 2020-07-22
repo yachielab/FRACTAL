@@ -183,9 +183,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"
             
             if (ML_or_MP=="MP"):
-                partition.make_unrooted(
+                partition.make_unrooted_after_rooting(
                     TREE_FILE,
-                    TREE_FILE+".unrooted"
+                    TREE_FILE+".unrooted",
+                    "s0"
                 )
                 TREE_FILE=TREE_FILE+".unrooted"
             

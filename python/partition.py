@@ -25,8 +25,9 @@ def rooting_and_remove(nwkfilepath,newnwkpath,root):
         tree2=Phylo.BaseTree.Tree(tree1.clade[0])
     Phylo.write(tree2,newnwkpath,"newick")
 
-def make_unrooted(treefile,new_treefile):
+def make_unrooted_after_rooting(treefile,new_treefile,root):
     ref_tree=Phylo.read(treefile,'newick')
+    ref_tree.root_with_outgroup(root)
     if len(ref_tree.clade.clades) == 2:
         if len(ref_tree.clade.clades[0].clades) == 2 :
             ref_tree.clade = ref_tree.clade.clades[0]
