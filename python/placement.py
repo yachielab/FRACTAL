@@ -373,7 +373,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # remove unnecessary files
         for i in range(nodenum):
             os.remove(outdir+"/epang"+str(i)+".o")
-            os.remove(outdir+"/"+moved +"."+str(i))
+            os.remove(moved +"."+str(i))
         
         shutil.move(moved,query)
 
