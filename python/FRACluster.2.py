@@ -128,12 +128,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #random sampling#
             #################
 
-            if(os.path.isfile("ITERATION.edit")):
+            if(os.path.isfile(WD+"/ITERATION.edit")):
                 rename_sequence.random_sampling(
                     "ITERATION.edit"           ,
                     "SUBSAMPLE/SUBSAMPLE.edit" ,
                     SUBSAMPLE_SIZE             ,
-                    seed=SEED
+                    seed=SEED                  ,
+                    file_format = "edit"
                 )
                 shutil.rmtree ("EPANG")
                 os    .mkdir  ("EPANG")
