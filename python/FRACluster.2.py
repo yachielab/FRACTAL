@@ -207,7 +207,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
             
             # if parameter optimization failed
-            if (not os.path.isfile(WD+"/PARAM/RAxML_result.PARAM_"+str(i))):
+            if ( ML_or_MP == "ML" and  not os.path.isfile(WD+"/PARAM/RAxML_result.PARAM_"+str(i))):
 
                 print("Parameter optimization failed...")
 
