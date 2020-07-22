@@ -180,7 +180,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -s "  + ALIGNER                               ,
                 shell=True
             )
-            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"
+            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"
             
             if (ML_or_MP=="MP"):
                 partition.make_unrooted_after_rooting(
@@ -198,7 +198,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         RAXMLPAR                                                        +
                         " -T "   + str(raxml_thread_num)                                +
                         " -f e"                                                         +
-                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.gz"   +
+                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.gz"   +
                         " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
@@ -208,7 +208,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     subprocess.call(
                         RAXMLSEQ                                                        +
                         " -f e"                                                         +
-                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.gz"    + 
+                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.gz"    + 
                         " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
