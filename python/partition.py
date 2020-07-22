@@ -30,12 +30,12 @@ def make_unrooted_after_rooting(treefile,new_treefile,root):
     ref_tree.root_with_outgroup(root)
     if len(ref_tree.clade.clades) == 2:
         if len(ref_tree.clade.clades[0].clades) == 2 :
-            ref_tree.clade = ref_tree.clade.clades[0]
-            ref_tree.clade.clades.append(ref_tree.clade.clades[1])
+            newtree=Phylo.BaseTree.Tree(ref_tree.clade.clades[0])
+            newtree.clade.clades.append(ref_tree.clade.clades[1])
         elif len(ref_tree.clade.clades[1].clades) == 2 :
-            ref_tree.clade = ref_tree.clade.clades[1]
-            ref_tree.clade.clades.append(ref_tree.clade.clades[0])
-    Phylo.write(ref_tree,new_treefile,"newick")
+            newtree=Phylo.BaseTree.Tree(ref_tree.clade.clades[1])
+            newtree.clade.clades.append(ref_tree.clade.clades[0])
+    Phylo.write(newtree,new_treefile,"newick")
 
 def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     partition={}; leaf_to_Nseq={}
