@@ -32,16 +32,8 @@ def edit2editlist(edit_file):
     return editlist
 
 def edit2fasta(edit_file, edit_list, out_gz = True):
-    is_gzipped = (edit_file.split(".")[-1] == "gz")
-    if ( is_gzipped ):
-        inhandle = gzip.open(edit_file, 'rt')
-    else:
-        inhandle = open(edit_file, 'r')
-
-    if (out_gz):
-        outhandle = gzip.open( edit_file + ".fa.gz", 'wt' )
-    else:
-        outhandle = open( edit_file + ".fa", 'w' )
+    inhandle = gzip.open(edit_file, 'rt')
+    outhandle = gzip.open( edit_file + ".fa.gz", 'wt' )
     
     if (True):
         for line in inhandle:

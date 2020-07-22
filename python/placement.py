@@ -134,14 +134,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     refseq+".hmm "             +
                     query                      +
                     " | sed 's/\./N/g'> "      +
-                    outdir+"/ref_query.fa.gz"     ,
+                    outdir+"/ref_query.fa.gz"  ,
                     shell=True
                 )  
             elif(ALIGNED=="aligned"): # for aligned sequences
                 subprocess.call(
                     "cat "+refseq+" "            +
                     query                        +
-                    " > "+outdir+"/ref_query.fa.gz" ,
+                    " | gunzip > "+outdir+"/ref_query.fa" ,
                     shell=True
                 )
             os.chdir(outdir)
@@ -149,7 +149,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 RAXMLSEQ                      +
                 " -n epa_result"              +
                 " -f y -m GTRCAT"             +
-                " -s "+outdir+"/ref_query.fa.gz" +
+                " -s "+outdir+"/ref_query.fa" +
                 " -t "+reftree                ,
                 shell=True
             )
@@ -239,7 +239,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         )
                     moved = outdir+"/query.edit.fa.gz"
                     handle.write(
-                        "mv "                               + \
+                        "mv "                                  + \
                         outdir+"/query.edit."+str(i)+".fa.gz " + \
                         moved + "." + str(i) + "\n"
                         )
