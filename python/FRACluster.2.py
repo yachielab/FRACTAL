@@ -131,7 +131,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             if(os.path.isfile(WD+"/ITERATION.edit.gz")):
                 rename_sequence.random_sampling(
                     WD+"/ITERATION.edit.gz"        ,
-                    "SUBSAMPLE/SUBSAMPLE.edit.gz" ,
+                    WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED                  ,
                     file_format = "edit"
@@ -143,7 +143,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             else:
                 rename_sequence.random_sampling(
                     WD+"/INPUT.edit.gz"           ,
-                    "SUBSAMPLE/SUBSAMPLE.edit" ,
+                    WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
                     SUBSAMPLE_SIZE             ,
                     seed=SEED                  ,
                     n = seq_count              ,
