@@ -80,7 +80,7 @@ elif [ "$FASTA_or_EDIT" = "edit" ]; then
     if [ $( echo ${input_faname} | sed 's/\.[^\.]*$//') = "gz" ]; then
         cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit
     else
-        cat${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
+        cat ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
     fi
     wait
 fi
