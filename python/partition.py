@@ -117,7 +117,7 @@ def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_
         rand_idx=range(num_of_para)
     '''
     # add paraphyletic sequences into subsample
-    with open(all_fa,'r') as allfa, open(outputfname,'a') as out:
+    with gzip.open(all_fa,'rt') as allfa, gzip.open(outputfname,'at') as out:
         if (file_format == "fasta"):
             handle = SeqIO.parse(allfa, "fasta")
             for record in handle:
@@ -186,8 +186,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
     for fasta_count, in_fasta in enumerate(in_fasta_list):
         ost=[]
         for i in range(num_mono):
-            ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
-        para=open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
+            ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
+        para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'wt')
 
         if (file_format=="fasta"):
             with open(in_fasta,'r') as in_handle:

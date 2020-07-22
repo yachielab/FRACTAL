@@ -83,4 +83,4 @@ if __name__ == "__main__":
         for line in handle:
             editlist.append(line.split("\n")[0])
 
-    edit2fasta(argvs[1],editlist)
+    edit2fasta(argvs[1],editlist,out_gz=True)

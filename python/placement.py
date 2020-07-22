@@ -237,10 +237,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         outdir+"/query.edit."+str(i)+" "        +
                         outdir+"/editlist.txt\n"
                         )
-                    moved = outdir+"/query.edit.fa"
+                    moved = outdir+"/query.edit.fa.gz"
                     handle.write(
                         "mv "                               + \
-                        outdir+"/query.edit."+str(i)+".fa " + \
+                        outdir+"/query.edit."+str(i)+".fa.gz " + \
                         moved + "." + str(i) + "\n"
                         )
 
@@ -327,18 +327,18 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " --mapali "+refseq+" "                     +
                             refseq+".hmm "+moved+"."+str(i)             +
                             " | sed 's/\./N/g'"                         +
-                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
+                            " | gzip > "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz\n"
                         )   
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(
                             "cat "+refseq+" "+
                             moved+"."+str(i)+
-                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
+                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz\n"
                         )
                     handle.write(
                         RAXMLSEQ                                      +
                         " -n epa_result -f y -m GTRCAT"               +
-                        " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa" +
+                        " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz" +
                         " -t "+reftree+"\n"
                         ) 
                     handle.write(

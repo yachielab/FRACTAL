@@ -4,9 +4,10 @@ import sys
 import shutil
 import os
 import subprocess
+import gzip
 
 def rename_sequence(in_fname,out_fname):
-    with open(in_fname) as origin, open(out_fname, 'w') as renamed:
+    with gzip.open(in_fname, 'rt') as origin, gzip.open(out_fname, 'wt') as renamed:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k = 0
@@ -19,14 +20,14 @@ def rename_sequence(in_fname,out_fname):
 
 def outgroup_check_fast(in_fname):
     exist_root = False
-    with open(in_fname, 'r') as origin:
+    with gzip.open(in_fname, 'rt') as origin:
         for line in origin:
             if (line           == ">root\n"): exist_root = True; break
             if (line.split()[0]== "root"   ): exist_root = True; break
     return exist_root
 
 def count_sequence(in_fname):
-    with open(in_fname) as origin:
+    with gzip.open(in_fname, 'rt') as origin:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k=0
@@ -39,7 +40,7 @@ def count_sequence(in_fname):
     return [k,n] # k: number of sequence, n: average sequence length
 
 def count_sequence_fast(in_fname):
-    with open(in_fname) as handle:
+    with gzip.open(in_fname, 'rt') as handle:
         k, l=0, 0
         for line in handle:
             if(line[0]==">"): k+=1
@@ -62,7 +63,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         rand_idx=list(range(n-1))
 
     if ( file_format == "fasta" ):
-        with open(out_fname, 'w') as subs:
+        with gzip.open(out_fname, 'w') as subs:
             with open(in_fname) as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 for s in allseq_itr:
@@ -70,7 +71,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                         SeqIO.write(s, subs, "fasta")
             
             added_seqs = set()
-            with open(in_fname) as allseq:
+            with gzip.open(in_fname) as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 i=0 # index on rand_idx
                 k=0 # index on record
@@ -85,7 +86,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                             i += 1
                         k += 1
     elif (file_format=="edit"):
-        with open(in_fname, 'r') as rhandle, open(out_fname, 'w') as whandle:
+        with gzip.open(in_fname, 'r') as rhandle, gzip.open(out_fname, 'w') as whandle:
             i = 0
             k = 0
             edits_str_set = set()

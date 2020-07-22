@@ -50,10 +50,12 @@ if [ $ALIGNED = 'aligned' ]; then
     echo "Already aligned!"
     mv ${FILE} ${FILE}.aligned
 elif [ $ALIGNED = "unaligned" ]; then
-    ${ALIGNER} --quiet ${FILE} > ${FILE}.aligned # set $PATH!!!!!!!!!!
+    ${ALIGNER} --quiet < (${FILE} | gunzip) > ${FILE}.aligned # set $PATH!!!!!!!!!!
 else
     echo "exception: Alignment method name seems wrong..."
 fi
+
+gzip ${FILE}.aligned > ${FILE}.aligned.gz
 
 # Tree construction
 # ML (RAxML)
