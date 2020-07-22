@@ -34,15 +34,19 @@ def edit2editlist(edit_file):
 
     return editlist
 
-def edit2fasta(edit_file, edit_list):
+def edit2fasta(edit_file, edit_list, out_gz = False):
     is_gzipped = (edit_file.split(".")[-1] == "gz")
     if ( is_gzipped ):
         inhandle = gzip.open(edit_file, 'rt')
     else:
         inhandle = open(edit_file, 'r')
 
-    with open( edit_file + ".fa", 'w' ) as outhandle:
-
+    if (out_gz):
+        None
+    else:
+        outhandle = open( edit_file + ".fa", 'w' )
+    
+    if (True):
         for line in inhandle:
             seq_name      = line.split()[0]
             if len(line.split()) > 1:
@@ -65,6 +69,7 @@ def edit2fasta(edit_file, edit_list):
             outhandle.write(">"+seq_name+"\n"+seq_str+"\n")
             
     inhandle.close()
+    outhandle.close()
 
 '''
 command line argument: "<editsets .edit file path> <edit list .txt file path>"
@@ -76,6 +81,6 @@ if __name__ == "__main__":
     editlist = []
     with open(editlist_file, 'r') as handle:
         for line in handle:
-            editlist.append(line.split()[0])
+            editlist.append(line.split("\n")[0])
 
     rename_sequence(argvs[1],editlist)
