@@ -42,7 +42,7 @@ def edit2fasta(edit_file, edit_list, out_gz = False):
         inhandle = open(edit_file, 'r')
 
     if (out_gz):
-        None
+        outhandle = gzip.open( edit_file + ".fa.gz", 'wt' )
     else:
         outhandle = open( edit_file + ".fa", 'w' )
     
@@ -83,4 +83,4 @@ if __name__ == "__main__":
         for line in handle:
             editlist.append(line.split("\n")[0])
 
-    rename_sequence(argvs[1],editlist)
+    edit2fasta(argvs[1],editlist)
