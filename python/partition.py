@@ -70,31 +70,25 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     while(stack!=[]):
         cstate=stack.pop()
         d=len(ref_tree.get_path(cstate)) # current depth
-        if (cstate.name == None):
+        cedge =int(cstate.name.strip('{').strip('}'))
+        if(place_list[cedge]==[] and d<depth):
             if(len(cstate.clades)!=0):
                 stack.extend(cstate.clades)
             else:
                 leaves[cstate.name]=[cstate.name]
-        else:
-            cedge =int(cstate.name.strip('{').strip('}'))
-            if(place_list[cedge]==[] and d<depth):
-                if(len(cstate.clades)!=0):
-                    stack.extend(cstate.clades)
-                else:
-                    leaves[cstate.name]=[cstate.name]
-            else: # if some seqnames were placed to the edge
-                leaves[cstate.name]=list(ter.name for ter in cstate.get_terminals())
-                downstream=[]
-                downstream.extend(cstate.get_terminals())
-                downstream.extend(cstate.get_nonterminals())
-                downstream_edge=list(int(state.name.strip('{').strip('}')) for state in downstream)
-                for edge in downstream_edge:
-                    for seqname in place_list[edge]:
-                        if seqname != "root":
-                            partition[seqname]=cedge
-                            if(cedge in leaf_to_Nseq.keys()): leaf_to_Nseq[cedge]+=1
-                            else: leaf_to_Nseq[cedge]=1
-                cstate.clades=[]
+        else: # if some seqnames were placed to the edge
+            leaves[cstate.name]=list(ter.name for ter in cstate.get_terminals())
+            downstream=[]
+            downstream.extend(cstate.get_terminals())
+            downstream.extend(cstate.get_nonterminals())
+            downstream_edge=list(int(state.name.strip('{').strip('}')) for state in downstream)
+            for edge in downstream_edge:
+                for seqname in place_list[edge]:
+                    if seqname != "root":
+                        partition[seqname]=cedge
+                        if(cedge in leaf_to_Nseq.keys()): leaf_to_Nseq[cedge]+=1
+                        else: leaf_to_Nseq[cedge]=1
+            cstate.clades=[]
     tree=Phylo.BaseTree.Tree(ref_tree.clade.clades[0])
     Phylo.write(tree, 'tmp.nwk', 'newick')
     with open('tmp.nwk','r') as tmp:
