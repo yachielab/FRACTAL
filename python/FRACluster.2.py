@@ -180,7 +180,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -s "  + ALIGNER                               ,
                 shell=True
             )
-            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"
+
+            partition.make_unrooted(
+                WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree",
+                WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.unrooted.tree",
+            )
+
+            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.unrooted.tree"
             
             if (ML_or_MP=="ML"):
                 os.chdir(WD+"/PARAM")
