@@ -51,7 +51,10 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
     elif(len(seed)!=0):random.seed(int(seed))
     else:print("-r Error: invalid random seed!")
     if (n==None):
-        n=count_sequence_fast(in_fname)[0]
+        if ( file_format == "fasta" ):
+            n=count_sequence_fast(in_fname)[0]
+        if ( file_format == "edit" ):
+            n = int(subprocess.check_output(['wc', '-l', in_fname]).decode().split(' ')[0])
     if (n > subsample_size):
         rand_idx=random.sample(range(n-1),subsample_size)
         rand_idx.sort()
