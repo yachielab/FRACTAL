@@ -31,7 +31,7 @@ def edit2editlist(edit_file):
 
     return editlist
 
-def edit2fasta(edit_file, edit_list, out_gz = False):
+def edit2fasta(edit_file, edit_list, out_gz = True):
     is_gzipped = (edit_file.split(".")[-1] == "gz")
     if ( is_gzipped ):
         inhandle = gzip.open(edit_file, 'rt')

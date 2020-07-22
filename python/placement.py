@@ -59,7 +59,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
 
         if (file_format == "edit"):
             manage_edits.edit2fasta(query, edit_list)
-            query = query + ".fa"
+            query = query + ".fa.gz"
 
         if(ML_or_MP=="ML"): 
             if(ALIGNED=="unaligned"): # for unaligned sequences
