@@ -180,6 +180,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -s "  + ALIGNER                               ,
                 shell=True
             )
+            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"
             
             if (ML_or_MP=="ML"):
                 os.chdir(WD+"/PARAM")
@@ -190,7 +191,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         " -T "   + str(raxml_thread_num)                                +
                         " -f e"                                                         +
                         " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"      +
-                        " -t "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree" +
+                        " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
                         shell=True
@@ -205,6 +206,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         " -m "   + MODEL                                                ,
                         shell=True
                     )
+                TREE_FILE = WD+"/PARAM/RAxML_result.PARAM_"+str(i)
             
             # if parameter optimization failed
             if ( ML_or_MP == "ML" and  not os.path.isfile(WD+"/PARAM/RAxML_result.PARAM_"+str(i))):
@@ -233,12 +235,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 QUERY_EDITS = WD+"/INPUT.edit"
                 ALIGNED_FOR_PLACEMENT = ALIGNED
 
+                WD+"/PARAM/RAxML_result.PARAM_"+str(i)
+
                 # conduct placement
                 placement.distributed_placement(
                     WD                                                  , 
                     EPANG                                               ,  
                     WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned"       , 
-                    WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
+                    TREE_FILE                                           , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
                     QUERY_EDITS                                         , 
                     WD+"/EPANG"                                         , 
