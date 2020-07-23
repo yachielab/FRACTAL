@@ -97,7 +97,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                     if (i>=len(rand_idx)):
                         break
                     if ( k==rand_idx[i] ):
-                        if ( len(line.split()) > 0 ):
+                        if ( len(line.split()) > 1 ):
                             edits_str = line.split()[1]
                         else:
                             edits_str = ""
