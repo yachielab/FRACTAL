@@ -385,6 +385,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " -t "+reftree+"\n"
                         ) 
                     handle.write(
+                        "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*"
+                        ) 
+                    handle.write(
                         "python3 "                                                      +
                         codedir+"/python/jplace_parse.py "                              +
                         outdir+"/EPANG"+str(i)+"/RAxML_portableTree.epa_result.jplace " +
@@ -395,6 +398,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o"
                     )
+                handle.write(
+                    "rm "+outdir+"/*."+str(i)
+                    ) 
             # end of a distributed task
         # check if all placement tasks ended
         flag = 0
@@ -410,7 +416,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # remove unnecessary files
         for i in range(nodenum):
             os.remove(outdir+"/epang"+str(i)+".o")
-            os.remove(moved +"."+str(i))
         
         if (file_format == "fasta"):
             shutil.move(moved,query)
