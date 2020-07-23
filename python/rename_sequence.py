@@ -97,7 +97,10 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                     if (i>=len(rand_idx)):
                         break
                     if ( k==rand_idx[i] ):
-                        edits_str = line.split()[1]
+                        if ( len(line.split()) > 0 ):
+                            edits_str = line.split()[1]
+                        else:
+                            edits_str = ""
                         if edits_str not in edits_str_set:
                             whandle.write(name + "\t" + edits_str + "\n")
                             edits_str_set.add(edits_str)
