@@ -9,10 +9,6 @@ import sys
 import re
 import random
 
-
-
-
-
 def correspond(treestr):
     corr={}
     pattern1 = r"s\d+"
