@@ -385,7 +385,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " -t "+reftree+"\n"
                         ) 
                     handle.write(
-                        "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*"
+                        "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
                         ) 
                     handle.write(
                         "python3 "                                                      +
@@ -399,7 +399,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     outdir+"/epang"+str(i)+".o\n"
                     )
                 handle.write(
-                    "rm "+outdir+"/*."+str(i)
+                    "rm "+outdir+"/*."+str(i)+"\n"
                     ) 
             # end of a distributed task
         # check if all placement tasks ended
