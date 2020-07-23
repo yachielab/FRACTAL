@@ -396,7 +396,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         )
                 handle.write(
                     "echo \"finished\" > "      +
-                    outdir+"/epang"+str(i)+".o"
+                    outdir+"/epang"+str(i)+".o\n"
                     )
                 handle.write(
                     "rm "+outdir+"/*."+str(i)
