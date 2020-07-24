@@ -299,7 +299,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 if(para!=0): # if problematic sequences remained
 
                     shutil.copyfile(
-                        WD+"/SUBSAMPLE/SUBSAMPLE.edit",
+                        WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz",
                         WD+"/ITERATION.edit"
                     )
 
