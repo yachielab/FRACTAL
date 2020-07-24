@@ -389,7 +389,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "ITERATION.fa",
         "tmp.nwk",
         "INPUT.fa.aligned",
-        "INPUT.fa.aligned.problematic",
         "SUBSAMPLE.fa.aligned"
         ]
     

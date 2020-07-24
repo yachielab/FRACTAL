@@ -50,6 +50,43 @@ def decompose_edit(in_file, x,seq_count):
     for i in range(x):
         ohandle[i].close()
 
+def decompose_edit(in_file, x,seq_count):
+    n=seq_count
+    k=n//x # each decomposed file has k sequences
+    ohandle=[]
+    for i in range(x):
+        ohandle.append(
+            open(in_file+"."+str(i), 'w')
+        ) 
+    with open(in_file,'r') as ihandle:
+        l=0 # inclement constantly
+        if(True):
+            for line in ihandle:
+                i = min(l//k, x-1)
+                ohandle[i].write(line)
+                l+=1
+    for i in range(x):
+        ohandle[i].close()
+
+def decompose_edit2(in_file, seq_count, n_per_file = 10000):
+    n=seq_count
+    k=10000
+    x=n//k
+    ohandle=[]
+    for i in range(x):
+        ohandle.append(
+            open(in_file+"."+str(i), 'w')
+        ) 
+    with open(in_file,'r') as ihandle:
+        l=0 # inclement constantly
+        if(True):
+            for line in ihandle:
+                i = min(l//k, x-1)
+                ohandle[i].write(line)
+                l+=1
+    for i in range(x):
+        ohandle[i].close()
+
 def distributed_placement(  WD, EPANG, refseq, reftree, model, 
                             query, outdir, threadnum, nodenum, 
                             codedir, seq_count, ML_or_MP, RAXMLSEQ, 
@@ -329,17 +366,26 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " | sed 's/\./N/g'"                         +
                             " | gzip > "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz\n"
                         )   
+                        handle.write(
+                            "rm " + moved+"."+str(i) + "\n"
+                        )   
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(
                             "cat "+refseq+" "+
                             moved+"."+str(i)+
                             " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz\n"
                         )
+                        handle.write(
+                            "rm " + moved+"."+str(i) + "\n"
+                        )  
                     handle.write(
                         RAXMLSEQ                                      +
                         " -n epa_result -f y -m GTRCAT"               +
                         " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz" +
                         " -t "+reftree+"\n"
+                        ) 
+                    handle.write(
+                        "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
                         ) 
                     handle.write(
                         "python3 "                                                      +
@@ -350,8 +396,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         )
                 handle.write(
                     "echo \"finished\" > "      +
-                    outdir+"/epang"+str(i)+".o"
+                    outdir+"/epang"+str(i)+".o\n"
                     )
+                handle.write(
+                    "rm "+outdir+"/*."+str(i)+"\n"
+                    ) 
             # end of a distributed task
         # check if all placement tasks ended
         flag = 0
@@ -367,7 +416,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # remove unnecessary files
         for i in range(nodenum):
             os.remove(outdir+"/epang"+str(i)+".o")
-            os.remove(moved +"."+str(i))
         
         if (file_format == "fasta"):
             shutil.move(moved,query)

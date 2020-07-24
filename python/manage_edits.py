@@ -23,7 +23,7 @@ def edit2editlist(edit_file):
 
     editlist = []
     for key_edit in edit2seqcount:
-        if (edit2seqcount[key_edit] < total_seqcount):
+        if (edit2seqcount[key_edit] > 1 and edit2seqcount[key_edit] < total_seqcount):
             editlist.append(key_edit)
             editlist.sort()
 
