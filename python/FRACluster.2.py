@@ -43,13 +43,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         return
     
     # check number of sequences
-    seq_count                 = int(subprocess.\
+    seq_count                 = int((subprocess.\
                                     Popen(
                                         'less INPUT.edit.gz | wc -l',
                                         stdout=subprocess.PIPE,
                                         shell=True
                                     ).communicate()[0]
-                                ).decode('utf-8')
+                                ).decode('utf-8'))
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
