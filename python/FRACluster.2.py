@@ -364,8 +364,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "INPUT.edit",
         "ITERATION.edit",
         "tmp.nwk",
-        "INPUT.edit.aligned",
-        "INPUT.edit.aligned.problematic",
+        "INPUT.edit.fa", 
+        "INPUT.edit.fa.aligned", 
         "SUBSAMPLE.edit.agned"
         ]
     
@@ -380,7 +380,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     for filename in filenames:
         try:
-            os.remove(filename)
+            os.remove(WD + "/" + filename)
         except:
             None
 
