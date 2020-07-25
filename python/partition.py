@@ -9,6 +9,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import subprocess
 import random
+import gzip
 #from memory_profiler import profile
 
 def rooting(nwkfilepath,newnwkpath,root):
