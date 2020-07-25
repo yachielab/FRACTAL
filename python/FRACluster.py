@@ -315,11 +315,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
                     
                     # select all sequence file
-                    if os.path.isfile(WD+"/INPUT.fa.aligned"):
-                        ALIGNED_ALL = WD+"/INPUT.fa.aligned"
+                    if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
+                        ALIGNED_ALL = WD+"/INPUT.fa.gz.aligned"
                         ALIGNED     = "aligned"
                     else:
-                        ALIGNED_ALL = "INPUT.fa" 
+                        ALIGNED_ALL = "INPUT.fa.gz" 
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
