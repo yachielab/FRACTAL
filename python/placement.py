@@ -85,6 +85,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             if(ALIGNED=="unaligned"): # for unaligned sequences
                 # Build HMM profile
                 subprocess.call(
+                    "gunzip " + query  ,
+                    shell=True
+                ) 
+                # Build HMM profile
+                subprocess.call(
                     hmm_profiler + " " + 
                     refseq+".hmm "     +
                     refseq             ,
