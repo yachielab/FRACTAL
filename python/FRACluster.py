@@ -305,7 +305,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     # select subsample sequence file
                     if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
-                        ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.gz.aligned"
+                        ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
                     else:
                         ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
 
