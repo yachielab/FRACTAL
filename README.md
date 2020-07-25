@@ -221,7 +221,7 @@ Lineage estimation with a software tool of choice and user defined parameters.
 Lineage estimation from an unaligned sequence dataset. The number of sequences in a subsample and the threshold number of input sequences to swich to direct lineage computing are set to be 1,000.
 
 ```shell
-FRACTAL -i test.unaligned.fa -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
+FRACTAL -i test.unaligned.fa.gz -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
 ```
 
 **Example 6**
@@ -229,7 +229,7 @@ FRACTAL -i test.unaligned.fa -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML 
 Lineage estimation from sets of CRISPR edits for lineage tracing by sample tree estimation using MP (RAxML) and phylogenetic placement using MP (RAxML). When `-E` option is specified, FRACTAL takes a special format of edit set file (see example input) as input and returns a lineage.
 
 ```shell
-FRACTAL -i test.edit -f FRACTAL_edit -p MP -E
+FRACTAL -i test.edit.gz -f FRACTAL_edit -p MP -E
 ```
 
 Input:    
