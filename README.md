@@ -224,6 +224,14 @@ Lineage estimation from an unaligned sequence dataset. The number of sequences i
 FRACTAL -i test.unaligned.fa.gz -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
 ```
 
+Input:    
+
+​	 [`test.unaligend.fa.gz`](https://github.com/yachielab/FRACTAL/blob/master/example/test.unaligend.fa.gz) (Original format)
+
+Output:  
+
+​	 [`FRACTAL_unaligned.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_unaligned.nwk) (Newick format) 
+
 **Example 6**
 
 Lineage estimation from sets of CRISPR edits for lineage tracing by sample tree estimation using MP (RAxML) and phylogenetic placement using MP (RAxML). When `-E` option is specified, FRACTAL takes a special format of edit set file (see example input) as input and returns a lineage.
@@ -234,7 +242,7 @@ FRACTAL -i test.edit.gz -f FRACTAL_edit -p MP -E
 
 Input:    
 
-​	 [`test.edit`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit) (Original format)
+​	 [`test.edit.gz`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit.gz) (Original format)
 
 Output:  
 
