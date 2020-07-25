@@ -300,7 +300,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     shutil.copyfile(
                         WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz",
-                        WD+"/ITERATION.edit"
+                        WD+"/ITERATION.edit.gz"
                     )
 
                     partition.add_paraphyletic_fa(
