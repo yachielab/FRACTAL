@@ -221,7 +221,7 @@ Lineage estimation with a software tool of choice and user defined parameters.
 Lineage estimation from an unaligned sequence dataset. The number of sequences in a subsample and the threshold number of input sequences to swich to direct lineage computing are set to be 1,000.
 
 ```shell
-FRACTAL -i test.unaligned.fa -u -k 1000 -t 1000 -e -m fasttreeML 
+FRACTAL -i test.unaligned.fa -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
 ```
 
 **Example 6**
@@ -238,7 +238,7 @@ Input:
 
 Output:  
 
-​	 [`FRACTAL_edit.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_ML.nwk) (Newick format) 
+​	 [`FRACTAL_edit.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_edit.nwk) (Newick format) 
 
 ### FRACTAL Usage
 

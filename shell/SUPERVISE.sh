@@ -70,14 +70,14 @@ fi
 mkdir ${ROOT_DIR}/nodes/d0
 
 if [ "$FASTA_or_EDIT" = "fasta" ]; then
-    if [ $( echo ${input_faname} | sed 's/\.[^\.]*$//') = "gz" ]; then
+    if [ $( echo ${input_faname} | sed sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
         cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
     else
         cat ${input_faname} | gzip > ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
     fi
     wait
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
-    if [ $( echo ${input_faname} | sed 's/\.[^\.]*$//') = "gz" ]; then
+    if [ $( echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
         cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit
     else
         cat ${input_faname} | gzip > ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
