@@ -248,7 +248,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     handle.write(
                         "python3 "                             +
                         codedir+"/python/manage_edits.py "     +
-                        outdir+"/query.edit.gz."+str(i)+" "        +
+                        outdir+"/query.edit.gz."+str(i)+".gz " +
                         outdir+"/editlist.txt\n"
                         )
                     moved = outdir+"/query.edit.fa.gz"
