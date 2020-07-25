@@ -10,7 +10,7 @@ import gzip
 # decompose fasta file (in_file) into x fasta files.
 def decompose_fasta(in_file, x,seq_count):
     n=seq_count
-    k=n//x + 1 # each decomposed file has k sequences
+    k=n//x # each decomposed file has k sequences
     ohandle=[]
     for i in range(x):
         ohandle.append(
@@ -19,15 +19,9 @@ def decompose_fasta(in_file, x,seq_count):
     with gzip.open(in_file,'rt') as ihandle:
         allseq_itr = SeqIO.parse(ihandle, "fasta")
         l=0 # inclement constantly
-        m=0 # inclement for each sequence, but become 0 after m reaches k
-        i=0 # 
         if(True):
             for record in allseq_itr:
-                if(m<k):
-                    m+=1
-                else:
-                    i+=1
-                    m=0
+                i = min(l//k, x-1)
                 SeqIO.write(record,ohandle[i],'fasta')
                 l+=1
     for i in range(x):
@@ -414,15 +408,17 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
             subprocess.call(
-                "cat "+
+                "gzip -c "+
                 outdir+"/EPANG*/ref_query.fa.selectcols.query "+
                 "> "+
-                WD+"/INPUT.fa.aligned",
+                WD+"/INPUT.fa.aligned.gz",
                 shell=True
             )
-            shutil.move(
-                outdir+"/EPANG0/ref_query.fa.selectcols.ref", 
-                WD+"/SUBSAMPLE.fa.aligned"
+            subprocess.call(
+                "gzip -c "+
+                outdir+"/EPANG0/ref_query.fa.selectcols.ref"+
+                "> "+ 
+                WD+"/SUBSAMPLE.fa.aligned.gz"
                 )
 
         # merge results
