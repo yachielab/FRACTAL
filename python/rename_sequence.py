@@ -64,7 +64,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
 
     if ( file_format == "fasta" ):
         with gzip.open(out_fname, 'wt') as subs:
-            with open(in_fname) as allseq:
+            with gzip.open(in_fname, 'rt') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 for s in allseq_itr:
                     if(s.id=="root"):
