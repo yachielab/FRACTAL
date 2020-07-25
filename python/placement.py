@@ -14,7 +14,7 @@ def decompose_fasta(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            gzip.open(in_file+"."+str(i), 'wt')
+            gzip.open(in_file+"."+str(i)+".gz", 'wt')
         ) 
     with gzip.open(in_file,'rt') as ihandle:
         allseq_itr = SeqIO.parse(ihandle, "fasta")
@@ -33,7 +33,7 @@ def decompose_edit(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            gzip.open(in_file+"."+str(i), 'wt')
+            gzip.open(in_file+"."+str(i)+".gz", 'wt')
         ) 
     with gzip.open(in_file,'rt') as ihandle:
         l=0 # inclement constantly
@@ -52,7 +52,7 @@ def decompose_edit2(in_file, seq_count, n_per_file = 10000):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            open(in_file+"."+str(i), 'w')
+            open(in_file+"."+str(i)+".gz", 'w')
         ) 
     with open(in_file,'r') as ihandle:
         l=0 # inclement constantly
@@ -314,7 +314,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -s "+refseq                 +
                             " -t "+reftree                +
                             " --model "+model             +
-                            " -q "+moved+"."+str(i)       +
+                            " -q "+moved+"."+str(i)+".gz"       +
                             " -w "+outdir+"/EPANG"+str(i) +
                             " -T "+str(threadnum)+"\n"
                             )
@@ -339,21 +339,21 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             hmm_aligner                                 +
                             " --outformat afa"                          +
                             " --mapali "+refseq+" "                     +
-                            refseq+".hmm "+moved+"."+str(i)             +
+                            refseq+".hmm "+moved+"."+str(i)+".gz"       +
                             " | sed 's/\./N/g'"                         +
                             " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )   
                         #handle.write(
-                        #    "rm " + moved+"."+str(i) + "\n"
+                        #    "rm " + moved+"."+str(i)+".gz" + "\n"
                         #)   
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(
                             "cat "+refseq+" "+
-                            moved+"."+str(i)+
+                            moved+"."+str(i)+".gz"+
                             " | gunzip > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )
                         handle.write(
-                            "rm " + moved+"."+str(i) + "\n"
+                            "rm " + moved+"."+str(i)+".gz" + "\n"
                         )  
                     handle.write(
                         RAXMLSEQ                                      +
