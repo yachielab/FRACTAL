@@ -79,4 +79,4 @@ else
     echo "exception: Tree construction method name seems wrong..."
 fi
 
-gzip ${FILE}.aligned
+#gzip ${FILE}.aligned
