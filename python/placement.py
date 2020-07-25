@@ -56,9 +56,9 @@ def decompose_edit(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            open(in_file+"."+str(i), 'w')
+            gzip.open(in_file+".gz."+str(i), 'wt')
         ) 
-    with open(in_file,'r') as ihandle:
+    with gzip.open(in_file,'rt') as ihandle:
         l=0 # inclement constantly
         if(True):
             for line in ihandle:
@@ -214,7 +214,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         dname=WD.split("/").pop()
 
         if ( file_format == "fasta" ):
-            moved=outdir+"/query.fa"
+            moved=outdir+"/query.fa.gz"
             shutil.move(query, moved)
 
             if(ALIGNED=="unaligned"):
@@ -231,7 +231,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 seq_count
                 )
         elif ( file_format == "edit" ):
-            moved=outdir+"/query.edit"
+            moved=outdir+"/query.edit.gz"
             shutil.move(query, moved)
             decompose_edit(
                 moved,
@@ -271,13 +271,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     handle.write(
                         "python3 "                             +
                         codedir+"/python/manage_edits.py "     +
-                        outdir+"/query.edit."+str(i)+" "        +
+                        outdir+"/query.edit.gz."+str(i)+" "        +
                         outdir+"/editlist.txt\n"
                         )
                     moved = outdir+"/query.edit.fa.gz"
                     handle.write(
                         "mv "                                  + \
-                        outdir+"/query.edit."+str(i)+".fa.gz " + \
+                        outdir+"/query.edit.gz."+str(i)+".fa.gz " + \
                         moved + "." + str(i) + "\n"
                         )
 
