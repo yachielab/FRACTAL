@@ -391,6 +391,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     filenames = [
         "INPUT.fa.gz",
+        "INPUT.fa.aligned",
         "INPUT.fa.aligned.gz",
         "ITERATION.fa.gz",
         "tmp.nwk",
