@@ -253,8 +253,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         )
                     moved = outdir+"/query.edit.fa.gz"
                     handle.write(
-                        "mv "                                     + \
-                        outdir+"/query.edit.gz."+str(i)+".fa.gz " + \
+                        "mv "                                        + \
+                        outdir+"/query.edit.gz."+str(i)+".gz.fa.gz " + \
                         moved + "." + str(i) + ".gz\n"
                         )
 
