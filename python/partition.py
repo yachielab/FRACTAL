@@ -207,7 +207,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         SeqIO.write(s, ost[l], "fasta")
                     i=i+1
         elif(file_format=="edit"):
-            with open(in_fasta,'r') as in_handle:
+            with gzip.open(in_fasta,'rt') as in_handle:
                 for line in in_handle:
                     name = line.split()[0]
                     if(name=="root"):
