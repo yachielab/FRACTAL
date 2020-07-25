@@ -188,7 +188,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         ost=[]
         for i in range(num_mono):
             ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
-        para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'wt')
+        para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
 
         if (file_format=="fasta"):
             with gzip.open(in_fasta,'rt') as in_handle:
