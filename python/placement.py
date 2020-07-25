@@ -356,7 +356,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         handle.write(
                             "cat "+refseq+" "+
                             moved+"."+str(i)+
-                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz\n"
+                            " gunzip > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )
                         handle.write(
                             "rm " + moved+"."+str(i) + "\n"
@@ -364,7 +364,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     handle.write(
                         RAXMLSEQ                                      +
                         " -n epa_result -f y -m GTRCAT"               +
-                        " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz" +
+                        " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa" +
                         " -t "+reftree+"\n"
                         ) 
                     #handle.write(
