@@ -260,7 +260,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 placement.distributed_placement(
                     WD                                                  , 
                     EPANG                                               ,  
-                    WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz."           , 
+                    WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"            , 
                     WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
                     QUERY_FA                                            , 
