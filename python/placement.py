@@ -268,7 +268,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             #" -m "                                     +
                             " --mapali " + refseq + " "                +
                             refseq+".hmm "                             +
-                            moved +"."+str(i)                          +
+                            moved +"."+str(i)+".gz"                    +
                             " | sed 's/\./-/g' "                       +
                             " > "                                      +
                             outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
@@ -314,7 +314,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -s "+refseq                 +
                             " -t "+reftree                +
                             " --model "+model             +
-                            " -q "+moved+"."+str(i)+".gz"       +
+                            " -q "+moved+"."+str(i)+".gz" +
                             " -w "+outdir+"/EPANG"+str(i) +
                             " -T "+str(threadnum)+"\n"
                             )
@@ -376,7 +376,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     outdir+"/epang"+str(i)+".o\n"
                     )
                 handle.write(
-                    "rm "+outdir+"/*."+str(i)+"\n"
+                    "rm "+outdir+"/*."+str(i)+".gz\n"
                     ) 
             # end of a distributed task
         # check if all placement tasks ended
@@ -402,9 +402,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
             subprocess.call(
-                "gzip -c "+
+                "cat "+
                 outdir+"/EPANG*/ref_query.fa.selectcols.query "+
-                "> "+
+                " | gzip > "+
                 WD+"/INPUT.fa.aligned.gz",
                 shell=True
             )
