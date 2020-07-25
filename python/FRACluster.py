@@ -255,12 +255,17 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 else:
                     QUERY_FA = WD+"/INPUT.fa.gz"
                     ALIGNED_FOR_PLACEMENT = ALIGNED
+                
+                if (ALIGNED=="aligned"):
+                    refseq = WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
+                else:
+                    refseq = WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
 
                 # conduct placement
                 placement.distributed_placement(
                     WD                                                  , 
                     EPANG                                               ,  
-                    WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"            , 
+                    refseq                                              , 
                     WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
                     QUERY_FA                                            , 
