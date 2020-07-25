@@ -350,7 +350,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
             sys.exit()
         
-        FASTA_LIST = [ WD+"/INPUT.fa" ]
+        FASTA_LIST = [ WD+"/INPUT.fa.gz" ]
         if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
             FASTA_LIST.append(WD+"/INPUT.fa.gz.aligned")
         DIRdict = partition.partition_fasta(
@@ -361,7 +361,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
             "PARTITION.info",
             "UPSTREAM.nwk",
-            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa",
+            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gzd",
             ROOTING
             )
         
