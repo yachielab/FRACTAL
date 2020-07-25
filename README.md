@@ -170,7 +170,7 @@ Output:
 
 **Example 2**
 
-Lineage estimation by NJ using RapidNJ with distributed computing where the maximum number of computing nodes is set to 100. The output file name is set to `FRACTAL_NJ`. The computation will take several minutes.
+Lineage estimation by sample tree estimation using RapidNJ with distributed computing where the maximum number of computing nodes is set to 100. The output file name is set to `FRACTAL_NJ`. The computation will take several minutes.
 
 ```shell
 FRACTAL -i test.fa -f FRACTAL_NJ -m rapidnjNJ -d 100
@@ -186,7 +186,7 @@ Output:
 
 **Example 3**
 
-Lineage estimation by ML using FastTreeMP with its option `-fastest` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
+Lineage estimation by sample tree estimation using FastTreeMP with its option `-fastest` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
 
 ```shell
 FRACTAL -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest" -c 16
@@ -215,6 +215,30 @@ Lineage estimation with a software tool of choice and user defined parameters.
    ```shell
    FRACTAL -i test.fa -f FRACTAL_raxml -s ml_raxml.sh -d 100
    ```
+
+**Example 5**
+
+Lineage estimation from an unaligned sequence dataset. The number of sequences in a subsample and the threshold number of input sequences to swich to direct lineage computing are set to be 1,000.
+
+```shell
+FRACTAL -i test.unaligned.fa -u -k 1000 -t 1000 -e -m fasttreeML 
+```
+
+**Example 6**
+
+Lineage estimation from sets of CRISPR edits for lineage tracing by sample tree estimation using MP (RAxML) and phylogenetic placement using MP (RAxML). When `-E` option is specified, FRACTAL takes a special format of edit set file (see example input) as input and returns a lineage.
+
+```shell
+FRACTAL -i test.edit -f FRACTAL_edit -p MP -E
+```
+
+Input:    
+
+​	 [`test.edit`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit) (Original format)
+
+Output:  
+
+​	 [`FRACTAL_edit.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_ML.nwk) (Newick format) 
 
 ### FRACTAL Usage
 
