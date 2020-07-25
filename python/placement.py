@@ -14,7 +14,7 @@ def decompose_fasta(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            gzip.open(in_file+".gz."+str(i), 'wt')
+            gzip.open(in_file+str(i), 'wt')
         ) 
     with gzip.open(in_file,'rt') as ihandle:
         allseq_itr = SeqIO.parse(ihandle, "fasta")
@@ -39,7 +39,7 @@ def decompose_edit(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            gzip.open(in_file+".gz."+str(i), 'wt')
+            gzip.open(in_file+str(i), 'wt')
         ) 
     with gzip.open(in_file,'rt') as ihandle:
         l=0 # inclement constantly
@@ -403,7 +403,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         if (file_format == "fasta"):
             shutil.move(moved,query)
         elif (file_format == "edit"):
-            shutil.move(outdir+"/query.edit",query)
+            shutil.move(outdir+"/query.edit.gz",query)
 
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
