@@ -14,9 +14,9 @@ def decompose_fasta(in_file, x,seq_count):
     ohandle=[]
     for i in range(x):
         ohandle.append(
-            open(in_file+"."+str(i), 'w')
+            gzip.open(in_file+".gz."+str(i), 'wt')
         ) 
-    with open(in_file,'r') as ihandle:
+    with gzip.open(in_file,'rt') as ihandle:
         allseq_itr = SeqIO.parse(ihandle, "fasta")
         l=0 # inclement constantly
         m=0 # inclement for each sequence, but become 0 after m reaches k
@@ -29,24 +29,6 @@ def decompose_fasta(in_file, x,seq_count):
                     i+=1
                     m=0
                 SeqIO.write(record,ohandle[i],'fasta')
-                l+=1
-    for i in range(x):
-        ohandle[i].close()
-
-def decompose_edit(in_file, x,seq_count):
-    n=seq_count
-    k=n//x # each decomposed file has k sequences
-    ohandle=[]
-    for i in range(x):
-        ohandle.append(
-            open(in_file+"."+str(i), 'w')
-        ) 
-    with open(in_file,'r') as ihandle:
-        l=0 # inclement constantly
-        if(True):
-            for line in ihandle:
-                i = min(l//k, x-1)
-                ohandle[i].write(line)
                 l+=1
     for i in range(x):
         ohandle[i].close()
