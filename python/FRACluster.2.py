@@ -215,7 +215,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         RAXMLSEQ                                                        +
                         " -f e"                                                         +
                         " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"    + 
-                        " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
+                        " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
                         shell=True
