@@ -370,9 +370,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "INPUT.edit.gz",
         "ITERATION.edit.gz",
         "tmp.nwk",
-        "INPUT.edit.gz.aligned",
-        "INPUT.edit.gz.aligned.problematic",
-        "SUBSAMPLE.edit.aligned"
+        "INPUT.edit.gz.fa.gz",
         ]
     
     dirnames = [
