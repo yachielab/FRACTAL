@@ -88,6 +88,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     "gunzip " + query  ,
                     shell=True
                 ) 
+                query = query.split(".gz")[0]
                 # Build HMM profile
                 subprocess.call(
                     hmm_profiler + " " + 
