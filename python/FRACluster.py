@@ -253,7 +253,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     QUERY_FA = WD+"/INPUT.fa.gz.aligned"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
-                    QUERY_FA = WD+"/INPUT.fa"
+                    QUERY_FA = WD+"/INPUT.fa.gz"
                     ALIGNED_FOR_PLACEMENT = ALIGNED
 
                 # conduct placement
