@@ -343,9 +343,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " | sed 's/\./N/g'"                         +
                             " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )   
-                        #handle.write(
-                        #    "rm " + moved+"."+str(i)+".gz" + "\n"
-                        #)   
+                        handle.write(
+                            "rm " + moved+"."+str(i)+".gz" + "\n"
+                        )   
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         handle.write(
                             "cat "+refseq+" "+
@@ -412,7 +412,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 "gzip -c "+
                 outdir+"/EPANG0/ref_query.fa.selectcols.ref"+
                 "> "+ 
-                WD+"/SUBSAMPLE.fa.aligned.gz"
+                WD+"/SUBSAMPLE.fa.aligned.gz",
+                shell=True
                 )
 
         # merge results
