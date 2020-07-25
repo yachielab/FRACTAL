@@ -277,7 +277,7 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
             qf.write(command)
 
 def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
-    with open(INPUTfile,'r') as handle:
+    with gzip.open(INPUTfile,'rt') as handle:
         names=[]
         if (file_format == "fasta"):
             records = SeqIO.parse(handle, "fasta")

@@ -204,7 +204,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         RAXMLPAR                                                        +
                         " -T "   + str(raxml_thread_num)                                +
                         " -f e"                                                         +
-                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.gz"   +
+                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"   +
                         " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
@@ -214,7 +214,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     subprocess.call(
                         RAXMLSEQ                                                        +
                         " -f e"                                                         +
-                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.gz"    + 
+                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"    + 
                         " -t "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.aligned.tree"  +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
@@ -371,6 +371,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "ITERATION.edit.gz",
         "tmp.nwk",
         "INPUT.edit.gz.fa.gz",
+        "INPUT.edit.gz.fa.aligned.gz"
         ]
     
     dirnames = [
@@ -378,7 +379,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "PARAM",
         "PARTITION",
         "SUBSAMPLE",
-        #"TREE"
         ]
     
     
