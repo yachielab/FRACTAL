@@ -191,7 +191,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'wt')
 
         if (file_format=="fasta"):
-            with open(in_fasta,'r') as in_handle:
+            with gzip.open(in_fasta,'rt') as in_handle:
                 record = SeqIO.parse(in_handle, "fasta")
                 i=0
                 for s in record:
