@@ -367,9 +367,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.gz" +
                         " -t "+reftree+"\n"
                         ) 
-                    handle.write(
-                        "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
-                        ) 
+                    #handle.write(
+                    #    "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
+                    #    ) 
                     handle.write(
                         "python3 "                                                      +
                         codedir+"/python/jplace_parse.py "                              +
