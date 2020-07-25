@@ -5,6 +5,7 @@ import manage_edits
 import subprocess
 import os
 import shutil
+import gzip
 
 # decompose fasta file (in_file) into x fasta files.
 def decompose_fasta(in_file, x,seq_count):
