@@ -57,13 +57,12 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         if ( file_format == "fasta" ):
             n=count_sequence_fast(in_fname)[0]
         if ( file_format == "edit" ):
-            n = int(subprocess.check_output(['wc', '-l', in_fname]).decode().split(' ')[0])
+            n = int((subprocess.Popen('less INPUT.edit.gz | wc -l', stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8'))
     if (n > subsample_size):
-        rand_idx=random.sample(range(n-1),subsample_size)
+        rand_idx=random.sample(range(n-1),subsample_size) # n-1: not include root
         rand_idx.sort()
     else:
         rand_idx=list(range(n-1))
-
     sample_name_list = []
     if ( file_format == "fasta" ):
         with gzip.open(out_fname, 'wt') as subs:
@@ -72,7 +71,6 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                 for s in allseq_itr:
                     if(s.id=="root"):
                         SeqIO.write(s, subs, "fasta")    
-            
             added_seqs = set()
             with gzip.open(in_fname, 'rt') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
@@ -92,10 +90,9 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
     elif (file_format=="edit"):
         with gzip.open(in_fname, 'rt') as rhandle, gzip.open(out_fname, 'wt') as whandle:
             i = 0
-            k = 0
+            k = 0 # line number
             edits_str_set = set()
             whandle.write("root\n")
-                    
             for line in rhandle:
                 name      = line.split()[0]
                 if ( name != "root"):
