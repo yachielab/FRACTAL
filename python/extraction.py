@@ -8,10 +8,8 @@ import gzip
 
 
 def tree_extraction(treefile,nameset, newtreefile):
-    print(nameset)
     tree=Phylo.read(treefile,'newick')
     TipList=tree.get_terminals()
-    print(TipList)
     name_to_numtips={}
     while(TipList!=[]):
         tip=TipList.pop()
