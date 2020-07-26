@@ -57,7 +57,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         if ( file_format == "fasta" ):
             n=count_sequence_fast(in_fname)[0]
         if ( file_format == "edit" ):
-            n = int((subprocess.Popen('less INPUT.edit.gz | wc -l', stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8'))
+            n = int((subprocess.Popen('less '+in_fname+' | wc -l', stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8'))
     if (n > subsample_size):
         rand_idx=random.sample(range(n-1),subsample_size) # n-1: not include root
         rand_idx.sort()
