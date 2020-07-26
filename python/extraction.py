@@ -64,7 +64,7 @@ def create_tree(tree, name_to_numtips):
                 if(name_to_numtips[child.name]):
                     stack.append([child,parent])
     while len(newtree.clade.clades) == 1:
-        newtree.clade = newtree.clade.clades[0]
+        newtree = Phylo.BaseTree.Tree(newtree.clade.clades[0])
     return Phylo.BaseTree.Tree(newtree.clade)
 
 def fasta_extraction(fastafile,nameset,ext_fastafile):
