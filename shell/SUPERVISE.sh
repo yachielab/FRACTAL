@@ -28,8 +28,8 @@ JOB_NAME=${18}
 PLACEMENT_METHOD=${19}
 ALIGNED=${20}
 max_num_of_iterations=${21}
-extraction_size=${23}
-FASTA_or_EDIT=${24}
+extraction_size=${22}
+FASTA_or_EDIT=${23}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
