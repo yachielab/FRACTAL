@@ -5,6 +5,7 @@ import subprocess
 import re
 import random
 import gzip
+import copy
 
 
 def tree_extraction(treefile,nameset, newtreefile):
