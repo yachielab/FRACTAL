@@ -501,3 +501,4 @@ if __name__ == "__main__":
         )
     else:
         print("Error: Number of arguments: "+str(len(argvs))+" for FRACluster.py is wrong!")
+        print(argvs)
