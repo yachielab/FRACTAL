@@ -7,7 +7,7 @@ import random
 import gzip
 
 
-def tree_extraction(treefile,nameset):
+def tree_extraction(treefile,nameset, newtreefile):
     tree=Phylo.read(treefile,'newick')
     TipList=tree.get_terminals()
     name_to_numtips={}
@@ -29,7 +29,7 @@ def tree_extraction(treefile,nameset):
             name_to_numtips[clade.name]=False
     newtree=create_tree(tree, name_to_numtips)
     return newtree
-    #Phylo.write(newtree, treefile+".ext", 'newick')
+    Phylo.write(newtree, newtreefile, 'newick')
 
 def one_of_child_true(clade,name_to_numtips):
     for child in clade.clades:
