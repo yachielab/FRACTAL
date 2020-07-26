@@ -409,7 +409,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "EPANG",
         "PARAM",
         "PARTITION",
-        "SUBSAMPLE",
+        #"SUBSAMPLE",
         ]
     
     
