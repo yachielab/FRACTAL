@@ -65,7 +65,7 @@ def create_tree(tree, name_to_numtips):
     return newtree
 
 def fasta_extraction(fastafile,nameset,ext_fastafile):
-    with gzup.open(fastafile,'rt') as ihandle, gzip.open(ext_fastafile,'wt') as ohandle:
+    with gzip.open(fastafile,'rt') as ihandle, gzip.open(ext_fastafile,'wt') as ohandle:
         sequences=SeqIO.parse(ihandle,'fasta')
         for record in sequences:
             if(record.name in nameset):
