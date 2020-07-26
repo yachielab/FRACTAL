@@ -437,7 +437,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 if __name__ == "__main__":
     argvs = sys.argv
 
-    if (len(argvs)==24):
+    if (len(argvs)==25):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
@@ -468,7 +468,7 @@ if __name__ == "__main__":
             HMM_ALIGNER       = "unspecified",
             seq_count_when_aligned=None
             )
-    elif ((len(argvs)==24+4)):
+    elif ((len(argvs)==25+4)):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
