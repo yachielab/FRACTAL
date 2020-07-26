@@ -200,13 +200,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 extracted_seq_rename_list = [ seqname2renamedname[name] for name in extracted_seq_name_list ]
                 extraction.tree_extraction(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree",
-                    set(extracted_seq_rename_list)                           ,
+                    set(extracted_seq_rename_list)                         ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree"
                     )
                 TREE_FILE                 = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree"
                 extraction.fasta_extraction(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"          ,
-                    set(extracted_seq_rename_list)                        ,
+                    set(extracted_seq_rename_list)                      ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
                     )
                 SUBSAMPLE_SEQ_FILE    = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz"
@@ -399,7 +399,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     filenames = [
         "INPUT.edit.gz",
-        "ITERATION.edit.gz",
+        #"ITERATION.edit.gz",
         "tmp.nwk",
         "INPUT.edit.gz.fa.gz",
         "INPUT.edit.gz.fa.aligned.gz"
