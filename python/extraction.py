@@ -52,7 +52,7 @@ def create_tree(tree, name_to_numtips):
         statepair=stack.pop()
         cstate=statepair[0]
         parent=statepair[1]
-        if(len(cstate.clades)>1 and all_child_true(cstate,name_to_numtips)):
+        if(len(cstate.clades)!=1 and all_child_true(cstate,name_to_numtips)):
             parent.clades.append(cstate)
             for child in cstate.clades:
                 if(name_to_numtips[child.name]):
