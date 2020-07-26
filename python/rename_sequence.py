@@ -11,12 +11,14 @@ def rename_sequence(in_fname,out_fname):
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k = 0
+        name2renamed = {}
         for s in input_itr:
+            name2renamed[s.name] = "s"+str(k)
             s.id = "s"+str(k)
             s.description = "s"+str(k)
-            k = k +1
+            k = k + 1
             SeqIO.write(s, renamed, "fasta")
-
+    return name2renamed
 
 def outgroup_check_fast(in_fname):
     exist_root = False
@@ -62,13 +64,14 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
     else:
         rand_idx=list(range(n-1))
 
+    sample_name_list = ["root"]
     if ( file_format == "fasta" ):
         with gzip.open(out_fname, 'wt') as subs:
             with gzip.open(in_fname, 'rt') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 for s in allseq_itr:
                     if(s.id=="root"):
-                        SeqIO.write(s, subs, "fasta")
+                        SeqIO.write(s, subs, "fasta")    
             
             added_seqs = set()
             with gzip.open(in_fname, 'rt') as allseq:
@@ -83,6 +86,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                             if (str(s.seq) not in added_seqs):
                                 SeqIO.write(s, subs, "fasta")
                                 added_seqs.add(str(s.seq))
+                                sample_name_list.append(s.name)
                             i += 1
                         k += 1
     elif (file_format=="edit"):
@@ -105,9 +109,10 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                         if edits_str not in edits_str_set:
                             whandle.write(name + "\t" + edits_str + "\n")
                             edits_str_set.add(edits_str)
+                            sample_name_list.append(name)
                         i += 1
                     k += 1
-                
+    return sample_name_list
 
 '''
 command line argument: "<input .fa file path> <output .fa file path>"

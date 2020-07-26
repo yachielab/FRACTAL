@@ -15,13 +15,16 @@ import shutil
 import rename_sequence
 import placement
 import manage_edits
+import extraction
+
 import math
 import time
 import gzip
+import random
 
 def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-               INIT_SEQ_COUNT,SEED,ML_or_MP, 
+               INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
                seq_count_when_aligned=None
                ):
@@ -135,26 +138,28 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
 
             if(os.path.isfile(WD+"/ITERATION.edit.gz")):
-                rename_sequence.random_sampling(
-                    WD+"/ITERATION.edit.gz"        ,
-                    WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
-                    SUBSAMPLE_SIZE             ,
-                    seed=SEED                  ,
-                    file_format = "edit"
-                )
+                sampled_seq_name_list = \
+                    rename_sequence.random_sampling(
+                        WD+"/ITERATION.edit.gz"        ,
+                        WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
+                        SUBSAMPLE_SIZE             ,
+                        seed=SEED                  ,
+                        file_format = "edit"
+                    )
                 shutil.rmtree ("EPANG")
                 os    .mkdir  ("EPANG")
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
             else:
-                rename_sequence.random_sampling(
-                    WD+"/INPUT.edit.gz"           ,
-                    WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
-                    SUBSAMPLE_SIZE             ,
-                    seed=SEED                  ,
-                    n = seq_count              ,
-                    file_format = "edit"
-                )
+                sampled_seq_name_list = \
+                    rename_sequence.random_sampling(
+                        WD+"/INPUT.edit.gz"               ,
+                        WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz" ,
+                        SUBSAMPLE_SIZE                    ,
+                        seed=SEED                         ,
+                        n = seq_count                     ,
+                        file_format = "edit"
+                    )
             
             edit_list = manage_edits.edit2editlist(WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz")
             manage_edits.edit2fasta(WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz", edit_list, out_gz=True)
@@ -162,8 +167,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #rename sequence#
             #################
-            rename_sequence.rename_sequence(
-                "SUBSAMPLE/SUBSAMPLE.edit.gz.fa.gz"     , 
+            seqname2renamedname = rename_sequence.rename_sequence(
+                "SUBSAMPLE/SUBSAMPLE.edit.gz.fa.gz"  , 
                 "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
             )
             
@@ -173,20 +178,45 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             os.chdir(WD+"/TREE")
             
             subprocess.call(
-                "bash " + CODEDIR+ "/shell/TREE.sh"             + 
-                " -n "  + str(tree_thread_num)                  +
-                " -m "  + TREEMETHOD                            +
-                " -a "  + ALIGNED                               +
+                "bash " + CODEDIR+ "/shell/TREE.sh"                + 
+                " -n "  + str(tree_thread_num)                     +
+                " -m "  + TREEMETHOD                               +
+                " -a "  + ALIGNED                                  +
                 " -f "  + WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz" +
-                " -c "  + CODEDIR                               +
-                " -w "  + WD+"/TREE"                            +
-                " -p \""+ str(OPTION) + "\""                    +
-                " -d "  + MODEL                                 + 
-                " -q "  + SOFTWARE                              +
-                " -s "  + ALIGNER                               ,
+                " -c "  + CODEDIR                                  +
+                " -w "  + WD+"/TREE"                               +
+                " -p \""+ str(OPTION) + "\""                       +
+                " -d "  + MODEL                                    + 
+                " -q "  + SOFTWARE                                 +
+                " -s "  + ALIGNER                                  ,
                 shell=True
             )
-            TREE_FILE = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"
+
+            # Subsample tree extraction
+
+            if ( EXTRACTION_SIZE < SUBSAMPLE_SIZE):
+                
+                extracted_seq_name_list   = random.sample(sampled_seq_name_list, EXTRACTION_SIZE)
+                extracted_seq_rename_list = [ seqname2renamedname[name] for name in extracted_seq_name_list ]
+                extraction.tree_extraction(
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree",
+                    set(extracted_seq_name_list)
+                    )
+                TREE_FILE                 = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree"
+                extraction.fasta_extraction(
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"          ,
+                    extracted_seq_name_list                             ,
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
+                    )
+                SUBSAMPLE_SEQ_FILE    = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz"
+                SUBSAMPLE_SEQ_FILE_ML = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted"
+
+            else:
+
+                TREE_FILE             = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"
+                SUBSAMPLE_SEQ_FILE    = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
+                SUBSAMPLE_SEQ_FILE_ML = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
+            
             
             if (ML_or_MP=="MP"):
                 partition.make_unrooted_after_rooting(
@@ -204,7 +234,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         RAXMLPAR                                                        +
                         " -T "   + str(raxml_thread_num)                                +
                         " -f e"                                                         +
-                        " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"   +
+                        " -s "   + SUBSAMPLE_SEQ_FILE_ML                                   +
                         " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
@@ -214,7 +244,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     subprocess.call(
                         RAXMLSEQ                                                        +
                         " -f e"                                                         +
-                        " -s "   + WD +"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"    + 
+                        " -s "   + SUBSAMPLE_SEQ_FILE_ML                                   + 
                         " -t "   + TREE_FILE                                            +
                         " -n "   + "PARAM_"+str(i)                                      +
                         " -m "   + MODEL                                                ,
@@ -253,7 +283,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 placement.distributed_placement(
                     WD                                                  , 
                     EPANG                                               ,  
-                    WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"            , 
+                    SUBSAMPLE_SEQ_FILE                                  , 
                     TREE_FILE                                           , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
                     QUERY_EDITS                                         , 
@@ -432,12 +462,13 @@ if __name__ == "__main__":
             INIT_SEQ_COUNT    = int(argvs[20]),
             SEED              = argvs[21],
             ML_or_MP          = argvs[22],
+            EXTRACTION_SIZE   = argvs[23],
             ALIGNER           = "unspecified", 
             HMM_PROFILER      = "unspecified", 
             HMM_ALIGNER       = "unspecified",
             seq_count_when_aligned=None
             )
-    elif ((len(argvs)==23+4)):
+    elif ((len(argvs)==24+4)):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
@@ -462,10 +493,11 @@ if __name__ == "__main__":
             INIT_SEQ_COUNT    = int(argvs[20]),
             SEED              = argvs[21],
             ML_or_MP          = argvs[22],
-            ALIGNER           = argvs[23],
-            HMM_PROFILER      = argvs[24],
-            HMM_ALIGNER       = argvs[25],
-            seq_count_when_aligned=int(argvs[26])
+            EXTRACTION_SIZE   = argvs[23],
+            ALIGNER           = argvs[24],
+            HMM_PROFILER      = argvs[25],
+            HMM_ALIGNER       = argvs[26],
+            seq_count_when_aligned=int(argvs[27])
         )
     else:
         print("Error: Number of arguments: "+str(len(argvs))+" for FRACluster.py is wrong!")
