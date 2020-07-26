@@ -11,7 +11,7 @@ def rename_sequence(in_fname,out_fname):
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k = 0
-        name2renamed = {}
+        name2renamed = {"root":"s0"}
         for s in input_itr:
             name2renamed[s.name] = "s"+str(k)
             s.id = "s"+str(k)
