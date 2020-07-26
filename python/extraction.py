@@ -28,8 +28,8 @@ def tree_extraction(treefile,nameset, newtreefile):
         else:
             name_to_numtips[clade.name]=False
     newtree=create_tree(tree, name_to_numtips)
-    return newtree
     Phylo.write(newtree, newtreefile, 'newick')
+    return newtree
 
 def one_of_child_true(clade,name_to_numtips):
     for child in clade.clades:
