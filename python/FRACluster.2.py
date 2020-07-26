@@ -205,7 +205,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 TREE_FILE                 = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree"
                 extraction.fasta_extraction(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"          ,
-                    extracted_seq_name_list                             ,
+                    set(extracted_seq_name_list)                        ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
                     )
                 SUBSAMPLE_SEQ_FILE    = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz"
