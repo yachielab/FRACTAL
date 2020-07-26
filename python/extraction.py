@@ -53,7 +53,7 @@ def create_tree(tree, name_to_numtips):
         statepair=stack.pop()
         cstate=statepair[0]
         parent=statepair[1]
-        if(len(cstate.clades)!=1 and all_child_true(cstate,name_to_numtips)):
+        if(all_child_true(cstate,name_to_numtips)):
             parent.clades.append(cstate)
             for child in cstate.clades:
                 if(name_to_numtips[child.name]):
@@ -63,7 +63,9 @@ def create_tree(tree, name_to_numtips):
             for child in cstate.clades:
                 if(name_to_numtips[child.name]):
                     stack.append([child,parent])
-    return Phylo.BaseTree.Tree(newtree.clade.clades[0])
+    while len(newtree.clade.clades) == 1:
+        newtree.clade = newtree.clade.clades[0]
+    return Phylo.BaseTree.Tree(newtree.clade)
 
 def fasta_extraction(fastafile,nameset,ext_fastafile):
     with gzip.open(fastafile,'rt') as ihandle, gzip.open(ext_fastafile,'wt') as ohandle:
