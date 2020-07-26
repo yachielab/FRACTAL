@@ -44,10 +44,11 @@ def all_child_true(clade, name_to_numtips):
     return True
 
 def create_tree(tree, name_to_numtips):
-    init_clade = Phylo.BaseTree.Clade(name="origin")
-    newtree = Phylo.BaseTree.Tree(init_clade)
+    #init_clade = Phylo.BaseTree.Clade(name="origin")
+    newtree = Phylo.BaseTree.Tree(tree.clade)
     stack=[]
-    stack.append([tree.clade,init_clade])
+    for clade in tree.clade.clades:
+        stack.append([clade, tree.clade])
     while(stack!=[]):
         statepair=stack.pop()
         cstate=statepair[0]
