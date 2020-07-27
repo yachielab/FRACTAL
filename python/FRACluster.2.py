@@ -209,6 +209,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     set(extracted_seq_rename_list)                      ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
                     )
+                subprocess.call(
+                    "cat "                                                          +
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz | "         +
+                    "gunzip > " + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted" ,
+                    shell=True
+                )
                 SUBSAMPLE_SEQ_FILE    = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz"
                 SUBSAMPLE_SEQ_FILE_ML = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted"
 
@@ -402,7 +408,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "ITERATION.edit.gz",
         "tmp.nwk",
         "INPUT.edit.gz.fa.gz",
-        "INPUT.edit.gz.fa.aligned.gz"
+        "INPUT.edit.gz.fa.aligned.gz",
+        "INPUT.edit.gz.fa.aligned",
+        "INPUT.edit.gz.fa.aligned.tree"
         ]
     
     dirnames = [
