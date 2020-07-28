@@ -178,7 +178,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #rename sequence#
             #################
-            rename_sequence.rename_sequence(
+            seqname2renamedname = rename_sequence.rename_sequence(
                 "SUBSAMPLE/SUBSAMPLE.fa.gz"           , 
                 "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
             )
