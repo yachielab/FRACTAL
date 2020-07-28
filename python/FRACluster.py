@@ -227,9 +227,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     "gunzip > " + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted" ,
                     shell=True
                 )
-                shutil.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree")
-                shutil.remove()
-                shutil.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz")
+                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree")
+                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz")
+                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned")
+                
                 os.rename(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree",
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"
