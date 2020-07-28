@@ -14,6 +14,8 @@ import subprocess
 import shutil
 import rename_sequence
 import placement
+import extraction
+
 import math
 import time
 import random
