@@ -59,6 +59,7 @@ def parse_jplace(fname, placement_method,seed):
             equally_parsimonious_edge_list = list('{'+str(pl[0])+'}' for pl in placement['p'])
             #edge = random.choice(equally_parsimonious_edge_list)
             edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
+            orint(equally_parsimonious_edge_list, edge_str)
             if (edge_str == "tree_top"):
                 root=correspond(treestr)[1]
                 edge_str = '{' + str(root) + '}'
