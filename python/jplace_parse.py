@@ -55,7 +55,7 @@ def parse_jplace(fname, placement_method,seed):
             edge = placement['p'][maxidx][0]
             name = placement['n'][0]
         elif(placement_method=="epa_MP"):
-            equally_parsimonious_edge_list = list(pl[0] for pl in placement['p'])
+            equally_parsimonious_edge_list = list(str(pl[0]) for pl in placement['p'])
             #edge = random.choice(equally_parsimonious_edge_list)
             edge = tree.common_ancestor(equally_parsimonious_edge_list).name
             name = placement['n'][0]
