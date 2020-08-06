@@ -61,8 +61,10 @@ def parse_jplace(fname, placement_method,seed):
             edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
             print(equally_parsimonious_edge_list, edge_str)
             if (edge_str == "tree_top"):
+                print("yes")
                 root=correspond(treestr)[1]
                 edge_str = '{' + str(root) + '}'
+            print(edge_str)
             edge = int(edge_str.split('{')[1].split('}')[0])
             name = placement['n'][0]
         if(name!='root'):
