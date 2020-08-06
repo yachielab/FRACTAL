@@ -48,6 +48,7 @@ def parse_jplace(fname, placement_method,seed):
     placement_list = [] # edge name -> sequence name
     for i in range(len(tree.get_terminals())+len(tree.get_nonterminals())):
         placement_list.append([])
+    print(tree)
     for placement in jdict:
         if(placement_method=="epa-ng"):
             problist = list(pl[2] for pl in placement['p'])
@@ -60,7 +61,6 @@ def parse_jplace(fname, placement_method,seed):
             #edge = random.choice(equally_parsimonious_edge_list)
             edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
             print(equally_parsimonious_edge_list, edge_str)
-            print(tree)
             if (edge_str == "tree_top"):
                 root=correspond(treestr)[1]
                 edge_str = root
