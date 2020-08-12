@@ -155,7 +155,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 INPUT_FA = WD+"/INPUT.fa.aligned.gz"
                 ALIGNED  = "aligned" 
 
-            if(os.path.isfile("ITERATION.fa.gz.gz")):
+            if(os.path.isfile("ITERATION.fa.gz")):
                 sampled_seq_name_list = \
                     rename_sequence.random_sampling(
                         "ITERATION.fa.gz"             ,

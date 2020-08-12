@@ -110,13 +110,6 @@ def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_
         jp = jf.read()
     # parse json format
     js = json.loads(jp)
-    '''
-    # generate random indices
-    if(subsample_size<num_of_para):
-        rand_idx=random.sample(range(num_of_para),subsample_size)
-    else:
-        rand_idx=range(num_of_para)
-    '''
     # add paraphyletic sequences into subsample
     with gzip.open(all_fa,'rt') as allfa, gzip.open(outputfname,'at') as out:
         if (file_format == "fasta"):
