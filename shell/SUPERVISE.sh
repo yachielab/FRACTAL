@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 23 ]; then
+if [ $# -ne 24 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
