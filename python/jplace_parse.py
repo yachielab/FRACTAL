@@ -69,13 +69,13 @@ def parse_jplace(fname, placement_method,seed,careful=1):
             tree.clade.name = "tree_top"
             equally_parsimonious_edge_list = list('{'+str(pl[0])+'}' for pl in placement['p'])
             if (careful==1):
-                edge = random.choice(equally_parsimonious_edge_list)
+                edge_str = random.choice(equally_parsimonious_edge_list)
             else:
                 edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
                 if (edge_str == "tree_top"):
                     root=correspond(treestr)[1]
                     edge_str = root
-                edge = int(edge_str.split('{')[1].split('}')[0])
+            edge = int(edge_str.split('{')[1].split('}')[0])
             name = placement['n'][0]
         if(name!='root'):
             placement_list[edge].append(name)
