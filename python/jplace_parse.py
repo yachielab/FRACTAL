@@ -51,6 +51,7 @@ def parse_jplace(fname, placement_method,seed,careful=1):
     for placement in jdict:
         if(placement_method=="epa-ng"):
             edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
+            print(careful, len(edge_prob_list))
             if (careful>1 and len(edge_prob_list)>1 ):
                 print("careful placement")
                 tree.clade.name = "tree_top"
