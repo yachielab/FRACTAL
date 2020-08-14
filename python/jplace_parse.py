@@ -50,9 +50,9 @@ def parse_jplace(fname, placement_method,seed,careful=1):
         placement_list.append([])
     for placement in jdict:
         if(placement_method=="epa-ng"):
+            edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
             if (careful>1 and len(edge_prob_list)>1 ):
                 print("careful placement")
-                edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
                 tree.clade.name = "tree_top"
                 root=correspond(treestr)[1]
                 edge_prob_list_sorted = sorted(scores, key=lambda x:x['prob'], reverse=True)
