@@ -34,7 +34,7 @@ def correspond(treestr):
             break
     return [corr,root]
 
-def parse_jplace(fname, placement_method,seed):
+def parse_jplace(fname, placement_method,seed,careful=1):
     if(len(seed)!=0):random.seed(int(seed))
     with open(fname,"r") as jf:
         jp = jf.read()
@@ -50,19 +50,32 @@ def parse_jplace(fname, placement_method,seed):
         placement_list.append([])
     for placement in jdict:
         if(placement_method=="epa-ng"):
-            problist = list(pl[2] for pl in placement['p'])
-            maxidx=problist.index(max(problist))
-            edge = placement['p'][maxidx][0]
+            edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
+            #problist = list(pl[2] for pl in placement['p'])
+            if (careful>1 and len(edge_prob_list)>1 ):
+                tree.clade.name = "tree_top"
+                root=correspond(treestr)[1]
+                edge_prob_list_sorted = sorted(scores, key=lambda x:x['prob'], reverse=True)
+                best_places  = ['{'+str(edge_prob['edge'])+'}' for edge_prob in edge_prob_list_sorted[0:careful]]
+                edge_str = tree.common_ancestor(best_places).name
+                if (edge_str == "tree_top"):
+                    edge_str = root
+                edge = int(edge_str.split('{')[1].split('}')[0])
+            else:
+                maxidx=problist.index(max(problist))
+                edge = placement['p'][maxidx][0]
             name = placement['n'][0]
         elif(placement_method=="epa_MP"):
             tree.clade.name = "tree_top"
             equally_parsimonious_edge_list = list('{'+str(pl[0])+'}' for pl in placement['p'])
-            #edge = random.choice(equally_parsimonious_edge_list)
-            edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
-            if (edge_str == "tree_top"):
-                root=correspond(treestr)[1]
-                edge_str = root
-            edge = int(edge_str.split('{')[1].split('}')[0])
+            if (careful==1):
+                edge = random.choice(equally_parsimonious_edge_list)
+            else:
+                edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
+                if (edge_str == "tree_top"):
+                    root=correspond(treestr)[1]
+                    edge_str = root
+                edge = int(edge_str.split('{')[1].split('}')[0])
             name = placement['n'][0]
         if(name!='root'):
             placement_list[edge].append(name)

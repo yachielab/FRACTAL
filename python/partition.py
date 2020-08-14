@@ -259,7 +259,7 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
             ARGVS[1]  = DIRdict[key][0]
             ARGVS[20] = INITIAL_SEQ_COUNT
             if (ARGVS[14] == "unaligned"):
-                ARGVS[26] = seq_count_when_aligned
+                ARGVS[28] = seq_count_when_aligned
 
 
             command="python3 "

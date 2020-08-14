@@ -67,8 +67,8 @@ def decompose_edit2(in_file, seq_count, n_per_file = 10000):
 def distributed_placement(  WD, EPANG, refseq, reftree, model, 
                             query, outdir, threadnum, nodenum, 
                             codedir, seq_count, ML_or_MP, RAXMLSEQ, 
-                            ALIGNED, seed, hmm_aligner="", hmm_profiler="",
-                            file_format = "fasta", edit_list = None ):
+                            ALIGNED, seed, careful=1, hmm_aligner="", hmm_profiler="",
+                            file_format = "fasta", edit_list = None):
     if(nodenum<=1):
 
         if (file_format == "edit"):
@@ -170,7 +170,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             jplace_parse.parse_jplace(
                 outdir+"/RAxML_portableTree.epa_result.jplace",
                 "epa_MP",
-                seed
+                seed,
+                careful=careful
             )
         os.rename(
             outdir+"/edge_to_seqname.out",

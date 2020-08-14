@@ -29,9 +29,10 @@ EXTRACTION_SIZE=10000000000
 ALIGNED="aligned"
 LIMITATION=10000
 FASTA_or_EDIT="fasta"
+CAREFUL_PLACEMENT=1
 
 function version {
-  echo "######## FRACTAL v2.3.0 ########"
+  echo "######## FRACTAL v2.4.0 ########"
 }
 
 function usage {
@@ -73,6 +74,8 @@ Options:
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
     -p <String, Permissible values: ‘ML’, ‘MP’>
       Method for phylogenetic placement in each iteration cycle. Default: ML
+    -P <Integer>
+      The rank considered for getting consensus of placement result Default: 1
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
@@ -105,7 +108,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:x:t:d:c:r:O:I:j:m:l:z:vheuE OPT
+while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:O:I:j:m:l:z:vheuE OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -118,6 +121,7 @@ do
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
     "p" ) FLG_P="TRUE" ; PLACEMENT_METHOD="$OPTARG";;
+    "P" ) FLG_P="TRUE" ; CAREFUL_PLACEMENT="$OPTARG";;
     "x" ) FLG_X="TRUE" ; MAX_ITERATION="$OPTARG";;
     "t" ) FLG_T="TRUE" ; THRESHOLD="$OPTARG";;
     "d" ) FLG_D="TRUE" ; NUM_OF_JOBS="$OPTARG";;
@@ -181,7 +185,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${FASTA_or_EDIT}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT}
 wait
 
 #show result
