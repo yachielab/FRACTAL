@@ -128,7 +128,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             jplace_parse.parse_jplace(
                 outdir+"/epa_result.jplace",
                 "epa-ng",
-                seed
+                seed,
+                careful=careful
                 )
             
         if(ML_or_MP=="MP"): 
