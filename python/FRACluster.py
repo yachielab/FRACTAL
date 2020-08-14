@@ -358,9 +358,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     else:
                         ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
 
-                    shutil.copyfile(
-                        ALIGNED_SUBSAMPLE,
-                        "ITERATION.fa.gz"
+                    #shutil.copyfile(
+                    #    ALIGNED_SUBSAMPLE,
+                    #    "ITERATION.fa.gz"
+                    #)
+                    subprocess.call(
+                        "gzip -c "+ALIGNED_SUBSAMPLE+" > "+WD+"/ITERATION.fa.gz",
+                        shell=True
                     )
                     
                     # select all sequence file
@@ -372,7 +376,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
-                        "ITERATION.fa.gz"                          ,
+                        "ITERATION.fa.gz"                       ,
                         ALIGNED_ALL                             ,
                         SUBSAMPLE_SIZE                          ,
                         para
