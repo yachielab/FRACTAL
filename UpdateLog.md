@@ -1,5 +1,9 @@
 ### Update Log
 
+<h4> 7/21/2020 Version 2.4.0 </h4>
+
+1. Option: -P option was released. FRACTAL was enabled to get a robust placement result.
+
 <h4> 7/21/2020 Version 2.3.0 </h4>
 
 1. Option: -E option was released. FRACTAL was enabled to treat edit list.
