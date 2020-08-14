@@ -56,7 +56,7 @@ def parse_jplace(fname, placement_method,seed,careful=1):
                 print("careful placement")
                 tree.clade.name = "tree_top"
                 root=correspond(treestr)[1]
-                edge_prob_list_sorted = sorted(scores, key=lambda x:x['prob'], reverse=True)
+                edge_prob_list_sorted = sorted(edge_prob_list, key=lambda x:x['prob'], reverse=True)
                 best_places  = ['{'+str(edge_prob['edge'])+'}' for edge_prob in edge_prob_list_sorted[0:careful]]
                 edge_str = tree.common_ancestor(best_places).name
                 if (edge_str == "tree_top"):
