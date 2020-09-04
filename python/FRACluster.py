@@ -146,7 +146,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
         # decompose FASTA
         if (seq_count > 10000 and NODE_COUNT):
-            subprocess.call("seqkit split2 -s "+max(10000, seq_count//max(nodenum,1))+" INPUT.fa.gz", shell=True)
+            subprocess.call("seqkit split2 -s "+str(max(10000, seq_count//max(nodenum,1)))+" INPUT.fa.gz", shell=True)
 
         while i<MAX_ITERATION:
             
