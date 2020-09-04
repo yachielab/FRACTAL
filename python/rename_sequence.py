@@ -40,7 +40,7 @@ def count_sequence(in_fname):
         for s in input_itr:
             n+=len(str(s.seq))//k
     return [k,n] # k: number of sequence, n: average sequence length
-
+'''
 def count_sequence_fast(in_fname):
     with gzip.open(in_fname, 'rt') as handle:
         k, l=0, 0
@@ -48,16 +48,16 @@ def count_sequence_fast(in_fname):
             if(line[0]==">"): k+=1
             elif(k==1): l+=len(line)-1
     return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
-
+'''
 def count_sequence_fast(in_fname):
-    seq_count = (
+    seq_count_str = (
         subprocess.Popen(
             "cat "+in_fname+" | gunzip | grep '>' | wc -l",
             stdout=subprocess.PIPE,
             shell=True
             ).communicate()[0]
             ).decode('utf-8')
-    return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
+    return int(seq_count_str)
 
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
     if(seed=="random"): random.seed(int(random.randint(0,99999)))
