@@ -59,6 +59,36 @@ def count_sequence_fast(in_fname):
             ).decode('utf-8')
     return int(seq_count_str)
 
+def random_sampling_from_splitted( # fasta only
+    in_dirname,
+    out_fname,
+    subsample_size,
+    seed,
+    Nseq_per_file,
+    n=None, 
+    file_format = "fasta"):
+
+    if(seed=="random"): random.seed(int(random.randint(0,99999)))
+    elif(len(seed)!=0):random.seed(int(seed))
+    else:print("-r Error: invalid random seed!")
+    if (n > subsample_size):
+        rand_idx=random.sample(range(n-1),subsample_size) # n-1: not include root
+        rand_idx.sort()
+    else:
+        rand_idx=list(range(n-1))
+    
+    command = "(" 
+    for seq_idx in rand_idx:
+        file_idx            = seq_idx // Nseq_per_file + 1
+        seq_idx_in_the_file = seq_idx %  Nseq_per_file
+
+        file_idx_str        = str(file_idx).zfill(3)
+        in_fname            = in_dirname + "/INPUT.part_" + file_idx_str + ".fa.gz"
+        
+        command += "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + ";"
+    command += ") | gzip > " + out_fname
+    subprocess.call(command, shell = True)
+
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
     if(seed=="random"): random.seed(int(random.randint(0,99999)))
     elif(len(seed)!=0):random.seed(int(seed))

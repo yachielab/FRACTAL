@@ -144,9 +144,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         prev_para = seq_count
         nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
-        # decompose FASTA
-        if (seq_count > 10000 and NODE_COUNT):
-            subprocess.call("seqkit split2 -s "+str(min(10000, seq_count//max(nodenum,1)))+" INPUT.fa.gz", shell=True)
 
         while i<MAX_ITERATION:
             
@@ -172,14 +169,30 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
             else:
-                sampled_seq_name_list = \
-                    rename_sequence.random_sampling(
-                        INPUT_FA                   ,
-                        "SUBSAMPLE/SUBSAMPLE.fa.gz",
-                        SUBSAMPLE_SIZE             ,
-                        seed=SEED                  ,
-                        n = seq_count
-                    )
+                # decompose FASTA
+                if (seq_count > 10000 and nodenum>1):
+                    Nseq_per_file = min(10000, seq_count//max(nodenum,1))
+                    subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA, shell=True)
+                    # subsampling
+                    sampled_seq_name_list = \
+                        rename_sequence.random_sampling_from_splitted(
+                            INPUT_FA+".split"          ,
+                            "SUBSAMPLE/SUBSAMPLE.fa.gz",
+                            SUBSAMPLE_SIZE             ,
+                            Nseq_per_file              ,
+                            seed = SEED                ,
+                            n    = seq_count
+                        )
+                else:
+                    # subsampling
+                    sampled_seq_name_list = \
+                        rename_sequence.random_sampling(
+                            INPUT_FA                   ,
+                            "SUBSAMPLE/SUBSAMPLE.fa.gz",
+                            SUBSAMPLE_SIZE             ,
+                            seed=SEED                  ,
+                            n = seq_count
+                        )
             
             #################
             #rename sequence#
