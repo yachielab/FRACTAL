@@ -44,6 +44,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         return
     
     # check number of sequences
+
+    subprocess.call("seqkit split2 INPUT.fa.gz", shell=True)
+
     seq_array                 = rename_sequence.count_sequence_fast("INPUT.fa.gz")
     seq_count                 = seq_array[0]
     if(INIT_SEQ_COUNT==0): 
