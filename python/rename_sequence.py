@@ -49,6 +49,16 @@ def count_sequence_fast(in_fname):
             elif(k==1): l+=len(line)-1
     return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
 
+def count_sequence_fast(in_fname):
+    seq_count = (
+        subprocess.Popen(
+            "cat "+in_fname+" | gunzip | grep '>' | wc -l",
+            stdout=subprocess.PIPE,
+            shell=True
+            ).communicate()[0]
+            ).decode('utf-8')
+    return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
+
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
     if(seed=="random"): random.seed(int(random.randint(0,99999)))
     elif(len(seed)!=0):random.seed(int(seed))

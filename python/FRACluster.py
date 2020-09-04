@@ -45,15 +45,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     # check number of sequences
 
-    subprocess.call("seqkit split2 INPUT.fa.gz", shell=True)
-
-    seq_array                 = rename_sequence.count_sequence_fast("INPUT.fa.gz")
-    seq_count                 = seq_array[0]
+    seq_count                 = rename_sequence.count_sequence_fast("INPUT.fa.gz")
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
-    seq_length                = seq_array[1]
-    raxml_thread_num          = min(max(seq_length//500,2),THREAD_NUM) # use 1 thread per 500 bp in RAxML
+    raxml_thread_num          = 1
     depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
     tree_thread_num           = THREAD_NUM
 
@@ -146,6 +142,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         os.mkdir("PARTITION")
         
         prev_para = seq_count
+        nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
+
+        # decompose FASTA
+        if (seq_count > 10000 and NODE_COUNT):
+            subprocess.call("seqkit split2 -s "+max(10000, seq_count//nodenum)+" INPUT.fa.gz", shell=True)
 
         while i<MAX_ITERATION:
             
@@ -293,7 +294,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 #Phylogenetic placement & visualization#
                 ########################################
                 os.chdir(WD)
-                nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
 
                 # select sequence file to place
                 if(os.path.isfile(WD+"/INPUT.fa.gz.aligned")):
