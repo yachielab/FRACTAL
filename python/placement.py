@@ -424,9 +424,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o\n"
                     )
-                handle.write(
-                    "rm "+outdir+"/*."+str(i)+".gz\n"
-                    ) 
+                #handle.write(
+                #    "rm "+outdir+"/*."+str(i)+".gz\n"
+                #    ) 
                 # end of a distributed task
         # check if all placement tasks ended
         flag = 0
