@@ -92,7 +92,6 @@ def parse_jplace(fname, placement_method,seed,careful=1):
         for i, seqnamelist in enumerate(placement_list):
             for seqname in seqnamelist:
                 handle.write(str(i)+"\t"+seqname+"\n")
-            handle.write("\n")
 
 '''
 command line argument: "<input .fa file path> <output .fa file path>"
