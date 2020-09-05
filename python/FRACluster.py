@@ -536,7 +536,7 @@ if __name__ == "__main__":
             HMM_ALIGNER       = "unspecified",
             seq_count_when_aligned=None
             )
-    elif ((len(argvs)==26+4)):
+    elif ((len(argvs)==26+3)):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
