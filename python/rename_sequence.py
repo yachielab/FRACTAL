@@ -92,7 +92,7 @@ def random_sampling_from_splitted( # fasta only
     command = "(" 
     for seq_idx in rand_idx:
         file_idx            = seq_idx // Nseq_per_file + 1
-        seq_idx_in_the_file = seq_idx %  Nseq_per_file
+        seq_idx_in_the_file = seq_idx %  Nseq_per_file + 1
 
         file_idx_str        = str(file_idx).zfill(3)
         in_fname            = in_dirname + "/INPUT.part_" + file_idx_str + ".fa.gz"
