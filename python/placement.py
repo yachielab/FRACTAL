@@ -337,9 +337,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " -w "+outdir+"/EPANG"+str(i)+"/"+filename +
                                 " -T "+str(threadnum)+"\n"
                                 )
-                            handle.write(
-                                "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
-                                )
+                        handle.write(
+                            "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
+                            )
                         handle.write(
                             "python3 "                                   +
                             codedir+"/python/jplace_parse.py "           +
@@ -348,6 +348,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             seed                                         +
                             "\n"
                             )
+                        handle.write(
+                            "rm " + queryfile + "\n"
+                            ) 
                         
 
 
@@ -380,7 +383,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             )   
                             handle.write(
-                                "rm " + moved+"."+str(i)+".gz" + "\n"
+                                "rm " + queryfile + "\n"
                             )   
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
@@ -397,9 +400,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -s "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa" +
                             " -t "+reftree+"\n"
                             ) 
-                        #handle.write(
-                        #    "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
-                        #    ) 
+                        handle.write(
+                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa*\n"
+                            ) 
                         handle.write(
                             "python3 "                                                      +
                             codedir+"/python/jplace_parse.py "                              +
@@ -446,7 +449,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             )
             subprocess.call(
                 "gzip -c "+
-                outdir+"/EPANG0/ref_query.fa.selectcols.ref"+
+                "$(ls "+outdir+"/EPANG0/*/ref_query.fa.selectcols.ref | head -n1)"+
                 "> "+ 
                 WD+"/SUBSAMPLE.fa.aligned.gz",
                 shell=True
