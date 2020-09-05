@@ -179,8 +179,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             INPUT_FA+".split"          ,
                             "SUBSAMPLE/SUBSAMPLE.fa.gz",
                             SUBSAMPLE_SIZE             ,
+                            SEED                ,
                             Nseq_per_file              ,
-                            seed = SEED                ,
                             n    = seq_count
                         )
                 else:
