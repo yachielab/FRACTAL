@@ -240,7 +240,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 for filename in node2filelist[i]:
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
                     queryfile = WD + "/INPUT.fa.gz.split/" + filename
-                    
+
                     PATH = (subprocess.\
                                 Popen(
                                     'echo $PATH',
@@ -420,13 +420,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             "epa_MP "                                                       +
                             seed + "\n"
                             )
-                    handle.write(
-                        "echo \"finished\" > "      +
-                        outdir+"/epang"+str(i)+".o\n"
-                        )
-                    handle.write(
-                        "rm "+outdir+"/*."+str(i)+".gz\n"
-                        ) 
+                handle.write(
+                    "echo \"finished\" > "      +
+                    outdir+"/epang"+str(i)+".o\n"
+                    )
+                handle.write(
+                    "rm "+outdir+"/*."+str(i)+".gz\n"
+                    ) 
                 # end of a distributed task
         # check if all placement tasks ended
         flag = 0
