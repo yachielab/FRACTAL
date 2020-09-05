@@ -91,7 +91,7 @@ def parse_jplace(fname, placement_method,seed,careful=1):
     with open("edge_to_seqname.out",'w') as handle:
         for i, seqnamelist in enumerate(placement_list):
             for seqname in seqnamelist:
-                handle.write(i,seqname,sep="\t")
+                handle.write(str(i)+"\t"+seqname+"\n")
             handle.write("\n")
 
 '''
