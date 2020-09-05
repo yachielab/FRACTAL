@@ -340,27 +340,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
                                 )
-                            handle.write(
-                                "python3 "                                   +
-                                codedir+"/python/jplace_parse.py "           +
-                                outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
-                                "epa-ng "                                    +
-                                seed                                         +
-                                "\n"
-                                )
-                            '''
-                            else:
-                                handle.write(
-                                    EPANG                         +
-                                    " --redo"                     +
-                                    " -s "+refseq                 +
-                                    " -t "+reftree                +
-                                    " --model "+model             +
-                                    " -q "+moved+"."+str(i)+".gz" +
-                                    " -w "+outdir+"/EPANG"+str(i) +
-                                    " -T "+str(threadnum)+"\n"
-                                    )
-                            '''
+                        handle.write(
+                            "python3 "                                   +
+                            codedir+"/python/jplace_parse.py "           +
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
+                            "epa-ng "                                    +
+                            seed                                         +
+                            "\n"
+                            )
                         
 
 
