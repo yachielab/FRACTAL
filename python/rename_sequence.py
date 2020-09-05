@@ -87,17 +87,16 @@ def random_sampling_from_splitted( # fasta only
     
     rand_idx = [root_idx]+rand_idx
     
-    command = "(" 
-    for seq_idx in rand_idx:
+    for k, seq_idx in enumerate(rand_idx):
         file_idx            = seq_idx // Nseq_per_file + 1
         seq_idx_in_the_file = seq_idx %  Nseq_per_file + 1
 
         file_idx_str        = str(file_idx).zfill(3)
         in_fname            = in_dirname + "/INPUT.part_" + file_idx_str + ".fa.gz"
         
-        command += "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + ";"
-    command += ") | gzip > " + out_fname
-    subprocess.call(command, shell = True)
+        command = "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + "| gzip > " + out_fname+"."+str(k)
+        subprocess.call(command, shell = True)
+    subprocess.call("cat "+out_fname+".* > " + out_fname, shell = True)
 
     seq_names_str = (
         subprocess.Popen(
