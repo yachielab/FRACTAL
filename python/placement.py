@@ -338,6 +338,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                     " -T "+str(threadnum)+"\n"
                                     )
                                 handle.write(
+                                    "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
+                                    )
+                                handle.write(
                                     "python3 "                                   +
                                     codedir+"/python/jplace_parse.py "           +
                                     outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
@@ -356,17 +359,22 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " -w "+outdir+"/EPANG"+str(i) +
                                 " -T "+str(threadnum)+"\n"
                                 )
-                    handle.write(
-                        "cd "+outdir+"/EPANG"+str(i)+"\n"
-                        )
-                    handle.write(
-                        "python3 "                                   +
-                        codedir+"/python/jplace_parse.py "           +
-                        outdir+"/EPANG"+str(i)+"/epa_result.jplace " +
-                        "epa-ng "                                    +
-                        seed                                         +
-                        "\n"
-                        )
+                    
+                    
+                    ''' will be deleted
+                    if (not os.path.exists(WD + "/INPUT.fa.gz.split")):
+                        handle.write(
+                            "cd "+outdir+"/EPANG"+str(i)+"\n"
+                            )
+                        handle.write(
+                            "python3 "                                   +
+                            codedir+"/python/jplace_parse.py "           +
+                            outdir+"/EPANG"+str(i)+"/epa_result.jplace " +
+                            "epa-ng "                                    +
+                            seed                                         +
+                            "\n"
+                            )
+                    '''
                 elif(ML_or_MP=="MP"):
                     handle.write(
                         "cd "+outdir+"/EPANG"+str(i)+"\n"
