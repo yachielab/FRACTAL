@@ -102,6 +102,17 @@ def random_sampling_from_splitted( # fasta only
     print(command)
     subprocess.call(command, shell = True)
 
+    seq_names_str = (
+        subprocess.Popen(
+            "cat "+out_fname+" | gunzip | grep '>' | tr -d '>' | tr '\n' ','",
+            stdout=subprocess.PIPE,
+            shell=True
+            ).communicate()[0]
+            ).decode('utf-8')
+    seqnames = seq_names_str.split(",")
+    return seqnames
+    
+
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
     if(seed=="random"): random.seed(int(random.randint(0,99999)))
     elif(len(seed)!=0):random.seed(int(seed))
