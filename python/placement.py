@@ -204,11 +204,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     refseq,
                     shell=True
                     )
-            decompose_fasta(
-                moved,
-                nodenum, 
-                seq_count
-                )
+            #decompose_fasta(
+            #    moved,
+            #    nodenum, 
+            #    seq_count
+            #    )
         elif ( file_format == "edit" ):
             moved=outdir+"/query.edit.gz"
             shutil.move(query, moved)
