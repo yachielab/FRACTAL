@@ -183,7 +183,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             SUBSAMPLE_SIZE             ,
                             SEED                       ,
                             Nseq_per_file              ,
-                            root_idx
+                            root_idx,
                             n    = seq_count
                         )
                 else:
