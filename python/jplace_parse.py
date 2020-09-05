@@ -81,10 +81,17 @@ def parse_jplace(fname, placement_method,seed,careful=1):
             placement_list[edge].append(name)
     with open('placement_tree.out','w') as handle:
         handle.write(treestr)
+    '''
     with open("edge_to_seqname.out",'w') as handle:
         for seqnamelist in placement_list:
             for seqname in seqnamelist:
                 handle.write(seqname+",")
+            handle.write("\n")
+    '''
+    with open("edge_to_seqname.out",'w') as handle:
+        for i, seqnamelist in enumerate(placement_list):
+            for seqname in seqnamelist:
+                handle.write(i,seqname,sep="\t")
             handle.write("\n")
 
 '''
