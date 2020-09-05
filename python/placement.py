@@ -348,6 +348,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                     seed                                         +
                                     "\n"
                                     )
+                        '''
                         else:
                             handle.write(
                                 EPANG                         +
@@ -359,8 +360,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " -w "+outdir+"/EPANG"+str(i) +
                                 " -T "+str(threadnum)+"\n"
                                 )
+                        '''
                     
-                    
+
+
                     ''' will be deleted
                     if (not os.path.exists(WD + "/INPUT.fa.gz.split")):
                         handle.write(
@@ -464,7 +467,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
 
         # merge results
         shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
-        my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
+        #my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
+        subprocess.call("cat " + outdir + "/EPANG*/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out")
 
 def my_paste(outdir, nodenum, outfilename):
     handles=[]

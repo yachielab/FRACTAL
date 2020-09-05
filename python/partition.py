@@ -54,16 +54,29 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     ref_tree=Phylo.read(treefile,'newick')
     ref_tree.root_with_outgroup(root)
     
-    # place list
-    place_list=[]
+    # edge2seqlist
+    edge2seqlist = {}
     with open(edge_to_sequence_file,'r') as handle:
         for line in handle:
+            '''
             line=line.split("\n")[0]
             if(len(line)>0): line=line[0:(len(line)-1)];place_list.append(line.split(","))
             else: place_list.append([])
+            '''
+            edge = line.split("\t")[0]
+            seq  = line.split("\t")[1].split("\n")[0]
+            if (edge in edge2seqlist.keys()):
+                edge2seqlist[edge].append(seq)
+            else:
+                edge2seqlist[edge] = [seq]
+    print(corr)
+    for edge in corr.keys():
+        if edge not in edge2seqlist.keys():
+            edge2seqlist[edge] = []
+        
 
     # get paraphyletic group
-    for seqname in place_list[int(root.strip('{').strip('}'))]:
+    for seqname in edge2seqlist[root]:
         partition[seqname]="paraphyletic"
         paraphyletic.append(seqname)
     # get monophyletic groups
@@ -72,7 +85,7 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
         cstate=stack.pop()
         d=len(ref_tree.get_path(cstate)) # current depth
         cedge =int(cstate.name.strip('{').strip('}'))
-        if(place_list[cedge]==[] and d<depth):
+        if(edge2seqlist[cstate.name]==[] and d<depth):
             if(len(cstate.clades)!=0):
                 stack.extend(cstate.clades)
             else:
@@ -82,9 +95,9 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
             downstream=[]
             downstream.extend(cstate.get_terminals())
             downstream.extend(cstate.get_nonterminals())
-            downstream_edge=list(int(state.name.strip('{').strip('}')) for state in downstream)
+            downstream_edge=list(state.name for state in downstream)
             for edge in downstream_edge:
-                for seqname in place_list[edge]:
+                for seqname in edge2seqlist[edge]:
                     if seqname != "root":
                         partition[seqname]=cedge
                         if(cedge in leaf_to_Nseq.keys()): leaf_to_Nseq[cedge]+=1
