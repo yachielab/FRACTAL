@@ -96,7 +96,7 @@ def random_sampling_from_splitted( # fasta only
         
         command = "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + "| gzip > " + out_fname+"."+str(k)
         subprocess.call(command, shell = True)
-    subprocess.call("cat "+out_fname+".* > " + out_fname, shell = True)
+    subprocess.call("cat "+out_fname+".* > " + out_fname+"; rm "+out_fname+".*", shell = True)
 
     seq_names_str = (
         subprocess.Popen(
