@@ -236,198 +236,197 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         #distribution start
         for i in range(nodenum):
             os.mkdir(outdir+"/EPANG"+str(i))
-            with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
-                PATH = (subprocess.\
-                            Popen(
-                                'echo $PATH',
-                                stdout=subprocess.PIPE,
-                                shell=True
+            for filename in node2filelist[i]:
+                os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
+                queryfile = WD + "/INPUT.fa.gz.split/" + filename
+                with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
+                    PATH = (subprocess.\
+                                Popen(
+                                    'echo $PATH',
+                                    stdout=subprocess.PIPE,
+                                    shell=True
+                                ).communicate()[0]
+                            ).decode('utf-8')
+                    PATH = (PATH.split('\n'))[0]
+                    LD_LIBRARY_PATH = (
+                        subprocess.\
+                            Popen(  'echo $LD_LIBRARY_PATH', 
+                                    stdout=subprocess.PIPE,
+                                    shell=True
                             ).communicate()[0]
                         ).decode('utf-8')
-                PATH = (PATH.split('\n'))[0]
-                LD_LIBRARY_PATH = (
-                    subprocess.\
-                        Popen(  'echo $LD_LIBRARY_PATH', 
-                                stdout=subprocess.PIPE,
-                                shell=True
-                        ).communicate()[0]
-                    ).decode('utf-8')
-                LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
-                handle.write("#!/bin/bash\n")
-                handle.write("#$ -S /bin/bash\n")
-                handle.write("PATH={}\n".format(PATH))
-                handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+                    LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
+                    handle.write("#!/bin/bash\n")
+                    handle.write("#$ -S /bin/bash\n")
+                    handle.write("PATH={}\n".format(PATH))
+                    handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
 
-                if (file_format == "edit"):
-                    handle.write(
-                        "python3 "                             +
-                        codedir+"/python/manage_edits.py "     +
-                        outdir+"/query.edit.gz."+str(i)+".gz " +
-                        outdir+"/editlist.txt\n"
-                        )
-                    moved = outdir+"/query.edit.fa.gz"
-                    handle.write(
-                        "mv "                                        + \
-                        outdir+"/query.edit.gz."+str(i)+".gz.fa.gz " + \
-                        moved + "." + str(i) + ".gz\n"
-                        )
+                    if (file_format == "edit"):
+                        handle.write(
+                            "python3 "                              +
+                            codedir+"/python/manage_edits.py "      +
+                            outdir +"/query.edit.gz."+str(i)+".gz " +
+                            outdir +"/editlist.txt\n"
+                            )
+                        moved = outdir+"/query.edit.fa.gz"
+                        handle.write(
+                            "mv "                                        + \
+                            outdir+"/query.edit.gz."+str(i)+".gz.fa.gz " + \
+                            moved + "." + str(i) + ".gz\n"
+                            )
 
 
-                if(ML_or_MP=="ML"): 
-                    if(ALIGNED=="unaligned"): # for unaligned sequences
-                        # Conduct HMM alignment
-                        handle.write(
-                            hmm_aligner                                +
-                            " --outformat afa"                         +
-                            #" -q "                                     +
-                            #" -m "                                     +
-                            " --mapali " + refseq + " "                +
-                            refseq+".hmm "                             +
-                            moved +"."+str(i)+".gz"                    +
-                            " | sed 's/\./-/g' "                       +
-                            " > "                                      +
-                            outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
-                            )
-                        handle.write(
-                            "python3 "                                 +
-                            codedir+"/python/divide_ref_and_query.py " +
-                            outdir+"/EPANG"+str(i)+"/ref_query.fa "    + 
-                            refseq + "\n"
-                            )
-                        handle.write(
-                            "trimal "                                                  +
-                            " -in " + outdir+"/EPANG"+str(i)+"/ref_query.fa "          +
-                            "-selectcols { "                                           +
-                            "   `trimal -sgc "                                         +
-                            "    -in " +outdir+"/EPANG"+str(i)+"/ref_query.fa.ref "    +
-                            "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
-                            "    |tr \"\\n\" \",\" ` "                                 +
-                            "    } "                                                   +
-                            "> "+outdir+"/EPANG"+str(i)+"/ref_query.fa.selectcols\n"
-                            )
-                        handle.write(
-                            "python3 "                                          +
-                            codedir +"/python/divide_ref_and_query.py "         +
-                            outdir  +"/EPANG"+str(i)+"/ref_query.fa.selectcols "+
-                            refseq  + "\n"
-                            )
-                        
-                        handle.write(
-                            EPANG                                               + 
-                            " --redo"                                           +
-                            " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa.ref"   +
-                            " -t "+reftree                                      +
-                            " --model "+model                                   +
-                            " -q "+outdir+"/EPANG"+str(i)+"/ref_query.fa.query" +
-                            " -w "+outdir+"/EPANG"+str(i)                       +
-                            " -T "+str(threadnum)+"\n"
-                            )
-                    elif(ALIGNED=="aligned"): # for aligned sequences
-                        if (os.path.exists(WD + "/INPUT.fa.gz.split")):
-                            for filename in node2filelist[i]:
-                                os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
-                                queryfile = WD + "/INPUT.fa.gz.split/" + filename
-                                handle.write(
-                                    EPANG                         +
-                                    " --redo"                     +
-                                    " -s "+refseq                 +
-                                    " -t "+reftree                +
-                                    " --model "+model             +
-                                    " -q "+queryfile              +
-                                    " -w "+outdir+"/EPANG"+str(i)+"/"+filename +
-                                    " -T "+str(threadnum)+"\n"
-                                    )
-                                handle.write(
-                                    "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
-                                    )
-                                handle.write(
-                                    "python3 "                                   +
-                                    codedir+"/python/jplace_parse.py "           +
-                                    outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
-                                    "epa-ng "                                    +
-                                    seed                                         +
-                                    "\n"
-                                    )
-                        '''
-                        else:
+                    if(ML_or_MP=="ML"): 
+                        if(ALIGNED=="unaligned"): # for unaligned sequences
+                            # Conduct HMM alignment
+                            handle.write(
+                                hmm_aligner                                +
+                                " --outformat afa"                         +
+                                #" -q "                                     +
+                                #" -m "                                     +
+                                " --mapali " + refseq + " "                +
+                                refseq+".hmm "                             +
+                                queryfile                                  +
+                                " | sed 's/\./-/g' "                       +
+                                " > "                                      +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                                )
+                            handle.write(
+                                "python3 "                                 +
+                                codedir+"/python/divide_ref_and_query.py " +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "    + 
+                                refseq + "\n"
+                                )
+                            handle.write(
+                                "trimal "                                                  +
+                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "          +
+                                "-selectcols { "                                           +
+                                "   `trimal -sgc "                                         +
+                                "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref "    +
+                                "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
+                                "    |tr \"\\n\" \",\" ` "                                 +
+                                "    } "                                                   +
+                                "> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols\n"
+                                )
+                            handle.write(
+                                "python3 "                                          +
+                                codedir +"/python/divide_ref_and_query.py "         +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols "+
+                                refseq  + "\n"
+                                )
+                            
+                            handle.write(
+                                EPANG                                               + 
+                                " --redo"                                           +
+                                " -s "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref"   +
+                                " -t "+reftree                                      +
+                                " --model "+model                                   +
+                                " -q "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.query" +
+                                " -w "+outdir+"/EPANG"+str(i)+"/"+filename                       +
+                                " -T "+str(threadnum)+"\n"
+                                )
+                        elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
                                 EPANG                         +
                                 " --redo"                     +
                                 " -s "+refseq                 +
                                 " -t "+reftree                +
                                 " --model "+model             +
-                                " -q "+moved+"."+str(i)+".gz" +
-                                " -w "+outdir+"/EPANG"+str(i) +
+                                " -q "+queryfile              +
+                                " -w "+outdir+"/EPANG"+str(i)+"/"+filename +
                                 " -T "+str(threadnum)+"\n"
                                 )
+                            handle.write(
+                                "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
+                                )
+                            handle.write(
+                                "python3 "                                   +
+                                codedir+"/python/jplace_parse.py "           +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
+                                "epa-ng "                                    +
+                                seed                                         +
+                                "\n"
+                                )
+                            '''
+                            else:
+                                handle.write(
+                                    EPANG                         +
+                                    " --redo"                     +
+                                    " -s "+refseq                 +
+                                    " -t "+reftree                +
+                                    " --model "+model             +
+                                    " -q "+moved+"."+str(i)+".gz" +
+                                    " -w "+outdir+"/EPANG"+str(i) +
+                                    " -T "+str(threadnum)+"\n"
+                                    )
+                            '''
+                        
+
+
+                        ''' will be deleted
+                        if (not os.path.exists(WD + "/INPUT.fa.gz.split")):
+                            handle.write(
+                                "cd "+outdir+"/EPANG"+str(i)+"\n"
+                                )
+                            handle.write(
+                                "python3 "                                   +
+                                codedir+"/python/jplace_parse.py "           +
+                                outdir+"/EPANG"+str(i)+"/epa_result.jplace " +
+                                "epa-ng "                                    +
+                                seed                                         +
+                                "\n"
+                                )
                         '''
-                    
-
-
-                    ''' will be deleted
-                    if (not os.path.exists(WD + "/INPUT.fa.gz.split")):
+                    elif(ML_or_MP=="MP"):
                         handle.write(
                             "cd "+outdir+"/EPANG"+str(i)+"\n"
-                            )
-                        handle.write(
-                            "python3 "                                   +
-                            codedir+"/python/jplace_parse.py "           +
-                            outdir+"/EPANG"+str(i)+"/epa_result.jplace " +
-                            "epa-ng "                                    +
-                            seed                                         +
-                            "\n"
-                            )
-                    '''
-                elif(ML_or_MP=="MP"):
-                    handle.write(
-                        "cd "+outdir+"/EPANG"+str(i)+"\n"
-                    )
-                    if(ALIGNED=="unaligned"): # for unaligned sequences
-                        # Conduct HMM alignment
-                        handle.write(
-                            hmm_aligner                                 +
-                            " --outformat afa"                          +
-                            " --mapali "+refseq+" "                     +
-                            refseq+".hmm "+moved+"."+str(i)+".gz"       +
-                            " | sed 's/\./N/g'"                         +
-                            " > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
-                        )   
-                        handle.write(
-                            "rm " + moved+"."+str(i)+".gz" + "\n"
-                        )   
-                    elif(ALIGNED=="aligned"): # for aligned sequences
-                        handle.write(
-                            "cat "+refseq+" "+
-                            moved+"."+str(i)+".gz"+
-                            " | gunzip > "+outdir+"/EPANG"+str(i)+"/ref_query.fa\n"
                         )
+                        if(ALIGNED=="unaligned"): # for unaligned sequences
+                            # Conduct HMM alignment
+                            handle.write(
+                                hmm_aligner                                 +
+                                " --outformat afa"                          +
+                                " --mapali "+refseq+" "                     +
+                                refseq+".hmm "+moved+"."+str(i)+".gz"       +
+                                " | sed 's/\./N/g'"                         +
+                                " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                            )   
+                            handle.write(
+                                "rm " + moved+"."+str(i)+".gz" + "\n"
+                            )   
+                        elif(ALIGNED=="aligned"): # for aligned sequences
+                            handle.write(
+                                "cat "+refseq+" "+
+                                moved+"."+str(i)+".gz"+
+                                " | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                            )
+                            handle.write(
+                                "rm " + moved+"."+str(i)+".gz" + "\n"
+                            )  
                         handle.write(
-                            "rm " + moved+"."+str(i)+".gz" + "\n"
-                        )  
+                            RAXMLSEQ                                      +
+                            " -n epa_result -f y -m GTRCAT"               +
+                            " -s "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa" +
+                            " -t "+reftree+"\n"
+                            ) 
+                        #handle.write(
+                        #    "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
+                        #    ) 
+                        handle.write(
+                            "python3 "                                                      +
+                            codedir+"/python/jplace_parse.py "                              +
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/RAxML_portableTree.epa_result.jplace " +
+                            "epa_MP "                                                       +
+                            seed + "\n"
+                            )
                     handle.write(
-                        RAXMLSEQ                                      +
-                        " -n epa_result -f y -m GTRCAT"               +
-                        " -s "+outdir+"/EPANG"+str(i)+"/ref_query.fa" +
-                        " -t "+reftree+"\n"
+                        "echo \"finished\" > "      +
+                        outdir+"/epang"+str(i)+".o\n"
+                        )
+                    handle.write(
+                        "rm "+outdir+"/*."+str(i)+".gz\n"
                         ) 
-                    #handle.write(
-                    #    "rm "+outdir+"/EPANG"+str(i)+"/ref_query.fa*\n"
-                    #    ) 
-                    handle.write(
-                        "python3 "                                                      +
-                        codedir+"/python/jplace_parse.py "                              +
-                        outdir+"/EPANG"+str(i)+"/RAxML_portableTree.epa_result.jplace " +
-                        "epa_MP "                                                       +
-                        seed + "\n"
-                        )
-                handle.write(
-                    "echo \"finished\" > "      +
-                    outdir+"/epang"+str(i)+".o\n"
-                    )
-                handle.write(
-                    "rm "+outdir+"/*."+str(i)+".gz\n"
-                    ) 
-            # end of a distributed task
+                # end of a distributed task
         # check if all placement tasks ended
         flag = 0
         while(flag==0):
@@ -452,7 +451,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         if(ALIGNED=="unaligned"):
             subprocess.call(
                 "cat "+
-                outdir+"/EPANG*/ref_query.fa.selectcols.query "+
+                outdir+"/EPANG*/*/ref_query.fa.selectcols.query "+
                 " | gzip > "+
                 WD+"/INPUT.fa.aligned.gz",
                 shell=True
