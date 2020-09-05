@@ -236,10 +236,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         #distribution start
         for i in range(nodenum):
             os.mkdir(outdir+"/EPANG"+str(i))
-            for filename in node2filelist[i]:
-                os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
-                queryfile = WD + "/INPUT.fa.gz.split/" + filename
-                with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
+            with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
+                for filename in node2filelist[i]:
+                    os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
+                    queryfile = WD + "/INPUT.fa.gz.split/" + filename
+                    
                     PATH = (subprocess.\
                                 Popen(
                                     'echo $PATH',
