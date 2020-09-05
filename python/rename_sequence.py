@@ -87,6 +87,7 @@ def random_sampling_from_splitted( # fasta only
         
         command += "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + ";"
     command += ") | gzip > " + out_fname
+    print(command)
     subprocess.call(command, shell = True)
 
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
