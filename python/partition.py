@@ -69,10 +69,10 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
                 edge2seqlist[edge].append(seq)
             else:
                 edge2seqlist[edge] = [seq]
-    print(corr)
-    for edge in corr.keys():
-        if edge not in edge2seqlist.keys():
-            edge2seqlist[edge] = []
+    print(ref_tree.get_nonterminals())
+    for node in ref_tree.get_terminals() + ref_tree.get_nonterminals():
+        if node.name not in edge2seqlist.keys():
+            edge2seqlist[node.name] = []
         
 
     # get paraphyletic group
