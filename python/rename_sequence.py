@@ -20,13 +20,20 @@ def rename_sequence(in_fname,out_fname):
             SeqIO.write(s, renamed, "fasta")
     return name2renamed
 
-def outgroup_check_fast(in_fname):
+def outgroup_check_fast(in_fname, file_format):
     exist_root = False
     with gzip.open(in_fname, 'rt') as origin:
+        idx = 0
         for line in origin:
-            if (line           == ">root\n"): exist_root = True; break
-            if (line.split()[0]== "root"   ): exist_root = True; break
-    return exist_root
+            if (file_format == "fasta"):
+                if (line           == ">root\n"): exist_root = True; break
+                elif(line[0]== '>'): 
+                    idx += 1
+            if (file_format == "edit"):
+                if (line.split()[0]== "root"   ): exist_root = True; break
+                else: 
+                    idx += 1
+    return exist_root, idx
 
 def count_sequence(in_fname):
     with gzip.open(in_fname, 'rt') as origin:
@@ -65,6 +72,7 @@ def random_sampling_from_splitted( # fasta only
     subsample_size,
     seed,
     Nseq_per_file,
+    root_idx,
     n=None, 
     file_format = "fasta"):
 
@@ -76,6 +84,8 @@ def random_sampling_from_splitted( # fasta only
         rand_idx.sort()
     else:
         rand_idx=list(range(n-1))
+    
+    rand_idx = [root_idx]+rand_idx
     
     command = "(" 
     for seq_idx in rand_idx:

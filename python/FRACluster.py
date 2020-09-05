@@ -36,8 +36,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     os.chdir(WD) # move to Working Directory
     
     # check if outgroup exists or not (sequence named "root")
-    if rename_sequence.outgroup_check_fast(WD+"/INPUT.fa.gz"):
+    root_exists, final_idx = rename_sequence.outgroup_check_fast(WD+"/INPUT.fa.gz", "fasta")
+    if(root_exists):
         print("INPUT.fa properly include outgroup sequence")
+        root_idx = final_idx
     else:
         print("No sequence named \"root\" in INPUT.fa!\
                INPUT.fa should include outgroup sequence named \"root\"")
@@ -181,6 +183,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             SUBSAMPLE_SIZE             ,
                             SEED                       ,
                             Nseq_per_file              ,
+                            root_idx
                             n    = seq_count
                         )
                 else:
