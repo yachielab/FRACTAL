@@ -466,7 +466,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 )
 
         # merge results
-        shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
+        #shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
         #my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
         subprocess.call(
             "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
