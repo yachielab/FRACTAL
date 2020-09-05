@@ -325,6 +325,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     elif(ALIGNED=="aligned"): # for aligned sequences
                         if (os.path.exists(WD + "/INPUT.fa.gz.split")):
                             for filename in node2filelist[i]:
+                                os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
                                 queryfile = WD + "/INPUT.fa.gz.split/" + filename
                                 handle.write(
                                     EPANG                         +
@@ -333,9 +334,17 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                     " -t "+reftree                +
                                     " --model "+model             +
                                     " -q "+queryfile              +
-                                    " -w "+outdir+"/EPANG"+str(i) +
+                                    " -w "+outdir+"/EPANG"+str(i)+"/"+filename +
                                     " -T "+str(threadnum)+"\n"
-                                )
+                                    )
+                                handle.write(
+                                    "python3 "                                   +
+                                    codedir+"/python/jplace_parse.py "           +
+                                    outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
+                                    "epa-ng "                                    +
+                                    seed                                         +
+                                    "\n"
+                                    )
                         else:
                             handle.write(
                                 EPANG                         +
