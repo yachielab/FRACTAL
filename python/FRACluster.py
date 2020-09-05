@@ -172,7 +172,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os    .mkdir  ("TREE")
             else:
                 # decompose FASTA
-                if (seq_count > 10000 and nodenum>1):
+                if (seq_count > 10000 or nodenum > 1):
                     Nseq_per_file = min(10000, seq_count//max(nodenum,1))
                     subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA, shell=True)
                     # subsampling
@@ -183,8 +183,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             SUBSAMPLE_SIZE             ,
                             SEED                       ,
                             Nseq_per_file              ,
-                            root_idx,
-                            n    = seq_count
+                            root_idx                   ,
+                            n = seq_count
                         )
                 else:
                     # subsampling

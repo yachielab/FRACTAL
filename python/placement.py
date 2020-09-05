@@ -191,7 +191,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
 
     else: # in distributed computing mode
         dname=WD.split("/").pop()
-
+        
         if ( file_format == "fasta" ):
             moved=outdir+"/query.fa.gz"
             shutil.move(query, moved)
@@ -220,6 +220,18 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
+        
+        if (os.path.exists(WD + "/INPUT.fa.gz.split")):
+            splitted_fasta_list = os.listdir(WD + "/INPUT.fa.gz.split")
+            Nfiles_total = len(splitted_fasta_list)
+            Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+            node2filelist = []
+            for i in range(nodenum):
+                if   (i <  nodenum - 1):
+                    file_list = splitted_fasta_list[Nfiles_per_node * i:Nfiles_per_node * (i+1)]
+                elif (i == nodenum - 1):
+                    file_list = splitted_fasta_list[Nfiles_per_node * i:]
+                node2filelist.append(file_list)
 
         #distribution start
         for i in range(nodenum):
@@ -264,7 +276,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 if(ML_or_MP=="ML"): 
                     if(ALIGNED=="unaligned"): # for unaligned sequences
                         # Conduct HMM alignment
-                        handle.write(hmm_aligner+
+                        handle.write(
+                            hmm_aligner                                +
                             " --outformat afa"                         +
                             #" -q "                                     +
                             #" -m "                                     +
@@ -310,16 +323,30 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -T "+str(threadnum)+"\n"
                             )
                     elif(ALIGNED=="aligned"): # for aligned sequences
-                        handle.write(
-                            EPANG                         +
-                            " --redo"                     +
-                            " -s "+refseq                 +
-                            " -t "+reftree                +
-                            " --model "+model             +
-                            " -q "+moved+"."+str(i)+".gz" +
-                            " -w "+outdir+"/EPANG"+str(i) +
-                            " -T "+str(threadnum)+"\n"
-                            )
+                        if (os.path.exists(WD + "/INPUT.fa.gz.split")):
+                            for filename in node2filelist[i]:
+                                queryfile = WD + "/INPUT.fa.gz.split/" + filename
+                                handle.write(
+                                    EPANG                         +
+                                    " --redo"                     +
+                                    " -s "+refseq                 +
+                                    " -t "+reftree                +
+                                    " --model "+model             +
+                                    " -q "+queryfile              +
+                                    " -w "+outdir+"/EPANG"+str(i) +
+                                    " -T "+str(threadnum)+"\n"
+                                )
+                        else:
+                            handle.write(
+                                EPANG                         +
+                                " --redo"                     +
+                                " -s "+refseq                 +
+                                " -t "+reftree                +
+                                " --model "+model             +
+                                " -q "+moved+"."+str(i)+".gz" +
+                                " -w "+outdir+"/EPANG"+str(i) +
+                                " -T "+str(threadnum)+"\n"
+                                )
                     handle.write(
                         "cd "+outdir+"/EPANG"+str(i)+"\n"
                         )
