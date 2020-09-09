@@ -380,10 +380,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 ##################################################
                 if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
                     
-                    # The previous subsample achieved minimum number of paraphyletic groups
-                    i    -= 1 
-                    para  = prev_para
-                    break
+                    # if i == 0, start from random sampling again, else use the result of previous i
+                    if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
+                        i -= 1
+                        para  = prev_para
+                        break
+                    else:
+                        if(os.path.isfile(WD+"/ITERATION.fa.gz")):
+                            os.remove(WD+"/ITERATION.fa.gz")
+                        i += 1
 
                 if(para!=0): # if problematic sequences remained
 
