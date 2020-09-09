@@ -159,13 +159,28 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 ALIGNED  = "aligned" 
 
             if(os.path.isfile("ITERATION.fa.gz")):
-                sampled_seq_name_list = \
-                    rename_sequence.random_sampling(
-                        "ITERATION.fa.gz"             ,
-                        "SUBSAMPLE/SUBSAMPLE.fa.gz"   ,
-                        SUBSAMPLE_SIZE             ,
-                        seed=SEED
-                    )
+                if (seq_count > 10000 or nodenum > 1):
+                    Nseq_per_file = min(10000, seq_count//max(nodenum,1))
+                    subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA, shell=True)
+                    # subsampling
+                    sampled_seq_name_list = \
+                        rename_sequence.random_sampling_from_splitted(
+                            INPUT_FA+".split"          ,
+                            "SUBSAMPLE/SUBSAMPLE.fa.gz",
+                            SUBSAMPLE_SIZE             ,
+                            SEED                       ,
+                            Nseq_per_file              ,
+                            root_idx                   ,
+                            n = seq_count
+                        )
+                else:
+                    sampled_seq_name_list = \
+                        rename_sequence.random_sampling(
+                            "ITERATION.fa.gz"             ,
+                            "SUBSAMPLE/SUBSAMPLE.fa.gz"   ,
+                            SUBSAMPLE_SIZE             ,
+                            seed=SEED
+                        )
                 shutil.rmtree ("EPANG")
                 os    .mkdir  ("EPANG")
                 shutil.rmtree ("TREE")
