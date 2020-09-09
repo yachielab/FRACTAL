@@ -115,7 +115,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
     else:print("-r Error: invalid random seed!")
     if (n==None):
         if ( file_format == "fasta" ):
-            n=count_sequence_fast(in_fname)s
+            n=count_sequence_fast(in_fname)
         if ( file_format == "edit" ):
             n = int((subprocess.Popen('less '+in_fname+' | wc -l', stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8'))
     if (n > subsample_size):
