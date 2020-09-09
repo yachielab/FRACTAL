@@ -161,7 +161,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             if(os.path.isfile("ITERATION.fa.gz")):
                 if (seq_count > 10000 or nodenum > 1):
                     Nseq_per_file = min(10000, seq_count//max(nodenum,1))
-                    subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA, shell=True)
+                    subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA +" &> /dev/null", shell=True)
                     # subsampling
                     sampled_seq_name_list = \
                         rename_sequence.random_sampling_from_splitted(
