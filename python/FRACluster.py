@@ -389,8 +389,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         if(os.path.isfile(WD+"/ITERATION.fa.gz")):
                             os.remove(WD+"/ITERATION.fa.gz")
                         i += 1
+                        resampling_needed = True
 
-                if(para!=0): # if problematic sequences remained
+                if(para!=0 and (not resampling_needed)): # if problematic sequences remained
 
                     # select subsample sequence file
                     if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
