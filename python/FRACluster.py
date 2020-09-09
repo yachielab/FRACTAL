@@ -426,12 +426,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     i+=1
                     prev_para=para
                 elif (not resampling_needed):
-                    print("resampling",WD,Nseq_in_largest_subclade, seq_count, resampling_needed,"break")
+                    print("resampling",WD,Nseq_in_largest_subclade, seq_count, resampling_needed,i,"break")
                     break
                 else:
                     prev_para = 0
-                    i+=1
-                    print("resampling",WD,Nseq_in_largest_subclade, seq_count, resampling_needed)
+                    print("resampling",WD,Nseq_in_largest_subclade, seq_count, resampling_needed, i)
 
         ##################
         #partition .fasta#
