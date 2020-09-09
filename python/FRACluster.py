@@ -430,6 +430,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     break
                 else:
                     prev_para = 0
+                    i+=1
                     print("resampling",WD,Nseq_in_largest_subclade, seq_count, resampling_needed)
 
         ##################
