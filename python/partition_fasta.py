@@ -100,7 +100,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
 if __name__ == "__main__":
     argvs = sys.argv
     partition_fasta(
-        in_fasta_list,
+        in_fasta_list = sys.argv[1], #<file name 1>;<file name 2>;<file name 3>
         num_file,
         OUT_DIR,
         wd,

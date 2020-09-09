@@ -92,7 +92,8 @@ def random_sampling_from_splitted( # fasta only
         seq_idx_in_the_file = seq_idx %  Nseq_per_file + 1
 
         file_idx_str        = str(file_idx).zfill(3)
-        in_fname            = in_dirname + "/INPUT.part_" + file_idx_str + ".fa.gz"
+        
+        in_fname            = in_dirname + "/"+".".join(in_dirname.split(".")[-2])+".part_" + file_idx_str + "." + ".".join(in_dirname.split(".")[-2:])
         
         command = "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + "| gzip > " + out_fname+"."+str(k)
         subprocess.call(command, shell = True)
