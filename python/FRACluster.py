@@ -378,6 +378,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 ##################################################
                 #get paraphyletic sequences and make ITERATION.fa.gz#
                 ##################################################
+                resampling_needed = False
                 if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
                     
                     # if i == 0, start from random sampling again, else use the result of previous i
