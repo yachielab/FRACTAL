@@ -221,8 +221,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 for edit in edit_list:
                     handle.write(edit + "\n")
         
-        if (os.path.exists(WD + "/INPUT.fa.gz.split")):
+        if (os.path.exists(WD + "/INPUT.fa.aligned.gz.split")):
+            splitted_fasta_list = os.listdir(WD + "/INPUT.fa.aligned.gz.split")
+            splitted = True
+        elif (os.path.exists(WD + "/INPUT.fa.gz.split")):
             splitted_fasta_list = os.listdir(WD + "/INPUT.fa.gz.split")
+            splitted = True
+        if (splitted):
             Nfiles_total = len(splitted_fasta_list)
             Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
             node2filelist = []
