@@ -163,6 +163,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os    .mkdir  ("EPANG")
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
+                
             if(os.path.isfile("ITERATION.fa.gz")):
                 if (seq_count > 10000 or nodenum > 1):
                     Nseq_per_file = min(10000, seq_count//max(nodenum,1))
