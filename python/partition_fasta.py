@@ -11,6 +11,17 @@ import subprocess
 import random
 import gzip
 
+def classification_fasta(inputFASTA_filehandle, seqname2handle):
+    # open input FASTAfile
+    records = SeqIO.parse(inputFASTA_filehandle, "fasta")
+    
+    for record in records:
+        outhandle = seqname2handle[record.id]
+        SeqIO.write(outhandle, record, "fasta")
+
+def 
+
+
 def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING,file_format="fasta"):
     # open .jpart file
     with open(jpart,"r") as jf:

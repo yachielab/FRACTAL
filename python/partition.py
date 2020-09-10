@@ -189,6 +189,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
 
+    print(DIRdict)
+
     for fasta_count, in_fasta in enumerate(in_fasta_list):
         ost=[]
         for i in range(num_mono):
@@ -196,6 +198,10 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
 
         if (file_format=="fasta"):
+
+            if (os.path.exists(in_fasta + ".split")):
+                partition_fasta_parallel(in_fasta + ".split", )
+
             with gzip.open(in_fasta,'rt') as in_handle:
                 record = SeqIO.parse(in_handle, "fasta")
                 i=0

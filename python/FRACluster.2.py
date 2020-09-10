@@ -344,8 +344,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
-                        "ITERATION.edit.gz"                        ,
-                        "INPUT.edit.gz"                            ,
+                        "ITERATION.edit.gz"                     ,
+                        "INPUT.edit.gz"                         ,
                         SUBSAMPLE_SIZE                          ,
                         para                                    ,
                         file_format = "edit"
@@ -368,9 +368,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         except:
             None
         
-        if(i==-1): 
-            print("Error: FRACluster.py cannot divide sequences into multiple subclades")
-            sys.exit()
+        if (Nseq_in_largest_subclade == seq_count - 1 ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
+            print ("Error: FRACluster.py could not divide sequences into multiple subclades")
+            return
         
         EDIT_LIST = [ WD+"/INPUT.edit.gz" ]
         DIRdict = partition.partition_fasta(

@@ -454,16 +454,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             )
         except:
             None
-        if (Nseq_in_largest_subclade == seq_count - 1 ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
-            return
         
-        if(i==-1): 
-            print("Error: FRACluster.py cannot divide sequences into multiple subclades")
-            sys.exit()
+        if (Nseq_in_largest_subclade == seq_count - 1 ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
+            print ("Error: FRACluster.py could not divide sequences into multiple subclades")
+            return
         
         FASTA_LIST = [ WD+"/INPUT.fa.gz" ]
         if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
             FASTA_LIST.append(WD+"/INPUT.fa.gz.aligned")
+            
         DIRdict = partition.partition_fasta(
             FASTA_LIST,
             NUMFILE,
