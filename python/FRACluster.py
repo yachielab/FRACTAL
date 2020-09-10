@@ -454,6 +454,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             )
         except:
             None
+        if (Nseq_in_largest_subclade == seq_count - 1 ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
+            return
         
         if(i==-1): 
             print("Error: FRACluster.py cannot divide sequences into multiple subclades")
@@ -473,10 +475,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz",
             ROOTING
             )
-
-        print("DIRdict", DIRdict)
-        if (sum(DIRdict.values()) == max(DIRdict.values()) ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
-            return
         
         partition.qsub_prep(
             ARGVS,
