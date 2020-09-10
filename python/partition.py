@@ -254,7 +254,23 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                                 wd + "/seqname_dirpath.txt" +
                                 "\n"
                                 )
-
+                            handle.write(
+                                "rm " +
+                                in_fasta + ".split/" + splitted_file + " "  +
+                                "\n"
+                                )
+                # wait for all partition jobs finish
+                while(os.listdir(in_fasta + ".split") != []):
+                    None
+                # concat all FASTA files for each subclade
+                for subclade_dir in dirpath_list:
+                    subprocess.call(
+                        "cat "                        +
+                        subclade_dir + "/* "          +
+                        "> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
+                        "rm " + subclade_dir + "/*.part_*"
+                    )
+                        
             else:            
             
                 with gzip.open(in_fasta,'rt') as in_handle:
