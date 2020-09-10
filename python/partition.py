@@ -288,12 +288,15 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                                 DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
                             SeqIO.write(s, ost[l], "fasta")
                         i += 1
+                for st in ost:
+                    st.close()
+                    para.close()
         elif(file_format=="edit"):
             ost=[]
             for i in range(num_mono):
                 ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
             para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
-            
+
             with gzip.open(in_fasta,'rt') as in_handle:
                 for line in in_handle:
                     name = line.split()[0]
@@ -307,9 +310,9 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         if( fasta_count == 0 ):
                             DIRdict['{'+str(js["partition"][name])+'}'][1]+=1
                         ost[l].write(line)
-        for st in ost:
-            st.close()
-        para.close()
+            for st in ost:
+                st.close()
+            para.close()
     with open(info, 'w') as out:
         out.write(json.dumps(DIRdict))
     for leaf in tree.get_terminals():
