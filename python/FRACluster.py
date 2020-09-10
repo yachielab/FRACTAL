@@ -462,7 +462,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         FASTA_LIST = [ WD+"/INPUT.fa.gz" ]
         if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
             FASTA_LIST.append(WD+"/INPUT.fa.gz.aligned")
-            
+
         DIRdict = partition.partition_fasta(
             FASTA_LIST,
             NUMFILE,
@@ -472,7 +472,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             "PARTITION.info",
             "UPSTREAM.nwk",
             WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz",
-            ROOTING
+            ROOTING,
+            nodenum = nodenum,
+            codedir = CODEDIR
             )
         
         partition.qsub_prep(
