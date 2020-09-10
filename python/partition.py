@@ -275,7 +275,7 @@ def partition_fasta(
                     subprocess.call(
                         "cat "                        +
                         subclade_dir + "/* "          +
-                        "> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
+                        ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
                         "rm " + subclade_dir + "/*.part_*",
                         bash = True
                     )

@@ -16,8 +16,12 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle):
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
     for record in records:
-        outhandle = seqname2handle[record.id]
-        SeqIO.write(record, outhandle, "fasta")
+        if (record.name == "root"):
+            for outhandle in list(seqname2handle.values):
+                SeqIO.write(record, outhandle, "fasta")
+        else:
+            outhandle = seqname2handle[record.id]
+            SeqIO.write(record, outhandle, "fasta")
 
 def partition_fasta(inputFASTA_path, outputFASTA_dirpathlist, seqname2dirpath):
 
