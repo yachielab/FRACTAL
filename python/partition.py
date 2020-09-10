@@ -210,7 +210,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                 # assign splitted files to each node: same as distributed placement
                 splitted_fasta_dir  = in_fasta + ".split"
                 splitted_fasta_list = os.listdir(in_fasta + ".split")
-
+                print("splitted_fasta_list", splitted_fasta_list)
                 Nfiles_total = len(splitted_fasta_list)
                 Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
                 node2filelist = []
@@ -245,6 +245,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         handle.write("PATH={}\n".format(PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+                        print ("node2filelist[i]", node2filelist[i]) 
                         for splitted_file in node2filelist[i]:
                             handle.write(
                                 "python3 "                  +
