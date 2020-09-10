@@ -150,7 +150,7 @@ def get_ancseq(ancseq,ancnum):
                 return ls[1]
     print("no sequence named "+ancname)
 
-def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING,file_format="fasta"):
+def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING,file_format="fasta", nodenum=1, codedir=None):
     # open .jpart file
     with open(jpart,"r") as jf:
         jp = jf.read()
@@ -188,13 +188,6 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         DIRdict[leaf.name] = [OUT_DIR+"/d"+str(num+i),0]
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
-    
-    print ("DIRdict", DIRdict)
-
-    with open(wd + "/seqname_dirpath.txt", 'w') as handle:
-        for seqname in list(js["partition"].keys()):
-            dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
-            handle.write(seqname +'\t' + dirpath + '\n')
 
     for fasta_count, in_fasta in enumerate(in_fasta_list):
         ost=[]
@@ -204,24 +197,75 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
 
         if (file_format=="fasta"):
 
-            #if (os.path.exists(in_fasta + ".split")):
-            #    partition_fasta_parallel(in_fasta + ".split", )
+            if (os.path.exists(in_fasta + ".split") and nodenum > 1):
+                
+                with open(wd + "/seqname_dirpath.txt", 'w') as handle:
+                    for seqname in list(js["partition"].keys()):
+                        dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
+                        handle.write(seqname +'\t' + dirpath + '\n')
+                
+                # assign splitted files to each node: same as distributed placement
+                splitted_fasta_dir  = in_fasta + ".split"
+                splitted_fasta_list = os.listdir(in_fasta + ".split")
 
-            with gzip.open(in_fasta,'rt') as in_handle:
-                record = SeqIO.parse(in_handle, "fasta")
-                i=0
-                for s in record:
-                    if(s.id=="root"):
-                        for st in ost: #ROOTING=="Origin"
-                            SeqIO.write(s, st, "fasta")
-                    elif(js["partition"][s.id]=="paraphyletic"):
-                        SeqIO.write(s, para, "fasta")
-                    else:
-                        l = NUMdict[str(js["partition"][s.id])]
-                        if( fasta_count == 0 ):
-                            DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
-                        SeqIO.write(s, ost[l], "fasta")
-                    i += 1
+                Nfiles_total = len(splitted_fasta_list)
+                Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+                node2filelist = []
+                for i in range(nodenum):
+                    if   (i <  nodenum - 1):
+                        file_list = splitted_fasta_list[Nfiles_per_node * i:Nfiles_per_node * (i+1)]
+                    elif (i == nodenum - 1):
+                        file_list = splitted_fasta_list[Nfiles_per_node * i:]
+                    node2filelist.append(file_list)
+
+                dname = wd.split("/")[-1]
+                for i in range(nodenum):
+                    with open(wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
+                        PATH = (subprocess.\
+                                    Popen(
+                                        'echo $PATH',
+                                        stdout=subprocess.PIPE,
+                                        shell=True
+                                    ).communicate()[0]
+                                ).decode('utf-8')
+                        PATH = (PATH.split('\n'))[0]
+                        LD_LIBRARY_PATH = (
+                            subprocess.\
+                                Popen(  'echo $LD_LIBRARY_PATH', 
+                                        stdout=subprocess.PIPE,
+                                        shell=True
+                                ).communicate()[0]
+                            ).decode('utf-8')
+                        LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
+                        handle.write("#!/bin/bash\n")
+                        handle.write("#$ -S /bin/bash\n")
+                        handle.write("PATH={}\n".format(PATH))
+                        handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+                        handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+                        handle.write(
+                            "python3 "                              +
+                            in_fasta                                +
+                            ";".join(node2filelist[i]) + " "        +
+                            wd + "/seqname_dirpath.txt"
+                            )
+
+            else:            
+            
+                with gzip.open(in_fasta,'rt') as in_handle:
+                    record = SeqIO.parse(in_handle, "fasta")
+                    i=0
+                    for s in record:
+                        if(s.id=="root"):
+                            for st in ost: #ROOTING=="Origin"
+                                SeqIO.write(s, st, "fasta")
+                        elif(js["partition"][s.id]=="paraphyletic"):
+                            SeqIO.write(s, para, "fasta")
+                        else:
+                            l = NUMdict[str(js["partition"][s.id])]
+                            if( fasta_count == 0 ):
+                                DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
+                            SeqIO.write(s, ost[l], "fasta")
+                        i += 1
         elif(file_format=="edit"):
             with gzip.open(in_fasta,'rt') as in_handle:
                 for line in in_handle:
