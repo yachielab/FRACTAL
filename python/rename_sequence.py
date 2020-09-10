@@ -87,7 +87,7 @@ def random_sampling_from_splitted( # fasta only
     
     rand_idx = [root_idx]+rand_idx
     
-    print(rand_idx)
+    print("rand_idx",rand_idx)
 
     for k, seq_idx in enumerate(rand_idx):
         file_idx            = seq_idx // Nseq_per_file + 1
