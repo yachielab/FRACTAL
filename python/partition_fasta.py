@@ -23,7 +23,7 @@ def partition_fasta(inputFASTA_path, outputFASTA_dirpathlist, seqname2dirpath):
 
     seqname_set = {}
     with gzip.open(inputFASTA_path, 'rt') as ist:
-        records = SeqIO.parse(ist)
+        records = SeqIO.parse(ist, "fasta")
         for record in records:
             seqname_set.add(record.name)
 
