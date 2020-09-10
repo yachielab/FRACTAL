@@ -190,10 +190,6 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         i=i+1
 
     for fasta_count, in_fasta in enumerate(in_fasta_list):
-        ost=[]
-        for i in range(num_mono):
-            ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
-        para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
 
         if (file_format=="fasta"):
 
@@ -272,7 +268,11 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                     )
                         
             else:            
-            
+                ost=[]
+                for i in range(num_mono):
+                    ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
+                para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
+
                 with gzip.open(in_fasta,'rt') as in_handle:
                     record = SeqIO.parse(in_handle, "fasta")
                     i=0
@@ -289,6 +289,11 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                             SeqIO.write(s, ost[l], "fasta")
                         i += 1
         elif(file_format=="edit"):
+            ost=[]
+            for i in range(num_mono):
+                ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
+            para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
+            
             with gzip.open(in_fasta,'rt') as in_handle:
                 for line in in_handle:
                     name = line.split()[0]
