@@ -150,7 +150,20 @@ def get_ancseq(ancseq,ancnum):
                 return ls[1]
     print("no sequence named "+ancname)
 
-def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsamplefa,ROOTING,file_format="fasta", nodenum=1, codedir=None):
+def partition_fasta(
+    in_fasta_list,
+    num_file,
+    OUT_DIR,
+    wd,
+    jpart,
+    info,
+    treefile,
+    subsamplefa,
+    ROOTING,
+    file_format="fasta", 
+    nodenum=1, 
+    codedir=None
+    ):
     # open .jpart file
     with open(jpart,"r") as jf:
         jp = jf.read()
@@ -240,7 +253,6 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         handle.write("PATH={}\n".format(PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                        print ("node2filelist[i]", node2filelist[i]) 
                         for splitted_file in node2filelist[i]:
                             handle.write(
                                 "python3 "                  +
@@ -264,7 +276,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         "cat "                        +
                         subclade_dir + "/* "          +
                         "> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
-                        "rm " + subclade_dir + "/*.part_*"
+                        "rm " + subclade_dir + "/*.part_*",
+                        bash = True
                     )
                         
             else:            
