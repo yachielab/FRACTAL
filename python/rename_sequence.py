@@ -76,9 +76,6 @@ def random_sampling_from_splitted( # fasta only
     n=None, 
     file_format = "fasta"):
 
-    if(seed=="random"): random.seed(int(random.randint(0,99999)))
-    elif(len(seed)!=0):random.seed(int(seed))
-    else:print("-r Error: invalid random seed!")
     if (n > subsample_size):
         rand_idx=random.sample(range(n-1),subsample_size) # n-1: not include root
         rand_idx.sort()
@@ -113,9 +110,6 @@ def random_sampling_from_splitted( # fasta only
     
 
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
-    if(seed=="random"): random.seed(int(random.randint(0,99999)))
-    elif(len(seed)!=0):random.seed(int(seed))
-    else:print("-r Error: invalid random seed!")
     if (n==None):
         if ( file_format == "fasta" ):
             n=count_sequence_fast(in_fname)
