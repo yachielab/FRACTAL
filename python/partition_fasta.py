@@ -49,6 +49,6 @@ def partition_fasta(inputFASTA_path, outputFASTA_dirpathlist, seqname2dirpath):
 if __name__ == "__main__":
     partition_fasta(
         inputFASTA_path      = sys.argv[1], 
-        outputFASTA_pathlist = sys.argv[2].split(";"), 
+        outputFASTA_pathlist = sys.argv[2].split(":"), 
         seqname2dirpath      = sys.argv[3]
         )

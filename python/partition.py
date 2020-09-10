@@ -250,7 +250,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                                 "python3 "                  +
                                 codedir + "/python/partition_fasta.py "     +
                                 in_fasta + ".split/" + splitted_file + " "  +
-                                ";".join(dirpath_list)+" "  +
+                                ":".join(dirpath_list)+" "  +
                                 wd + "/seqname_dirpath.txt" +
                                 "\n"
                                 )
