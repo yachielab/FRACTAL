@@ -199,10 +199,13 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
 
             if (os.path.exists(in_fasta + ".split") and nodenum > 1):
                 
+                dirpath_set = set()
                 with open(wd + "/seqname_dirpath.txt", 'w') as handle:
                     for seqname in list(js["partition"].keys()):
                         dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
+                        dirpath_set.add(dirpath)
                         handle.write(seqname +'\t' + dirpath + '\n')
+                dirpath_list = list(sorted(list(dirpath_set)))
                 
                 # assign splitted files to each node: same as distributed placement
                 splitted_fasta_dir  = in_fasta + ".split"
@@ -242,12 +245,14 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         handle.write("PATH={}\n".format(PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                        handle.write(
-                            "python3 "                              +
-                            in_fasta                                +
-                            ";".join(node2filelist[i]) + " "        +
-                            wd + "/seqname_dirpath.txt"
-                            )
+                        for splitted_file in node2filelist[i]:
+                            handle.write(
+                                "python3 "                  +
+                                splitted_file + " "         +
+                                ";".join(dirpath_list)+" "  +
+                                wd + "/seqname_dirpath.txt" +
+                                "\n"
+                                )
 
             else:            
             

@@ -19,7 +19,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle):
         outhandle = seqname2handle[record.id]
         SeqIO.write(outhandle, record, "fasta")
 
-def partition_fasta(inputFASTA_path, outputFASTA_pathlist, seqname2filepath):
+def partition_fasta(inputFASTA_path, outputFASTA_dirpathlist, seqname2dirpath):
 
     seqname_set = {}
     with gzip.open(inputFASTA_path, 'rt') as ist:
@@ -29,19 +29,20 @@ def partition_fasta(inputFASTA_path, outputFASTA_pathlist, seqname2filepath):
 
     ist = gzip.open(inputFASTA_path,'rt')
     ost_list = []
-    filepath2handle = {}
-    for outputFASTA_path in outputFASTA_pathlist:
-        ost_list.append(gzip.open(outputFASTA_path, 'wt'))
-        filepath2handle[outputFASTA_path] = ost_list[-1]
+    dirpath2handle = {}
+    for outputFASTA_dirpath in outputFASTA_dirpathlist:
+        outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_path.split("/")[-1]
+        ost_list.append(gzip.open(outputFASTA_filepath, 'wt'))
+        dirpath2handle[outputFASTA_dirpath] = ost_list[-1]
     
     seqname2handle = {}
-    with open(seqname2filepath, 'r') as dicst:
+    with open(seqname2dirpath, 'r') as dicst:
         for line in dicst:
             line     = line.split("\n")[0]
             seqname  = line.split("\t")[0]
-            filepath = line.split("\t")[1]
+            dirpath = line.split("\t")[1]
             if seqname in seqname_set:
-                seqname2handle[seqname] = filepath2handle [ filepath ]
+                seqname2handle[seqname] = dirpath2handle [ dirpath ]
 
     classify_sequences(ist, seqname2handle)
 
@@ -49,5 +50,5 @@ if __name__ == "__main__":
     partition_fasta(
         inputFASTA_path      = sys.argv[1], 
         outputFASTA_pathlist = sys.argv[2].split(";"), 
-        seqname2filepath     = sys.argv[3]
+        seqname2dirpath      = sys.argv[3]
         )
