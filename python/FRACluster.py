@@ -29,8 +29,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     ######## parameter ########
     ALIGNMENT_TIMING_PARAMETER = 0.5
-    if(SEED=="random"): random.SEED(int(random.randint(0,99999)))
-    elif(len(SEED)!=0): random.SEED(int(SEED))
+    if(SEED=="random"): random.seed(int(random.randint(0,99999)))
+    elif(len(SEED)!=0): random.seed(int(SEED))
     else:print("-r Error: invalid random seed!")
     ###########################
 
