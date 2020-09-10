@@ -189,9 +189,11 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
     
+    print ("DIRdict", DIRdict)
+
     with open(wd + "/seqname_dirpath.txt", 'w') as handle:
         for seqname in list(js["partition"].keys()):
-            dirpath = DIRdict[str(js["partition"][seqname])][0]
+            dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
             handle.write(seqname +'\t' + dirpath + '\n')
 
     for fasta_count, in_fasta in enumerate(in_fasta_list):
