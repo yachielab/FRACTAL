@@ -188,8 +188,11 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
         DIRdict[leaf.name] = [OUT_DIR+"/d"+str(num+i),0]
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
-
-    print(DIRdict)
+    
+    with open(wd + "/seqname_dirpath.txt", 'w') as handle:
+        for seqname in list(js["partition"].keys()):
+            dirpath = DIRdict[str(js["partition"][seqname])][0]
+            handle.write(seqname +'\t' + dirpath + '\n')
 
     for fasta_count, in_fasta in enumerate(in_fasta_list):
         ost=[]
@@ -199,8 +202,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
 
         if (file_format=="fasta"):
 
-            if (os.path.exists(in_fasta + ".split")):
-                partition_fasta_parallel(in_fasta + ".split", )
+            #if (os.path.exists(in_fasta + ".split")):
+            #    partition_fasta_parallel(in_fasta + ".split", )
 
             with gzip.open(in_fasta,'rt') as in_handle:
                 record = SeqIO.parse(in_handle, "fasta")
@@ -216,7 +219,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         if( fasta_count == 0 ):
                             DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
                         SeqIO.write(s, ost[l], "fasta")
-                    i=i+1
+                    i += 1
         elif(file_format=="edit"):
             with gzip.open(in_fasta,'rt') as in_handle:
                 for line in in_handle:
