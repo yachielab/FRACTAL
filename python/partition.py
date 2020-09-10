@@ -277,7 +277,7 @@ def partition_fasta(
                         subclade_dir + "/* "          +
                         ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
                         "rm " + subclade_dir + "/*.part_*",
-                        bash = True
+                        shell = True
                     )
                         
             else:            
