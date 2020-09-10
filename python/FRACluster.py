@@ -380,11 +380,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
                 print("detected "+str(para)+" paraphyletic sequences")
 
-                ##################################################
+                #####################################################
                 #get paraphyletic sequences and make ITERATION.fa.gz#
-                ##################################################
+                #####################################################
                 resampling_needed = False
-                if(para>prev_para or not(Nseq_in_largest_subclade<seq_count-1)):
+                if(para>prev_para):
                     
                     # if i == 0, start from random sampling again, else use the result of previous i
                     if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
@@ -396,6 +396,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             os.remove(WD+"/ITERATION.fa.gz")
                         i += 1
                         resampling_needed = True
+                
+                if( not Nseq_in_largest_subclade < seq_count-1 ):
+                    
+                    i += 1
+                    resampling_needed = True
 
                 if(para!=0): # if problematic sequences remained
 
@@ -468,6 +473,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz",
             ROOTING
             )
+
+        print("DIRdict", DIRdict)
+        if (sum(DIRdict.values()) == max(DIRdict.values()) ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
+            return
         
         partition.qsub_prep(
             ARGVS,

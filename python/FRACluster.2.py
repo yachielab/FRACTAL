@@ -197,7 +197,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             if ( EXTRACTION_SIZE < len(sampled_seq_name_list)):
                 
-                extracted_seq_name_list   = ["root"]+random.sample(sampled_seq_name_list, EXTRACTION_SIZE)
+                extracted_seq_name_list   = ["root"] + random.sample(sampled_seq_name_list, EXTRACTION_SIZE)
                 extracted_seq_rename_list = [ seqname2renamedname[name] for name in extracted_seq_name_list ]
                 extraction.tree_extraction(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree",
