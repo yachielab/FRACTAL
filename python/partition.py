@@ -223,7 +223,7 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
 
                 dname = wd.split("/")[-1]
                 for i in range(nodenum):
-                    with open(wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
+                    with open(wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".partition.sh", 'w') as handle:
                         PATH = (subprocess.\
                                     Popen(
                                         'echo $PATH',
