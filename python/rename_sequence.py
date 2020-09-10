@@ -77,10 +77,10 @@ def random_sampling_from_splitted( # fasta only
     file_format = "fasta"):
 
     if (n > subsample_size):
-        rand_idx=random.sample(range(n-1),subsample_size) # n-1: not include root
+        rand_idx=random.sample(range(1,n),subsample_size) # n-1: not include root
         rand_idx.sort()
     else:
-        rand_idx=list(range(n-1))
+        rand_idx=list(range(1,n))
     
     rand_idx = [root_idx]+rand_idx
     
