@@ -248,7 +248,8 @@ def partition_fasta(in_fasta_list,num_file,OUT_DIR,wd,jpart,info,treefile,subsam
                         for splitted_file in node2filelist[i]:
                             handle.write(
                                 "python3 "                  +
-                                in_fasta + ".split/" + splitted_file + " "         +
+                                codedir + "/python/partition_fasta.py "     +
+                                in_fasta + ".split/" + splitted_file + " "  +
                                 ";".join(dirpath_list)+" "  +
                                 wd + "/seqname_dirpath.txt" +
                                 "\n"
