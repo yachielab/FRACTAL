@@ -355,9 +355,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             seed                                         +
                             "\n"
                             )
-                        handle.write(
-                            "rm " + queryfile + "\n"
-                            ) 
+                        #handle.write(
+                        #    "rm " + queryfile + "\n"
+                        #    ) 
                         
 
 
