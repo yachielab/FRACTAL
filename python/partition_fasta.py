@@ -18,9 +18,6 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
     for record in records:
         if (record.name == "root"):
             for outhandle in outhandle_list:
-                
-                # ここで　1ファイルにしかrootを分配できていないっぽい
-                print("root",outhandle)
                 SeqIO.write(record, outhandle, "fasta")
         else:
             outhandle = seqname2handle[record.id]

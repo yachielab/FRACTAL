@@ -211,9 +211,12 @@ def partition_fasta(
                 dirpath_set = set()
                 with open(wd + "/seqname_dirpath.txt", 'w') as handle:
                     for seqname in list(js["partition"].keys()):
-                        dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
-                        dirpath_set.add(dirpath)
-                        handle.write(seqname +'\t' + dirpath + '\n')
+                        if js["partition"][seqname] == "paraphyletic":
+                            handle.write(seqname +'\t' + wd + '\n')
+                        else:
+                            dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
+                            dirpath_set.add(dirpath)
+                            handle.write(seqname +'\t' + dirpath + '\n')
                 dirpath_list = list(sorted(list(dirpath_set)))
                 
                 # assign splitted files to each node: same as distributed placement
@@ -326,8 +329,8 @@ def partition_fasta(
             for st in ost:
                 st.close()
             para.close()
-    with open(info, 'w') as out:
-        out.write(json.dumps(DIRdict))
+    #with open(info, 'w') as out:
+    #    out.write(json.dumps(DIRdict))
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
         leaf.name=newname
