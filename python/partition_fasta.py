@@ -11,16 +11,13 @@ import subprocess
 import random
 import gzip
 
-def classify_sequences(inputFASTA_filehandle, seqname2handle):
+def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
     # open input FASTAfile
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
     for record in records:
         if (record.name == "root"):
-            print("root",seqname2handle.values())
-            print("root",set(seqname2handle.values()))
-            print("root",list(set(seqname2handle.values())))
-            for outhandle in list(set(seqname2handle.values())):
+            for outhandle in outhandle_list:
                 
                 # ここで　1ファイルにしかrootを分配できていないっぽい
                 print("root",outhandle)
@@ -50,11 +47,11 @@ def partition_fasta(inputFASTA_path, outputFASTA_dirpathlist, seqname2dirpath):
         for line in dicst:
             line     = line.split("\n")[0]
             seqname  = line.split("\t")[0]
-            dirpath = line.split("\t")[1]
+            dirpath  = line.split("\t")[1]
             if seqname in seqname_set:
                 seqname2handle[seqname] = dirpath2handle [ dirpath ]
 
-    classify_sequences(ist, seqname2handle)
+    classify_sequences(ist, seqname2handle, ost_list)
 
 if __name__ == "__main__":
     partition_fasta(
