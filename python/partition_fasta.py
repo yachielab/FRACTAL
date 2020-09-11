@@ -17,13 +17,13 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle):
     
     for record in records:
         if (record.name == "root"):
-            print(seqname2handle.values())
-            print(set(seqname2handle.values()))
-            print(list(set(seqname2handle.values())))
+            print("root",seqname2handle.values())
+            print("root",set(seqname2handle.values()))
+            print("root",list(set(seqname2handle.values())))
             for outhandle in list(set(seqname2handle.values())):
                 
                 # ここで　1ファイルにしかrootを分配できていないっぽい
-                print(outhandle)
+                print("root",outhandle)
                 SeqIO.write(record, outhandle, "fasta")
         else:
             outhandle = seqname2handle[record.id]
