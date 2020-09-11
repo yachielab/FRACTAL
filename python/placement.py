@@ -231,7 +231,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             splitted = True
         if (splitted):
             Nfiles_total = len(splitted_fasta_list)
-            Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+            Nfiles_per_node = len(splitted_fasta_list) // nodenum + 1 # Only the last node may treat more number of files
             node2filelist = []
             for i in range(nodenum):
                 if   (i <  nodenum - 1):
@@ -355,26 +355,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             seed                                         +
                             "\n"
                             )
-                        #handle.write(
-                        #    "rm " + queryfile + "\n"
-                        #    ) 
-                        
-
-
-                        ''' will be deleted
-                        if (not os.path.exists(WD + "/INPUT.fa.gz.split")):
-                            handle.write(
-                                "cd "+outdir+"/EPANG"+str(i)+"\n"
-                                )
-                            handle.write(
-                                "python3 "                                   +
-                                codedir+"/python/jplace_parse.py "           +
-                                outdir+"/EPANG"+str(i)+"/epa_result.jplace " +
-                                "epa-ng "                                    +
-                                seed                                         +
-                                "\n"
-                                )
-                        '''
                     elif(ML_or_MP=="MP"):
                         handle.write(
                             "cd "+outdir+"/EPANG"+str(i)+"\n"
