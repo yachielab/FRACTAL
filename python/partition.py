@@ -275,14 +275,15 @@ def partition_fasta(
                     None
                 # concat all FASTA files for each subclade
                 for subclade_dir in dirpath_list:
-                    subprocess.call(
-                        "cat "                        +
-                        subclade_dir + "/* "          +
-                        ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
-                        "rm " + subclade_dir + "/*.part_*" +
-                        "",
-                        shell = True
-                    )
+                    if (subclade_dir != wd):
+                        subprocess.call(
+                            "cat "                        +
+                            subclade_dir + "/* "          +
+                            ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
+                            "rm " + subclade_dir + "/*.part_*" +
+                            "",
+                            shell = True
+                        )
                 problematic_filenames      = ".".join(in_fasta.split(".")[:-2])+".part*.gz"
                 problematic_concatfilename = ".".join(in_fasta.split(".")[:-2])+".problematic.gz"
                 subprocess.call(
