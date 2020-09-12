@@ -227,7 +227,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             splitted = True
         elif (os.path.exists(WD + "/INPUT.fa.gz.split")):
             splitted_fasta_dir  = WD + "/INPUT.fa.gz.split/"
-            splitted_fasta_list = list(sorted(os.listdir(WD + "/INPUT.fa.gz.split")))
+            splitted_fasta_list = sorted(os.listdir(WD + "/INPUT.fa.gz.split"))
             splitted = True
         if (splitted):
             Nfiles_total = len(splitted_fasta_list)
