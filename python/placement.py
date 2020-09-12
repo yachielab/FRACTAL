@@ -311,7 +311,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 "-selectcols { "                                           +
                                 "   `trimal -sgc "                                         +
                                 "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref "    +
-                                "    |awk ' { if( $2>0 ){ print $1 }}'"                 +
+                                "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
                                 "    |tr \"\\n\" \",\" ` "                                 +
                                 "    } "                                                   +
                                 "> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols\n"
