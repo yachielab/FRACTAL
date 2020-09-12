@@ -365,8 +365,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " --outformat afa"                          +
                                 " --mapali "+refseq+" "                     +
                                 refseq+".hmm "+queryfile                    +
-                                " | sed 's/\./N/g'"                         +
+                                #" | sed 's/\./N/g'"                         +
                                 " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                            )   
+                            handle.write(
+                                "cat "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
+                                "| sed 's/\./N/g' > " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa"
                             )   
                             handle.write(
                                 "python3 "                                 +
@@ -376,8 +380,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 )
                             handle.write(
                                 "trimal "                                                  +
-                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
-                                " | sed 's/N/\./g' "                                       +
+                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
                                 "-selectcols { "                                           +
                                 "   `trimal -sgc "                                         +
                                 "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref " +
@@ -396,16 +399,16 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cat "+refseq+" "+
                                 queryfile        +
-                                " | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                                " | sed 's/\./N/g' | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )
                         handle.write(
                             RAXMLSEQ                                      +
                             " -n epa_result -f y -m GTRCAT"               +
-                            " -s "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa" +
+                            " -s "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa" +
                             " -t "+reftree+"\n"
                             ) 
                         handle.write(
-                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             ) 
                         handle.write(
                             "python3 "                                                      +
