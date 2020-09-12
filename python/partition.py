@@ -217,7 +217,7 @@ def partition_fasta(
                             dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
                             dirpath_set.add(dirpath)
                             handle.write(seqname +'\t' + dirpath + '\n')
-                dirpath_list = list(sorted(list(dirpath_set)))
+                dirpath_list = list(sorted([wd] + list(dirpath_set)))
                 
                 # assign splitted files to each node: same as distributed placement
                 splitted_fasta_dir  = in_fasta + ".split"
