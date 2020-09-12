@@ -357,7 +357,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             )
                     elif(ML_or_MP=="MP"):
                         handle.write(
-                            "cd "+outdir+"/EPANG"+str(i)+"\n"
+                            "cd "+outdir+"/EPANG"+str(i)+"/"+filename+"\n"
                         )
                         if(ALIGNED=="unaligned"): # for unaligned sequences
                             # Conduct HMM alignment
