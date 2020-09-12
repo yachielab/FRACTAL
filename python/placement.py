@@ -365,12 +365,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 hmm_aligner                                 +
                                 " --outformat afa"                          +
                                 " --mapali "+refseq+" "                     +
-                                refseq+".hmm "+moved+"."+str(i)+".gz"       +
+                                refseq+".hmm "+queryfile                    +
                                 " | sed 's/\./N/g'"                         +
                                 " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
-                            )   
-                            handle.write(
-                                "rm " + queryfile + "\n"
                             )   
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
