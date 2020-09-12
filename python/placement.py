@@ -376,7 +376,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 )
                             handle.write(
                                 "trimal "                                                  +
-                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
+                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
+                                " | sed 's/N/\./g' "                                       +
                                 "-selectcols { "                                           +
                                 "   `trimal -sgc "                                         +
                                 "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref " +
