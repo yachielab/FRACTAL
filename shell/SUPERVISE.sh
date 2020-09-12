@@ -103,7 +103,7 @@ fi
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out -e ${ROOT_DIR}/err ${ROOT_DIR}/qsub_dir/qsub_d0.sh # parallel mode
+  qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh # parallel mode
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
