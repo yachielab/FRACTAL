@@ -274,14 +274,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         handle.write(
                             "python3 "                              +
                             codedir+"/python/manage_edits.py "      +
-                            outdir +"/query.edit.gz."+str(i)+".gz " +
+                            queryfile                               +
                             outdir +"/editlist.txt\n"
                             )
-                        moved = outdir+"/EPANG"+str(i)+"/"+filename+"/query.edit.fa.gz"
+                        queryfile = outdir+"/EPANG"+str(i)+"/"+filename+"/query.edit.fa.gz" + "." + str(i) + ".gz\n"
                         handle.write(
                             "mv "                                        + \
                             outdir+"/query.edit.gz."+str(i)+".gz.fa.gz " + \
-                            moved + "." + str(i) + ".gz\n"
+                            queryfile
                             )
 
                     if(ML_or_MP=="ML"): 
