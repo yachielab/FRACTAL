@@ -212,7 +212,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 nodenum, 
                 seq_count
             )
-            node2filelist = [ "query.edit.gz."+str(i)+".gz" for i in range(nodenum) ]
+            node2filelist = [ ["query.edit.gz."+str(i)+".gz"] for i in range(nodenum) ]
+            splitted_files_dir = outdir
             print ("node2filelist", node2filelist)
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
@@ -221,11 +222,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # judge splitted or not
         splitted = False
         if (os.path.exists(WD + "/INPUT.fa.aligned.gz.split")):
-            splitted_fasta_dir  = WD + "/INPUT.fa.aligned.gz.split/"
+            splitted_files_dir  = WD + "/INPUT.fa.aligned.gz.split/"
             splitted_fasta_list = os.listdir(WD + "/INPUT.fa.aligned.gz.split")
             splitted = True
         elif (os.path.exists(WD + "/INPUT.fa.gz.split")):
-            splitted_fasta_dir  = WD + "/INPUT.fa.gz.split/"
+            splitted_files_dir  = WD + "/INPUT.fa.gz.split/"
             splitted_fasta_list = sorted(os.listdir(WD + "/INPUT.fa.gz.split"))
             splitted = True
 
@@ -246,7 +247,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
                 for filename in node2filelist[i]:
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
-                    queryfile = splitted_fasta_dir + filename
+                    queryfile = splitted_files_dir + filename
 
                     PATH = (subprocess.\
                                 Popen(
