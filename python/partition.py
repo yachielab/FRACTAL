@@ -283,10 +283,12 @@ def partition_fasta(
                         "",
                         shell = True
                     )
+                problematic_filenames      = ".".join(in_fasta.split(".")[:-2])+".part*.gz"
+                problematic_concatfilename = ".".join(in_fasta.split(".")[:-2])+".problematic.gz"
                 subprocess.call(
                     "cat "      +
-                    in_fasta + "*part* "  +
-                    ">> " + in_fasta + ".problematic.gz\n" +
+                    problematic_filenames  +
+                    ">> " + problematic_concatfilename + "\n" +
                     #"rm " + in_fasta + "*part* "           +
                     "",
                     shell = True
