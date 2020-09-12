@@ -290,7 +290,7 @@ def partition_fasta(
                     "cat "      +
                     problematic_filenames  +
                     ">> " + problematic_concatfilename + "\n" +
-                    "rm " + in_fasta + "*part* "           +
+                    "rm " + problematic_filenames             +
                     "",
                     shell = True
                     )
