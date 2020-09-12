@@ -193,8 +193,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         dname=WD.split("/").pop()
         
         if ( file_format == "fasta" ):
-            moved=outdir+"/query.fa.gz"
-            shutil.move(query, moved)
+            #moved=outdir+"/query.fa.gz"
+            #shutil.move(query, moved)
 
             if(ALIGNED=="unaligned"):
                 # Build HMM profile
