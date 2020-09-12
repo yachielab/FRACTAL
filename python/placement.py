@@ -312,7 +312,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 "   `trimal -sgc "                                         +
                                 "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref "    +
                                 "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
-                                "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\" ` "                         +
+                                "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\" ` "            +
                                 "    } "                                                   +
                                 "> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols\n"
                                 )
@@ -375,10 +375,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 queryfile        +
                                 " | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             )
-                            #handle.write(
-                            #    "rm " + moved+"."+str(i)+".gz" + "\n"
-                            #)  
-                            None
                         handle.write(
                             RAXMLSEQ                                      +
                             " -n epa_result -f y -m GTRCAT"               +
@@ -386,7 +382,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -t "+reftree+"\n"
                             ) 
                         handle.write(
-                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa*\n"
+                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             ) 
                         handle.write(
                             "python3 "                                                      +
