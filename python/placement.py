@@ -413,11 +413,16 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             seed + "\n"
                             )
                         files_to_be_removed = [
-
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_equallyParsimoniousPlacements.epa_result",
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_originalLabelledTree.epa_result"         ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_portableTree.epa_result.jplace"          ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_labelledTree.epa_result"                 ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_labelledTree.epa_result"                 ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"ref_query*fa"                                  ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"*.selectcols"                                  ,
                         ]
                         handle.write(
-                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n" +
-                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/*.selectcols\n"
+                            "rm "+ " ".join(files_to_be_removed) + " &> /dev/null\n"
                             ) 
                 handle.write(
                     "echo \"finished\" > "      +
