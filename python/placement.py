@@ -212,7 +212,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 nodenum, 
                 seq_count
             )
-            node2filelist = [ outdir + "/query.edit.gz."+str(i)+".gz" for i in range(nodenum) ]
+            node2filelist = [ "query.edit.gz."+str(i)+".gz" for i in range(nodenum) ]
+            print ("node2filelist", node2filelist)
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
