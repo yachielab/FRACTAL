@@ -375,12 +375,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
                                 "cat "+refseq+" "+
-                                moved+"."+str(i)+".gz"+
+                                queryfile        +
                                 " | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             )
-                            handle.write(
-                                "rm " + moved+"."+str(i)+".gz" + "\n"
-                            )  
+                            #handle.write(
+                            #    "rm " + moved+"."+str(i)+".gz" + "\n"
+                            #)  
+                            None
                         handle.write(
                             RAXMLSEQ                                      +
                             " -n epa_result -f y -m GTRCAT"               +
