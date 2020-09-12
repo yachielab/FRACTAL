@@ -421,7 +421,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             os.remove(outdir+"/epang"+str(i)+".o")
         
         if (file_format == "fasta"):
-            shutil.move(moved,query)
+            None
         elif (file_format == "edit"):
             shutil.move(outdir+"/query.edit.gz",query)
 
