@@ -366,7 +366,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " --mapali "+refseq+" "                     +
                                 refseq+".hmm "+queryfile                    +
                                 #" | sed 's/\./N/g'"                         +
-                                " | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
+                                " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             )   
                             handle.write(
                                 "cat "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
