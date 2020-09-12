@@ -283,7 +283,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             moved + "." + str(i) + ".gz\n"
                             )
 
-
                     if(ML_or_MP=="ML"): 
                         if(ALIGNED=="unaligned"): # for unaligned sequences
                             # Conduct HMM alignment
@@ -307,10 +306,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 )
                             handle.write(
                                 "trimal "                                                  +
-                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "          +
+                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
                                 "-selectcols { "                                           +
                                 "   `trimal -sgc "                                         +
-                                "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref "    +
+                                "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref " +
                                 "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
                                 "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\" ` "            +
                                 "    } "                                                   +
@@ -369,6 +368,29 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " | sed 's/\./N/g'"                         +
                                 " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
                             )   
+                            handle.write(
+                                "python3 "                                 +
+                                codedir+"/python/divide_ref_and_query.py " +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "    + 
+                                refseq + "\n"
+                                )
+                            handle.write(
+                                "trimal "                                                  +
+                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
+                                "-selectcols { "                                           +
+                                "   `trimal -sgc "                                         +
+                                "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref " +
+                                "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
+                                "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\" ` "            +
+                                "    } "                                                   +
+                                "> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols\n"
+                                )
+                            handle.write(
+                                "python3 "                                          +
+                                codedir +"/python/divide_ref_and_query.py "         +
+                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols "+
+                                refseq  + "\n"
+                                )
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
                                 "cat "+refseq+" "+
