@@ -289,8 +289,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 hmm_aligner                                +
                                 " --outformat afa"                         +
-                                #" -q "                                     +
-                                #" -m "                                     +
                                 " --mapali " + refseq + " "                +
                                 refseq+".hmm "                             +
                                 queryfile                                  +
@@ -399,7 +397,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cat "+refseq+" "+
                                 queryfile        +
-                                " | sed 's/\./N/g' | gunzip > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
+                                "| gunzip | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )
                         handle.write(
                             RAXMLSEQ                                      +
@@ -408,15 +406,19 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             " -t "+reftree+"\n"
                             ) 
                         handle.write(
-                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
-                            ) 
-                        handle.write(
                             "python3 "                                                      +
                             codedir+"/python/jplace_parse.py "                              +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/RAxML_portableTree.epa_result.jplace " +
                             "epa_MP "                                                       +
                             seed + "\n"
                             )
+                        files_to_be_removed = [
+
+                        ]
+                        handle.write(
+                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n" +
+                            "rm "+outdir+"/EPANG"+str(i)+"/"+filename+"/*.selectcols\n"
+                            ) 
                 handle.write(
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o\n"
