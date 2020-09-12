@@ -370,7 +370,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             )   
                             handle.write(
                                 "cat "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
-                                "| sed 's/\./N/g' > " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa"
+                                "| sed 's/\./N/g' > " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )   
                             handle.write(
                                 "python3 "                                 +
