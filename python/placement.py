@@ -204,11 +204,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     refseq,
                     shell=True
                     )
-            #decompose_fasta(
-            #    moved,
-            #    nodenum, 
-            #    seq_count
-            #    )
         elif ( file_format == "edit" ):
             moved=outdir+"/query.edit.gz"
             shutil.move(query, moved)
@@ -217,6 +212,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 nodenum, 
                 seq_count
             )
+            node2filelist = [ outdir + "/query.edit.gz."+str(i)+".gz" for i in range(nodenum) ]
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
@@ -231,7 +227,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             splitted_fasta_dir  = WD + "/INPUT.fa.gz.split/"
             splitted_fasta_list = sorted(os.listdir(WD + "/INPUT.fa.gz.split"))
             splitted = True
-            
+
         if (splitted):
             Nfiles_total = len(splitted_fasta_list)
             Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
