@@ -279,15 +279,16 @@ def partition_fasta(
                         "cat "                        +
                         subclade_dir + "/* "          +
                         ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" +
-
-                        "rm " + subclade_dir + "/*.part_*",
+                        #"rm " + subclade_dir + "/*.part_*" +
+                        "",
                         shell = True
                     )
                 subprocess.call(
                     "cat "      +
                     in_fasta + "*part* "  +
                     ">> " + in_fasta + ".problematic.gz\n" +
-                    "rm " + in_fasta + "*part* ",
+                    #"rm " + in_fasta + "*part* "           +
+                    "",
                     shell = True
                     )
                         
