@@ -7,7 +7,7 @@ import subprocess
 import gzip
 
 def rename_sequence(in_fname,out_fname):
-    with gzip.open(in_fname, 'rt') as origin, gzip.open(out_fname, 'wt') as renamed:
+    with gzip.open(in_fname, 'rb') as origin, gzip.open(out_fname, 'wb') as renamed:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k = 0
@@ -22,7 +22,7 @@ def rename_sequence(in_fname,out_fname):
 
 def outgroup_check_fast(in_fname, file_format):
     exist_root = False
-    with gzip.open(in_fname, 'rt') as origin:
+    with gzip.open(in_fname, 'rb') as origin:
         idx = 0
         for line in origin:
             if (file_format == "fasta"):
@@ -36,7 +36,7 @@ def outgroup_check_fast(in_fname, file_format):
     return exist_root, idx
 
 def count_sequence(in_fname):
-    with gzip.open(in_fname, 'rt') as origin:
+    with gzip.open(in_fname, 'rb') as origin:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k=0
@@ -122,14 +122,14 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         rand_idx=list(range(n-1))
     sample_name_list = []
     if ( file_format == "fasta" ):
-        with gzip.open(out_fname, 'wt') as subs:
-            with gzip.open(in_fname, 'rt') as allseq:
+        with gzip.open(out_fname, 'wb') as subs:
+            with gzip.open(in_fname, 'rb') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 for s in allseq_itr:
                     if(s.id=="root"):
                         SeqIO.write(s, subs, "fasta")    
             added_seqs = set()
-            with gzip.open(in_fname, 'rt') as allseq:
+            with gzip.open(in_fname, 'rb') as allseq:
                 allseq_itr = SeqIO.parse(allseq, "fasta")
                 i=0 # index on rand_idx
                 k=0 # index on record
@@ -145,7 +145,7 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
                             i += 1
                         k += 1
     elif (file_format=="edit"):
-        with gzip.open(in_fname, 'rt') as rhandle, gzip.open(out_fname, 'wt') as whandle:
+        with gzip.open(in_fname, 'rb') as rhandle, gzip.open(out_fname, 'wb') as whandle:
             i = 0
             k = 0 # line number
             edits_str_set = set()
