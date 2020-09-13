@@ -26,17 +26,17 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
 def partition_fasta(inputFASTA_filepath, outputFASTA_dirpathlist, seqname2dirpath):
 
     seqname_set = set()
-    with gzip.open(inputFASTA_filepath, 'rb') as ist:
+    with gzip.open(inputFASTA_filepath, 'rt') as ist:
         records = SeqIO.parse(ist, "fasta")
         for record in records:
             seqname_set.add(record.name)
 
-    ist = gzip.open(inputFASTA_filepath,'rb')
+    ist = gzip.open(inputFASTA_filepath,'rt')
     ost_list = []
     dirpath2handle = {}
     for outputFASTA_dirpath in outputFASTA_dirpathlist:
         outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1]
-        ost_list.append(gzip.open(outputFASTA_filepath, 'wb'))
+        ost_list.append(gzip.open(outputFASTA_filepath, 'wt'))
         dirpath2handle[outputFASTA_dirpath] = ost_list[-1]
     
     seqname2handle = {}
