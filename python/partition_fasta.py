@@ -36,7 +36,7 @@ def partition_fasta(inputFASTA_filepath, outputFASTA_dirpathlist, seqname2dirpat
     dirpath2handle = {}
     for outputFASTA_dirpath in outputFASTA_dirpathlist:
         outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1]
-        ost_list.append(gzip.open(outputFASTA_filepath, 'wt'))
+        ost_list.append(gzip.open(outputFASTA_filepath, 'wb'))
         dirpath2handle[outputFASTA_dirpath] = ost_list[-1]
     
     seqname2handle = {}
