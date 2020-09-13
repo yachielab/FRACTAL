@@ -50,6 +50,10 @@ def partition_fasta(inputFASTA_filepath, outputFASTA_dirpathlist, seqname2dirpat
 
     classify_sequences(ist, seqname2handle, ost_list)
 
+    ist.close()
+    for ost in ost_list:
+        ost.close()
+
 if __name__ == "__main__":
     partition_fasta(
         inputFASTA_filepath     = sys.argv[1], 

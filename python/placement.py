@@ -420,7 +420,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_labelledTree.epa_result"                 ,
                             outdir+"/EPANG"+str(i)+"/"+filename+"/"+"RAxML_labelledTree.epa_result"                 ,
                             outdir+"/EPANG"+str(i)+"/"+filename+"/"+"ref_query*fa"                                  ,
-                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"&reduced"                                      ,
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/"+"*reduced"                                      ,
                             outdir+"/EPANG"+str(i)+"/"+filename+"/"+"*.selectcols"                                  ,
                         ]
                         handle.write(
