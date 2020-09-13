@@ -21,7 +21,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
                 outhandle.write(">root\n" + str(record.seq) + "\n")
         else:
             outhandle = seqname2handle[record.id]
-            outhandle.write(">" + record.id + "\n" + str(record.seq) + "\n")
+            outhandle.write(">" + str(record.id) + "\n" + str(record.seq) + "\n")
 
 def partition_fasta(inputFASTA_filepath, outputFASTA_dirpathlist, seqname2dirpath):
 
