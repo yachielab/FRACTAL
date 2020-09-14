@@ -289,7 +289,7 @@ def partition_fasta(
                         subprocess.call(
                             "cat "                        +
                             subclade_dir + "/* "          +
-                            "|gunzip|gzip>> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" + # Q. Why gunzip|gzip? A. Epa-ng cannot read concatenated gzip file created by python
+                            ">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" + # Q. Why gunzip|gzip? A. Epa-ng cannot read concatenated gzip file created by python
                             "rm " + subclade_dir + "/*.part_*" +
                             "",
                             shell = True
