@@ -266,6 +266,16 @@ def partition_fasta(
                                 "\n"
                                 )
                             handle.write(
+                                "gzip " 
+                                )
+                            for dirpath in dirpath_list:
+                                handle.write(
+                                    dirpath + "/" + splitted_file.split(".gz")[0] + " "
+                                    )
+                            handle.write(
+                                "\n" 
+                                )
+                            handle.write(
                                 "rm " +
                                 in_fasta + ".split/" + splitted_file + " "  +
                                 "\n"
