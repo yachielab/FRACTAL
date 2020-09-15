@@ -61,17 +61,17 @@ fi
 
 # input gzipped or not
 if [ $(echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
-    gzip_input="|gunzip"
+    gzip_input="gunzip"
 else
-    gzip_input=""
+    gzip_input="cat"
 fi
 
 # output gzipped or not
 if [ GZIP_INTERMEDIATE = "TRUE" ]; then
-    gzip_output="|gzip"
+    gzip_output="gzip"
     out_extention=".gz"
 else
-    gzip_output=""
+    gzip_output="cat"
     out_extention=""
 fi
 
@@ -82,8 +82,7 @@ if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
 fi
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
-echo "cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}"
-cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
+cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
