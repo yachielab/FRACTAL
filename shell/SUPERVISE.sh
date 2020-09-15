@@ -81,7 +81,7 @@ if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
     gzip_output=""
 fi
 
-cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${$FASTA_or_EDIT}${out_extention}
+cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
 
 wait
 
