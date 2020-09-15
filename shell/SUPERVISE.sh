@@ -80,13 +80,10 @@ if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
     gzip_input=""
     gzip_output=""
 fi
-
-cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
-
-wait
-
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
+cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
+wait
 echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
