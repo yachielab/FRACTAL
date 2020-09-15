@@ -39,8 +39,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ### get input file name ###
     infile_name = os.listdir(WD)[0]
     infile_path = WD+"/"+infile_name
-    if (ALIGNED=="unaligned"):
-        infile_aligned_path = WD+"/"+".".join(infile_name.split(".")[:-1]+["aligned",infile_name.split(".")[-1]])
+    infile_aligned_path = WD+"/"+".".join(infile_name.split(".")[:-1]+["aligned",infile_name.split(".")[-1]])
     ###########################
     
     ## check input file property ##
