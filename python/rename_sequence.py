@@ -21,19 +21,33 @@ def rename_sequence(in_fname,out_fname):
     return name2renamed
 
 def outgroup_check_fast(in_fname, file_format):
+    is_gzipped = (in_fname.split(".")[-1] == "gz")
+
     exist_root = False
-    with gzip.open(in_fname, 'rt') as origin:
-        idx = 0
-        for line in origin:
-            if (file_format == "fasta"):
-                if (line           == ">root\n"): exist_root = True; break
-                elif(line[0]== '>'): 
-                    idx += 1
-            if (file_format == "edit"):
-                if (line.split()[0]== "root"   ): exist_root = True; break
-                else: 
-                    idx += 1
-    return exist_root, idx
+    
+    # file open
+    if ( is_gzipped ):
+        origin = gzip.open(in_fname, 'rt') 
+    else:
+        origin = open(in_fname, 'r') 
+
+    idx = 0
+    for line in origin:
+        if (file_format == "fasta"):
+            if   (line           == ">root\n"): exist_root = True; break
+            elif (line[0]== '>'): 
+                idx += 1
+        if (file_format == "edit"):
+            if   (line.split()[0]== "root"   ): exist_root = True; break
+            else: 
+                idx += 1
+
+    # file close
+    origin.close()
+    if (exist_root):
+        return idx
+    else:
+        raise Exception('No root')
 
 def count_sequence(in_fname):
     with gzip.open(in_fname, 'rt') as origin:
@@ -57,9 +71,14 @@ def count_sequence_fast(in_fname):
     return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
 '''
 def count_sequence_fast(in_fname):
+    is_gzipped = (in_fname.split(".")[-1] == "gz")
+
+    if (is_gzipped):    gunzip = "| gunzip"
+    else:               gunzip = ""
+
     seq_count_str = (
         subprocess.Popen(
-            "cat "+in_fname+" | gunzip | grep '>' | wc -l",
+            "cat " + in_fname + gunzip + " | grep '>' | wc -l",
             stdout=subprocess.PIPE,
             shell=True
             ).communicate()[0]
@@ -110,6 +129,8 @@ def random_sampling_from_splitted( # fasta only
     
 
 def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format = "fasta"):
+    is_gzipped = (in_fname.split(".")[-1] == "gz")
+    
     if (n==None):
         if ( file_format == "fasta" ):
             n=count_sequence_fast(in_fname)
@@ -122,28 +143,37 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         rand_idx=list(range(n-1))
     sample_name_list = []
     if ( file_format == "fasta" ):
-        with gzip.open(out_fname, 'wt') as subs:
-            with gzip.open(in_fname, 'rt') as allseq:
-                allseq_itr = SeqIO.parse(allseq, "fasta")
-                for s in allseq_itr:
-                    if(s.id=="root"):
-                        SeqIO.write(s, subs, "fasta")    
-            added_seqs = set()
-            with gzip.open(in_fname, 'rt') as allseq:
-                allseq_itr = SeqIO.parse(allseq, "fasta")
-                i=0 # index on rand_idx
-                k=0 # index on record
-                for s in allseq_itr:
-                    if(i>=len(rand_idx)):
-                        break
-                    if(s.id!="root"):
-                        if(k==rand_idx[i]):
-                            if (str(s.seq) not in added_seqs):
-                                SeqIO.write(s, subs, "fasta")
-                                added_seqs.add(str(s.seq))
-                                sample_name_list.append(s.name)
-                            i += 1
-                        k += 1
+        # open files
+        if (is_gzipped):
+            subs   = open(out_fname, 'w')
+            allseq = open(in_fname, 'r')
+        else:
+            subs   = gzip.open(out_fname, 'wt')
+            allseq = gzip.open(in_fname, 'rt')
+
+        allseq_itr = SeqIO.parse(allseq, "fasta")
+        for s in allseq_itr:
+            if(s.id=="root"):
+                SeqIO.write(s, subs, "fasta")    
+        added_seqs = set()
+        with gzip.open(in_fname, 'rt') as allseq:
+            allseq_itr = SeqIO.parse(allseq, "fasta")
+            i=0 # index on rand_idx
+            k=0 # index on record
+            for s in allseq_itr:
+                if(i>=len(rand_idx)):
+                    break
+                if(s.id!="root"):
+                    if(k==rand_idx[i]):
+                        if (str(s.seq) not in added_seqs):
+                            SeqIO.write(s, subs, "fasta")
+                            added_seqs.add(str(s.seq))
+                            sample_name_list.append(s.name)
+                        i += 1
+                    k += 1
+        # close files
+        subs.close()
+        allseq.close()
     elif (file_format=="edit"):
         with gzip.open(in_fname, 'rt') as rhandle, gzip.open(out_fname, 'wt') as whandle:
             i = 0

@@ -28,11 +28,12 @@ PLACEMENT_METHOD="ML"
 EXTRACTION_SIZE=10000000000
 ALIGNED="aligned"
 LIMITATION=10000
-FASTA_or_EDIT="fasta"
+FASTA_or_EDIT="fa"
 CAREFUL_PLACEMENT=1
+GZIP_INTERMEDIATE="FALSE"
 
 function version {
-  echo "######## FRACTAL v2.4.0 ########"
+  echo "######## FRACTAL v2.4.1 ########"
 }
 
 function usage {
@@ -104,11 +105,13 @@ Options:
       Maximum number of FRACTAL iterations. Default: 10000
     -z <Integer>
       Number of extracted tips from sample tree. Default: no extraction
+    -g 
+      Gzip intermediate files
 EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:O:I:j:m:l:z:vheuE OPT
+while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:O:I:j:m:l:z:vheugE OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -136,6 +139,7 @@ do
     "u" ) FLG_u="TRUE" ; ALIGNED="unaligned";;
     "l" ) FLG_u="TRUE" ; LIMITATION="$OPTARG";;
     "z" ) FLG_z="TRUE" ; EXTRACTION_SIZE="$OPTARG";;
+    "g" ) FLG_g="TRUE" ; GZIP_INTERMEDIATE="TRUE";;
     * ) usage; exit 1;;
   esac
 done
@@ -185,7 +189,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE}
 wait
 
 #show result

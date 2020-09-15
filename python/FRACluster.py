@@ -15,6 +15,7 @@ import shutil
 import rename_sequence
 import placement
 import extraction
+import error_process
 
 import math
 import time
@@ -24,62 +25,77 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
                INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,careful,
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
-               seq_count_when_aligned=None
+               seq_count_when_aligned=None,
                ):
     
-    ######## parameter ########
+    # start timer
+    start = time.time() 
+
+    ##### hyper parameter #####
     ALIGNMENT_TIMING_PARAMETER = 0.5
-    if(SEED=="random"): random.seed(int(random.randint(0,99999)))
-    elif(len(SEED)!=0): random.seed(int(SEED))
-    else:print("-r Error: invalid random seed!")
+    SPLIT_THRESHOLD            = 10000
     ###########################
 
-    start = time.time() # in order to get the time which one cycle takes
+    ### get input file name ###
+    infile_name = os.listdir(WD)[0]
+    infile_path = WD+"/"+infile_name
+    if (ALIGNED=="unaligned"):
+        infile_aligned_path = WD+"/"+".".join(infile_name.split(".")[:-1]+["aligned",infile_name.split(".")[-1]])
+    ###########################
     
-    os.chdir(WD) # move to Working Directory
-    
-    # check if outgroup exists or not (sequence named "root")
-    root_exists, final_idx = rename_sequence.outgroup_check_fast(WD+"/INPUT.fa.gz", "fasta")
-    if(root_exists):
-        print("INPUT.fa properly include outgroup sequence")
-        root_idx = final_idx
+    ## check input file property ##
+    try:
+        root_idx = rename_sequence.outgroup_check_fast(infile_path, "fasta")
+    except:
+        error_process.no_root(); exit(1)
+    seq_count                 = rename_sequence.count_sequence_fast(infile_path)
+    is_gzipped                = (infile_path.split(".")[-1] == "gz")
+    if (is_gzipped):
+        gzip_extention        = ".gz"
     else:
-        print("No sequence named \"root\" in INPUT.fa!\
-               INPUT.fa should include outgroup sequence named \"root\"")
-        return
-    
-    # check number of sequences
-
-    seq_count                 = rename_sequence.count_sequence_fast("INPUT.fa.gz")
+        gzip_extention        = ""
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
-    raxml_thread_num          = 1
-    depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
-    tree_thread_num           = THREAD_NUM
-
     # check if aligned
     if (ALIGNED=="unaligned"):
-        if(os.path.isfile(WD+"/INPUT.fa.aligned.gz")):
+
+        if(os.path.isfile(infile_aligned_path)):
             if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
 
                 print(WD,seq_count, seq_count_when_aligned, "alignment needed!!")
 
-                os.remove(WD+"/INPUT.fa.aligned.gz")
-                INPUT_FA               = WD+"/INPUT.fa.gz"
+                os.remove(infile_aligned_path)
+                INPUT_FA               = infile_path
                 seq_count_when_aligned = seq_count
                 
             else:
-                INPUT_FA = WD+"/INPUT.fa.aligned.gz"
+                INPUT_FA = infile_aligned_path
                 ALIGNED  = "aligned"
         else:
-
-            print(WD,seq_count,seq_count_when_aligned,"alignment needed!!")
-
-            INPUT_FA               = WD+"/INPUT.fa.gz"
+            print(
+                "Directory:",WD,
+                "#sequence:",seq_count,
+                "#sequence in the last alignment:",seq_count_when_aligned,
+                "alignment needed!!"
+                )
+            INPUT_FA               = infile_path
             seq_count_when_aligned = seq_count
     elif (ALIGNED=="aligned"):
-        INPUT_FA               = WD+"/INPUT.fa.gz"
+        INPUT_FA               = infile_path
+    ################################
+
+    ######## parameter ########
+    if(SEED=="random"): random.seed(int(random.randint(0,99999)))
+    elif(len(SEED)!=0): random.seed(int(SEED))
+    else:print("-r Error: invalid random seed!")
+    raxml_thread_num          = 1
+    depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
+    tree_thread_num           = THREAD_NUM
+    ###########################
+
+    # move to Working Directory
+    os.chdir(WD) 
 
     i=1
     
@@ -115,6 +131,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
+        if (is_gzipped):
+            gzip_option = " -g "
+        else:
+            gzip_option = ""
         FRACTAL_COMMAND = "FRACTAL"                         + \
                           " -i " + INPUT_FA                 + \
                           " -k " + str(SUBSAMPLE_SIZE)      + \
@@ -124,7 +144,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                           " -x " + str(MAX_ITERATION)       + \
                           " -c " + str(THREAD_NUM)          + \
                           " -r " + SEED                     + \
-                          " -e "
+                          " -e "                            + \
+                          gzip_option
         
         if (TREEMETHOD!="unspecified"): 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
@@ -154,17 +175,23 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             
             os.chdir(WD)
 
-            #################
-            # split or not  #
-            #################
-            split = seq_count > 10000 or nodenum > 1
+            ### get input file name ###
+            iterationfile_path         = WD + "ITERATION.fa"                    + gzip_extention
+            subsamplefile_path         = WD + "SUBSAMPLE/SUBSAMPLE.fa"          + gzip_extention
+            renamed_subsamplefile_path = WD + "SUBSAMPLE/RENAMED_"+str(i)+".fa" + gzip_extention
+            ###########################
+
+            ################
+            # split or not #
+            ################
+            split = seq_count > SPLIT_THRESHOLD or nodenum > 1
 
             #################
             #random sampling#
             #################
-            if(os.path.isfile(WD+"/INPUT.fa.aligned.gz")):
-                INPUT_FA = WD+"/INPUT.fa.aligned.gz"
-                ALIGNED  = "aligned" 
+            if(os.path.isfile(infile_aligned_path)):
+                INPUT_FA = infile_aligned_path
+                ALIGNED  = "aligned"
 
             if (i>1):
                 shutil.rmtree ("EPANG")
@@ -172,15 +199,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
 
-            if(os.path.isfile("ITERATION.fa.gz")):
+            if(os.path.isfile(iterationfile_path)):
                 if (split): # if split
-                    if os.path.isfile(WD+"/INPUT.fa.aligned.gz") and not os.path.exists(WD+"/INPUT.fa.aligned.gz.split"):
+                    if os.path.isfile(infile_aligned_path) and not os.path.exists(infile_aligned_path+".split"):
                         Nseq_per_file = min(10000, seq_count//max(nodenum,1))
-                        subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+WD+"/INPUT.fa.aligned.gz"+" &> /dev/null", shell=True)
+                        subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+infile_aligned_path+" &> /dev/null", shell=True)
                 sampled_seq_name_list = \
                     rename_sequence.random_sampling(
-                        "ITERATION.fa.gz"             ,
-                        "SUBSAMPLE/SUBSAMPLE.fa.gz"   ,
+                        iterationfile_path            ,
+                        subsamplefile_path            ,
                         SUBSAMPLE_SIZE                ,
                         seed=SEED
                     )
@@ -193,7 +220,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     sampled_seq_name_list = \
                         rename_sequence.random_sampling_from_splitted(
                             INPUT_FA+".split"          ,
-                            "SUBSAMPLE/SUBSAMPLE.fa.gz",
+                            subsamplefile_path         ,
                             SUBSAMPLE_SIZE             ,
                             SEED                       ,
                             Nseq_per_file              ,
@@ -205,7 +232,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     sampled_seq_name_list = \
                         rename_sequence.random_sampling(
                             INPUT_FA                   ,
-                            "SUBSAMPLE/SUBSAMPLE.fa.gz",
+                            subsamplefile_path         ,
                             SUBSAMPLE_SIZE             ,
                             seed=SEED                  ,
                             n = seq_count
@@ -215,8 +242,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #rename sequence#
             #################
             seqname2renamedname = rename_sequence.rename_sequence(
-                "SUBSAMPLE/SUBSAMPLE.fa.gz"           , 
-                "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
+                subsamplefile_path, 
+                renamed_subsamplefile_path
             )
             
             #######################################
@@ -229,7 +256,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -n "  + str(tree_thread_num)                  +
                 " -m "  + TREEMETHOD                            +
                 " -a "  + ALIGNED                               +
-                " -f "  + WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz" +
+                " -f "  + renamed_subsamplefile_path            +
                 " -c "  + CODEDIR                               +
                 " -w "  + WD+"/TREE"                            +
                 " -p \""+ str(OPTION) + "\""                    +

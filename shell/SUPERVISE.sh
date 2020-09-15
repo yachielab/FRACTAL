@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 24 ]; then
+if [ $# -ne 25 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -31,6 +31,7 @@ max_num_of_iterations=${21}
 extraction_size=${22}
 careful=${23}
 FASTA_or_EDIT=${24}
+GZIP_INTERMEDIATE=${25}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
@@ -58,44 +59,34 @@ if [ "$ALIGNED" = "unaligned" ]; then
     HMM_ALIGN=$(which hmmalign)
 fi
 
-# if users want to show the calculation progress
-#if [ "${PROGRESS}" = "TRUE" ]; 
-#    while true; do 
-#        echo -n "Number of remaining sequences: "
-#        cat FRACTAL_ML4/nodes/d*/INPUT.fa | grep '>' | wc -l
-#        sleep 60
-#    done &
-#fi
+# input gzipped or not
+if [ echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
+    gzip_input="|gunzip"
+else
+    gzip_input=""
+# output gzipped or not
+if [ GZIP_INTERMEDIATE = "TRUE" ]; then
+    gzip_output="|gzip"
+    out_extention=".gz"
+else
+    gzip_output=""
+    out_extention=""
+# avoid gunzip & gzip
+if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
+    gzip_input=""
+    gzip_output=""
+
+cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${$FASTA_or_EDIT}${out_extention}
+
+wait
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
-
-if [ "$FASTA_or_EDIT" = "fasta" ]; then
-    if [ $( echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
-        cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
-    else
-        cat ${input_faname} | gzip > ${ROOT_DIR}/nodes/d0/INPUT.fa.gz
-    fi
-    wait
-elif [ "$FASTA_or_EDIT" = "edit" ]; then
-    if [ $( echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
-        cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
-    else
-        cat ${input_faname} | gzip > ${ROOT_DIR}/nodes/d0/INPUT.edit.gz
-    fi
-    wait
-fi
-
-#while [ ! -e ${ROOT_DIR}/nodes/d0/INPUT.fa ]; do
-#  echo "${ROOT_DIR}/nodes/d0/INPUT.fa was not found" 1>&2
-#  cp ${input_faname} ${ROOT_DIR}/nodes/d0/INPUT.fa
-#done
-
 echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-if [ "$FASTA_or_EDIT" = "fasta" ]; then
+if [ "$FASTA_or_EDIT" = "fa" ]; then
     echo "python3 ${CODE_DIR}/python/FRACluster.py   ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
     echo "python3 ${CODE_DIR}/python/FRACluster.2.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
