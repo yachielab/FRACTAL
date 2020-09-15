@@ -64,6 +64,8 @@ if [ $(echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
     gzip_input="|gunzip"
 else
     gzip_input=""
+fi
+
 # output gzipped or not
 if [ GZIP_INTERMEDIATE = "TRUE" ]; then
     gzip_output="|gzip"
@@ -71,10 +73,13 @@ if [ GZIP_INTERMEDIATE = "TRUE" ]; then
 else
     gzip_output=""
     out_extention=""
+fi
+
 # avoid gunzip & gzip
 if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
     gzip_input=""
     gzip_output=""
+fi
 
 cat ${input_faname} ${gzip_input} ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${$FASTA_or_EDIT}${out_extention}
 
