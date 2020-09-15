@@ -60,7 +60,7 @@ if [ "$ALIGNED" = "unaligned" ]; then
 fi
 
 # input gzipped or not
-if [ (echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
+if [ $(echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
     gzip_input="|gunzip"
 else
     gzip_input=""
