@@ -76,9 +76,9 @@ else
 fi
 
 # avoid gunzip & gzip
-if [ gzip_input = "|gunzip" -a gzip_output = "|gzip" ]; then
-    gzip_input=""
-    gzip_output=""
+if [ gzip_input = "gunzip" -a gzip_output = "gzip" ]; then
+    gzip_input="cat"
+    gzip_output="cat"
 fi
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
