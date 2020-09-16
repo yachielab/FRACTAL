@@ -231,11 +231,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
             node2filelist = []
             for i in range(nodenum):
-                if   (i <  nodenum - 1):
-                    file_list = splitted_fasta_list[Nfiles_per_node * i:Nfiles_per_node * (i+1)]
-                elif (i == nodenum - 1):
-                    file_list = splitted_fasta_list[Nfiles_per_node * i:]
-                node2filelist.append(file_list)
+                node2filelist.append([])
+            for j, file_name in enumerate(splitted_fasta_list):
+                node2filelist[j%nodenum].append(file_name)
 
         #distribution start
         for i in range(nodenum):
