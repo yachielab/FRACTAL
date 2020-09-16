@@ -432,12 +432,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     if os.path.isfile(subsamplefile_path+".aligned"):
                         ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
                     else:
-                        ALIGNED_SUBSAMPLE = renamed_subsamplefile_path+".aligned"
-
-                    #shutil.copyfile(
-                    #    ALIGNED_SUBSAMPLE,
-                    #    "ITERATION.fa.gz"
-                    #)
+                        ALIGNED_SUBSAMPLE = subsamplefile_path
+                        
                     subprocess.call(
                         "cat "+ALIGNED_SUBSAMPLE+" | "+gzip_command+"> "+iterationfile_path,
                         shell=True
