@@ -17,6 +17,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
     for record in records:
+        print (record.name)
         if (record.name == "root"):
             for outhandle in outhandle_list:
                 SeqIO.write(record, outhandle, "fasta")
