@@ -75,6 +75,9 @@ else
     out_extention=""
 fi
 
+echo "${GZIP_INTERMEDIATE}"
+echo "cat ${input_faname} | ${gzip_input} | ${gzip_output} "
+
 # avoid gunzip & gzip
 if [ gzip_input = "gunzip" -a gzip_output = "gzip" ]; then
     gzip_input="cat"
