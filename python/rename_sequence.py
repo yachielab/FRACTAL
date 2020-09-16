@@ -147,33 +147,37 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
         if (is_gzipped):
             subs   = gzip.open(out_fname, 'wt')
             allseq = gzip.open(in_fname, 'rt')
+            allseq2 = gzip.open(in_fname, 'rt')
         else:
             subs   = open(out_fname, 'w')
             allseq = open(in_fname, 'r')
+            allseq2 = open(in_fname, 'r')
+
 
         allseq_itr = SeqIO.parse(allseq, "fasta")
         for s in allseq_itr:
             if(s.id=="root"):
                 SeqIO.write(s, subs, "fasta")    
         added_seqs = set()
-        with gzip.open(in_fname, 'rt') as allseq:
-            allseq_itr = SeqIO.parse(allseq, "fasta")
-            i=0 # index on rand_idx
-            k=0 # index on record
-            for s in allseq_itr:
-                if(i>=len(rand_idx)):
-                    break
-                if(s.id!="root"):
-                    if(k==rand_idx[i]):
-                        if (str(s.seq) not in added_seqs):
-                            SeqIO.write(s, subs, "fasta")
-                            added_seqs.add(str(s.seq))
-                            sample_name_list.append(s.name)
-                        i += 1
-                    k += 1
+        
+        allseq_itr = SeqIO.parse(allseq2, "fasta")
+        i=0 # index on rand_idx
+        k=0 # index on record
+        for s in allseq_itr:
+            if(i>=len(rand_idx)):
+                break
+            if(s.id!="root"):
+                if(k==rand_idx[i]):
+                    if (str(s.seq) not in added_seqs):
+                        SeqIO.write(s, subs, "fasta")
+                        added_seqs.add(str(s.seq))
+                        sample_name_list.append(s.name)
+                    i += 1
+                k += 1
         # close files
         subs.close()
         allseq.close()
+        allseq2.close()
     elif (file_format=="edit"):
         with gzip.open(in_fname, 'rt') as rhandle, gzip.open(out_fname, 'wt') as whandle:
             i = 0
