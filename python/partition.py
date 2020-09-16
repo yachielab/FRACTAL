@@ -119,11 +119,11 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
 def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_para, file_format = "fasta"):
     is_gzipped = (all_fa.split(".")[-1] == "gz")
     if (is_gzipped):
-        allfa   = gzip.open(all_fa, 'wt')
-        out     = gzip.open(outputfname, 'rt')
+        allfa   = gzip.open(all_fa, 'rt')
+        out     = gzip.open(outputfname, 'wt')
     else:
-        allfa   = open(all_fa, 'w')
-        out     = open(outputfname, 'r')
+        allfa   = open(all_fa, 'r')
+        out     = open(outputfname, 'w')
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
