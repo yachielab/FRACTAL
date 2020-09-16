@@ -51,8 +51,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     is_gzipped                = (infile_path.split(".")[-1] == "gz")
     if (is_gzipped):
         gzip_extention        = ".gz"
+        gzip_command          = "gzip"
     else:
         gzip_extention        = ""
+        gzip_command          = "cat"
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
@@ -353,8 +355,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.chdir(WD)
 
                 # select sequence file to place
-                if(os.path.isfile(infile_path+".gz.aligned")):
-                    QUERY_FA = infile_path+".gz.aligned"
+                if(os.path.isfile(infile_path+".aligned")):
+                    QUERY_FA = infile_path+".aligned"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
                     QUERY_FA = infile_path
@@ -437,7 +439,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     #    "ITERATION.fa.gz"
                     #)
                     subprocess.call(
-                        "gzip -c "+ALIGNED_SUBSAMPLE+" > "+iterationfile_path+".gz",
+                        "cat "+ALIGNED_SUBSAMPLE+" | "+gzip_command+"> "+iterationfile_path,
                         shell=True
                     )
                     
@@ -450,7 +452,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
-                        "ITERATION.fa.gz"                       ,
+                        iterationfile_path                      ,
                         ALIGNED_ALL                             ,
                         SUBSAMPLE_SIZE                          ,
                         para
