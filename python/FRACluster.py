@@ -352,8 +352,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.chdir(WD)
 
                 # select sequence file to place
-                if(os.path.isfile(WD+"/INPUT.fa.gz.aligned")):
-                    QUERY_FA = WD+"/INPUT.fa.gz.aligned"
+                if(os.path.isfile(infile_name+".gz.aligned")):
+                    QUERY_FA = infile_name+".gz.aligned"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
                     QUERY_FA = infile_name
@@ -413,8 +413,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         para  = prev_para
                         break
                     else:
-                        if(os.path.isfile(WD+"/ITERATION.fa.gz")):
-                            os.remove(WD+"/ITERATION.fa.gz")
+                        if(os.path.isfile(iterationfile_path)):
+                            os.remove(iterationfile_path)
                         i += 1
                         resampling_needed = True
                 
@@ -426,26 +426,26 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 if(para!=0): # if problematic sequences remained
 
                     # select subsample sequence file
-                    if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
-                        ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
+                    if os.path.isfile(subsamplefile_path+".aligned"):
+                        ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
                     else:
-                        ALIGNED_SUBSAMPLE = "SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
+                        ALIGNED_SUBSAMPLE = renamed_subsamplefile_path+".aligned"
 
                     #shutil.copyfile(
                     #    ALIGNED_SUBSAMPLE,
                     #    "ITERATION.fa.gz"
                     #)
                     subprocess.call(
-                        "gzip -c "+ALIGNED_SUBSAMPLE+" > "+WD+"/ITERATION.fa.gz",
+                        "gzip -c "+ALIGNED_SUBSAMPLE+" > "+iterationfile_path+".gz",
                         shell=True
                     )
                     
                     # select all sequence file
-                    if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
-                        ALIGNED_ALL = WD+"/INPUT.fa.gz.aligned"
+                    if os.path.isfile(infile_path+".aligned"):
+                        ALIGNED_ALL = infile_path+".aligned"
                         ALIGNED     = "aligned"
                     else:
-                        ALIGNED_ALL = "INPUT.fa.gz" 
+                        ALIGNED_ALL = infile_path+".gz" 
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
@@ -480,9 +480,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print ("Error: FRACluster.py could not divide sequences into multiple subclades")
             return
         
-        FASTA_LIST = [ WD+"/INPUT.fa.gz" ]
-        if os.path.isfile(WD+"/INPUT.fa.gz.aligned"):
-            FASTA_LIST.append(WD+"/INPUT.fa.gz.aligned")
+        FASTA_LIST = [ infile_path ]
+        if os.path.isfile(infile_path+".aligned"):
+            FASTA_LIST.append(infile_path+".aligned")
 
         DIRdict = partition.partition_fasta(
             FASTA_LIST,
@@ -492,7 +492,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
             "PARTITION.info",
             "UPSTREAM.nwk",
-            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz",
+            renamed_subsamplefile_path+".gz",
             ROOTING,
             nodenum = nodenum,
             codedir = CODEDIR
@@ -518,18 +518,17 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     os.chdir(WD)
 
     filenames = [
-        "INPUT.fa.gz",
-        "INPUT.fa.aligned",
-        "INPUT.fa.aligned.gz",
-        "ITERATION.fa.gz",
+        infile_path,
+        infile_path+".aligned",
+        iterationfile_path,
         "tmp.nwk",
         "SUBSAMPLE.fa.aligned.gz",
-        "INPUT.fa.gz.aligned",
-        "INPUT.fa.gz.aligned.tree"
+        infile_path+".gz.aligned",
+        infile_path+".gz.aligned.tree"
         ]
     
     dirnames = [
-        "INPUT.fa.gz.split",
+        infile_path+".gz.split",
         "EPANG",
         "PARAM",
         "PARTITION",

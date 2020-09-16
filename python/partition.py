@@ -117,29 +117,37 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     return len(paraphyletic), max(list(leaf_to_Nseq.values()))
 
 def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_para, file_format = "fasta"):
+    is_gzipped = (all_fa.split(".")[-1] == "gz")
+    if (is_gzipped):
+        allfa   = gzip.open(all_fa, 'wt')
+        out     = gzip.open(outputfname, 'rt')
+    else:
+        allfa   = open(all_fa, 'w')
+        out     = open(outputfname, 'r')
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
     # parse json format
     js = json.loads(jp)
     # add paraphyletic sequences into subsample
-    with gzip.open(all_fa,'rt') as allfa, gzip.open(outputfname,'at') as out:
-        if (file_format == "fasta"):
-            handle = SeqIO.parse(allfa, "fasta")
-            for record in handle:
-                if(record.id!="root"):
-                    if(js["partition"][record.id]=="paraphyletic"):
-                        SeqIO.write(record, out, "fasta")
-        elif (file_format=="edit"):
-            for line in allfa:
-                name         = line.split()[0]
-                if (name != "root"):
-                    if (len(line.split())>1):
-                        editlist_str = line.split()[1]
-                    else:
-                        editlist_str = ""
-                    if(js["partition"][name]=="paraphyletic"):
-                        out.write(line)
+    if (file_format == "fasta"):
+        handle = SeqIO.parse(allfa, "fasta")
+        for record in handle:
+            if(record.id!="root"):
+                if(js["partition"][record.id]=="paraphyletic"):
+                    SeqIO.write(record, out, "fasta")
+    elif (file_format=="edit"):
+        for line in allfa:
+            name         = line.split()[0]
+            if (name != "root"):
+                if (len(line.split())>1):
+                    editlist_str = line.split()[1]
+                else:
+                    editlist_str = ""
+                if(js["partition"][name]=="paraphyletic"):
+                    out.write(line)
+    allfa.close()
+    out.close()
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
@@ -305,30 +313,39 @@ def partition_fasta(
                     shell = True
                     )
                         
-            else:            
+            else:        
+                is_gzipped = (in_fasta.split(".")[-1] == "gz")
                 ost=[]
-                for i in range(num_mono):
-                    ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
-                para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
+                if (is_gzipped):
+                    for i in range(num_mono):
+                        ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
+                    in_handle = gzip.open(in_fasta, 'rt')
+                    para   = gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
+                else:
+                    for i in range(num_mono):
+                        ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
+                    in_handle = open(in_fasta, 'r')
+                    para   = open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'w')
 
-                with gzip.open(in_fasta,'rt') as in_handle:
-                    record = SeqIO.parse(in_handle, "fasta")
-                    i=0
-                    for s in record:
-                        if(s.id=="root"):
-                            for st in ost: #ROOTING=="Origin"
-                                SeqIO.write(s, st, "fasta")
-                        elif(js["partition"][s.id]=="paraphyletic"):
-                            SeqIO.write(s, para, "fasta")
-                        else:
-                            l = NUMdict[str(js["partition"][s.id])]
-                            if( fasta_count == 0 ):
-                                DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
-                            SeqIO.write(s, ost[l], "fasta")
-                        i += 1
+            
+                record = SeqIO.parse(in_handle, "fasta")
+                i=0
+                for s in record:
+                    if(s.id=="root"):
+                        for st in ost: #ROOTING=="Origin"
+                            SeqIO.write(s, st, "fasta")
+                    elif(js["partition"][s.id]=="paraphyletic"):
+                        SeqIO.write(s, para, "fasta")
+                    else:
+                        l = NUMdict[str(js["partition"][s.id])]
+                        if( fasta_count == 0 ):
+                            DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
+                        SeqIO.write(s, ost[l], "fasta")
+                    i += 1
                 for st in ost:
                     st.close()
-                    para.close()
+                para.close()
+                in_handle.close()
         elif(file_format=="edit"):
             ost=[]
             for i in range(num_mono):
