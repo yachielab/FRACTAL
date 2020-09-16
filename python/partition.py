@@ -316,7 +316,7 @@ def partition_fasta(
                             shell = True
                         )
                 problematic_filenames      = in_fasta.split(".")[0]+".part*"
-                problematic_concatfilename = in_fasta.split(".")[0]+".problematic"+gzip_extention
+                problematic_concatfilename = wd+"/"+in_fasta.split("/")[-1]+".problematic"+gzip_extention
                 subprocess.call(
                     "cat "                 +
                     problematic_filenames  +
