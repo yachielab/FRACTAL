@@ -272,12 +272,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 extracted_seq_name_list   = ["root"]+random.sample(sampled_seq_name_list, EXTRACTION_SIZE)
                 extracted_seq_rename_list = [ seqname2renamedname[name] for name in extracted_seq_name_list ]
                 extraction.tree_extraction(
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree",
+                    renamed_subsamplefile_path+".aligned.tree",
                     set(extracted_seq_rename_list)                         ,
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree"
+                    renamed_subsamplefile_path+".aligned.extracted.tree"
                     )
                 extraction.fasta_extraction(
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"          ,
+                    renamed_subsamplefile_path          ,
                     set(extracted_seq_rename_list)                      ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
                     )
@@ -287,21 +287,21 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     "gunzip > " + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted" ,
                     shell=True
                 )
-                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree")
-                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz")
-                os.remove(WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned")
+                os.remove(renamed_subsamplefile_path+".aligned.tree")
+                os.remove(renamed_subsamplefile_path+"")
+                os.remove(renamed_subsamplefile_path+".aligned")
                 
                 os.rename(
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.extracted.tree",
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"
+                    renamed_subsamplefile_path+".aligned.extracted.tree",
+                    renamed_subsamplefile_path+".aligned.tree"
                     )
                 os.rename(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
+                    renamed_subsamplefile_path
                 )
                 os.rename(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
+                    renamed_subsamplefile_path+".aligned"
                 )
 
             os.chdir(WD+"/PARAM")
@@ -311,8 +311,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     RAXMLPAR                                                        +
                     " -T "   + str(raxml_thread_num)                                +
                     " -f e"                                                         +
-                    " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"   +
-                    " -t "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"+
+                    " -s "   + renamed_subsamplefile_path+".aligned"   +
+                    " -t "   + renamed_subsamplefile_path+".aligned.tree"+
                     " -n "   + "PARAM_"+str(i)                                      +
                     " -m "   + MODEL                                                ,
                     shell=True
@@ -321,8 +321,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 subprocess.call(
                     RAXMLSEQ                                                        +
                     " -f e"                                                         +
-                    " -s "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"   + 
-                    " -t "   + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned.tree"+
+                    " -s "   + renamed_subsamplefile_path+".aligned"   + 
+                    " -t "   + renamed_subsamplefile_path+".aligned.tree"+
                     " -n "   + "PARAM_"+str(i)                                      +
                     # " -n "   + "PARAM_"+str(i-i%2)                                  + # for test
                     " -m "   + MODEL                                                ,
@@ -360,9 +360,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     ALIGNED_FOR_PLACEMENT = ALIGNED
                 
                 if (ALIGNED=="aligned"):
-                    refseq = WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz"
+                    refseq = renamed_subsamplefile_path
+
                 else:
-                    refseq = WD+"/SUBSAMPLE/RENAMED_"+str(i)+".fa.gz.aligned"
+                    refseq = renamed_subsamplefile_path+".aligned"
 
                 # conduct placement
                 placement.distributed_placement(
