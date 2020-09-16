@@ -46,7 +46,7 @@ Usage:
     [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
     [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
     [-d job_number] [-c thread_number] [-e] [-r integer] [-E] [-O qsub_option] 
-    [-I first_qsub_option] [-j job_name] [-l iteration_upper_limit]
+    [-I first_qsub_option] [-j job_name] [-l iteration_upper_limit] [-g]
 
 Options:
     -v
