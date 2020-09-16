@@ -15,17 +15,16 @@ def rename_sequence(in_fname,out_fname):
         renamed   = open(out_fname, 'w')
         origin    = open(in_fname, 'r')
 
-    with gzip.open(in_fname, 'rt') as origin, gzip.open(out_fname, 'wt') as renamed:
-        input_itr = SeqIO.parse(origin, "fasta")
-        # Build a list sequences:
-        k = 0
-        name2renamed = {"root":"s0"}
-        for s in input_itr:
-            name2renamed[s.name] = "s"+str(k)
-            s.id = "s"+str(k)
-            s.description = "s"+str(k)
-            k = k + 1
-            SeqIO.write(s, renamed, "fasta")
+    input_itr = SeqIO.parse(origin, "fasta")
+    # Build a list sequences:
+    k = 0
+    name2renamed = {"root":"s0"}
+    for s in input_itr:
+        name2renamed[s.name] = "s"+str(k)
+        s.id = "s"+str(k)
+        s.description = "s"+str(k)
+        k = k + 1
+        SeqIO.write(s, renamed, "fasta")
 
     renamed.close()
     origin.close()
