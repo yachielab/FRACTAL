@@ -340,8 +340,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     para  = prev_para
                     break
                 else:
-                    if(os.path.isfile(WD+"/ITERATION.fa.gz")):
-                        os.remove(WD+"/ITERATION.fa.gz")
+                    if(os.path.isfile(iterationfile_path)):
+                        os.remove(iterationfile_path)
                     i += 1
             
             else: # if parameter optimization succeeded
@@ -356,7 +356,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     QUERY_FA = WD+"/INPUT.fa.gz.aligned"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
-                    QUERY_FA = WD+"/INPUT.fa.gz"
+                    QUERY_FA = infile_name
                     ALIGNED_FOR_PLACEMENT = ALIGNED
                 
                 if (ALIGNED=="aligned"):
