@@ -215,6 +215,13 @@ def partition_fasta(
         if (file_format=="fasta"):
 
             if (os.path.exists(in_fasta + ".split") and nodenum > 1):
+                is_gzipped = (in_fasta.split(".")[-1] == "gz")
+                if (is_gzipped):
+                    gzip_command = "gzip"
+                    gzip_extention = ".gz"
+                else:
+                    gzip_command = "cat"
+                    gzip_extention = ""
                 
                 dirpath_set = set()
                 with open(wd + "/seqname_dirpath.txt", 'w') as handle:
@@ -273,16 +280,17 @@ def partition_fasta(
                                 wd + "/seqname_dirpath.txt" +
                                 "\n"
                                 )
-                            handle.write(
-                                "gzip " 
-                                )
-                            for dirpath in dirpath_list:
+                            if (is_gzipped):
                                 handle.write(
-                                    dirpath + "/" + splitted_file.split(".gz")[0] + " "
+                                    "gzip " 
                                     )
-                            handle.write(
-                                "\n" 
-                                )
+                                for dirpath in dirpath_list:
+                                    handle.write(
+                                        dirpath + "/" + splitted_file.split(".gz")[0] + " "
+                                        )
+                                handle.write(
+                                    "\n" 
+                                    )
                             handle.write(
                                 "rm " +
                                 in_fasta + ".split/" + splitted_file + " "  +
@@ -297,18 +305,18 @@ def partition_fasta(
                         subprocess.call(
                             "cat "                        +
                             subclade_dir + "/* "          +
-                            "|gunzip|gzip>> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" + # Q. Why gunzip|gzip? A. Epa-ng cannot read concatenated gzip file created by python
+                            "|gunzip|"+ gzip_command +">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" + # Q. Why gunzip|gzip? A. Epa-ng cannot read concatenated gzip file created by python
                             "rm " + subclade_dir + "/*.part_*" +
                             "",
                             shell = True
                         )
-                problematic_filenames      = ".".join(in_fasta.split(".")[:-2])+".part*.gz"
-                problematic_concatfilename = ".".join(in_fasta.split(".")[:-2])+".problematic.gz"
+                problematic_filenames      = ".".join(in_fasta.split(".")[:-2])+".part*"
+                problematic_concatfilename = ".".join(in_fasta.split(".")[:-2])+".problematic"+gzip_extention
                 subprocess.call(
                     "cat "                 +
                     problematic_filenames  +
-                    ">> " + problematic_concatfilename + "\n" +
-                    "rm " + problematic_filenames             +
+                    ">> " + problematic_concatfilename + ";"+
+                    "rm " + problematic_filenames           +
                     "",
                     shell = True
                     )
