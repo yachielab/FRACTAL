@@ -104,7 +104,9 @@ def random_sampling_from_splitted( # fasta only
     Nseq_per_file,
     root_idx,
     n=None, 
-    file_format = "fasta"):
+    file_format = "fasta",
+    is_gzipped = False
+    ):
 
     if (n > subsample_size):
         rand_idx=random.sample(range(1,n),subsample_size) # n-1: not include root
@@ -113,8 +115,11 @@ def random_sampling_from_splitted( # fasta only
         rand_idx=list(range(1,n))
     
     rand_idx = [root_idx]+rand_idx
-    
-    print("rand_idx",rand_idx)
+
+    if (is_gzipped):
+        gzip_command = "gzip"
+    else:
+        gzip_command = "cat"
 
     for k, seq_idx in enumerate(rand_idx):
         file_idx            = seq_idx // Nseq_per_file + 1
@@ -122,9 +127,9 @@ def random_sampling_from_splitted( # fasta only
 
         file_idx_str        = str(file_idx).zfill(3)
         
-        in_fname            = in_dirname+"/"+".".join(in_dirname.split(".")[:-3]).split("/")[-1]+".part_" + file_idx_str + "." + ".".join(in_dirname.split(".")[-3:-1])
+        in_fname            = in_dirname+"/"+".".join(in_dirname.split(".")[:-2]).split("/")[-1]+".part_" + file_idx_str + "." + ".".join(in_dirname.split(".")[-2:-1])
         
-        command = "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + "| gzip > " + out_fname+"."+str(k)
+        command = "seqkit range -r " + str(seq_idx_in_the_file) + ":" + str(seq_idx_in_the_file) + " " + in_fname + "| "+gzip_command+" > " + out_fname+"."+str(k)
         subprocess.call(command, shell = True)
     subprocess.call("cat "+out_fname+".* > " + out_fname+"; rm "+out_fname+".*", shell = True)
 

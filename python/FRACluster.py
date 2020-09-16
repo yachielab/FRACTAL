@@ -224,7 +224,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             SEED                       ,
                             Nseq_per_file              ,
                             root_idx                   ,
-                            n = seq_count
+                            n = seq_count              ,
+                            is_gzipped = is_gzipped
                         )
                 else:
                     # subsampling
