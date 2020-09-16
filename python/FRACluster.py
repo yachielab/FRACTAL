@@ -448,7 +448,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         ALIGNED_ALL = infile_path+".aligned"
                         ALIGNED     = "aligned"
                     else:
-                        ALIGNED_ALL = infile_path+".gz" 
+                        ALIGNED_ALL = infile_path+gzip_extention
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
