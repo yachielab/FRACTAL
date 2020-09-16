@@ -460,7 +460,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 elif (not resampling_needed):
                     break
                 else:
-                    prev_para = 0
+                    prev_para = seq_count
 
         ##################
         #partition .fasta#
