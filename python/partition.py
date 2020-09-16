@@ -435,17 +435,22 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
             qf.write(command)
 
 def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
-    with gzip.open(INPUTfile,'rt') as handle:
-        names=[]
-        if (file_format == "fasta"):
-            records = SeqIO.parse(handle, "fasta")
-            for record in records:
-                if(record.id!="root"):
-                    names.append(record.id)
-        elif(file_format == "edit"):
-            for line in handle:
-                name = line.split()[0]
-                if (name != "root"): names.append(name)
+    is_gzipped = (INPUTfile.split(".")[-1] == "gz")
+    if is_gzipped:
+        handle  = gzip.open(INPUTfile, 'rt')
+    else:
+        handle  = open(INPUTfile, 'r')
+
+    names=[]
+    if (file_format == "fasta"):
+        records = SeqIO.parse(handle, "fasta")
+        for record in records:
+            if(record.id!="root"):
+                names.append(record.id)
+    elif(file_format == "edit"):
+        for line in handle:
+            name = line.split()[0]
+            if (name != "root"): names.append(name)
 
     if(len(names)==1):
         init_clade = Phylo.BaseTree.Clade(name=names[0])
@@ -458,3 +463,5 @@ def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
         print("tiny_tree() Error : len(names)=")
         print(len(names))
     Phylo.write(tree, OUTPUTnwk, 'newick')
+
+    handle.close()
