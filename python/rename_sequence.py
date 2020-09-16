@@ -145,11 +145,11 @@ def random_sampling(in_fname,out_fname,subsample_size,seed,n=None, file_format =
     if ( file_format == "fasta" ):
         # open files
         if (is_gzipped):
-            subs   = open(out_fname, 'w')
-            allseq = open(in_fname, 'r')
-        else:
             subs   = gzip.open(out_fname, 'wt')
             allseq = gzip.open(in_fname, 'rt')
+        else:
+            subs   = open(out_fname, 'w')
+            allseq = open(in_fname, 'r')
 
         allseq_itr = SeqIO.parse(allseq, "fasta")
         for s in allseq_itr:
