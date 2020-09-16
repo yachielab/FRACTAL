@@ -76,14 +76,12 @@ else
 fi
 
 # avoid gunzip & gzip
-if [ gzip_input = "gunzip" -a gzip_output = "gzip" ]; then
+if [ $gzip_input = "gunzip" -a $gzip_output = "gzip" ]; then
     gzip_input="cat"
     gzip_output="cat"
 fi
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
-echo "${GZIP_INTERMEDIATE}"
-echo "cat ${input_faname} | ${gzip_input} | ${gzip_output} "
 cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
