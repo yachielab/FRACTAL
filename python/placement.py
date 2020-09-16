@@ -221,13 +221,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         
         # judge splitted or not
         splitted = False
-        if (os.path.exists(WD + "/INPUT.fa.aligned.gz.split")):
-            splitted_files_dir  = WD + "/INPUT.fa.aligned.gz.split/"
-            splitted_fasta_list = os.listdir(WD + "/INPUT.fa.aligned.gz.split")
-            splitted = True
-        elif (os.path.exists(WD + "/INPUT.fa.gz.split")):
-            splitted_files_dir  = WD + "/INPUT.fa.gz.split/"
-            splitted_fasta_list = sorted(os.listdir(WD + "/INPUT.fa.gz.split"))
+        if (os.path.exists(query + ".split")):
+            splitted_files_dir  = query + ".split/"
+            splitted_fasta_list = os.listdir(splitted_files_dir)
             splitted = True
 
         if (splitted):

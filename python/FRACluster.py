@@ -353,11 +353,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.chdir(WD)
 
                 # select sequence file to place
-                if(os.path.isfile(infile_name+".gz.aligned")):
-                    QUERY_FA = infile_name+".gz.aligned"
+                if(os.path.isfile(infile_path+".gz.aligned")):
+                    QUERY_FA = infile_path+".gz.aligned"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
-                    QUERY_FA = infile_name
+                    QUERY_FA = infile_path
                     ALIGNED_FOR_PLACEMENT = ALIGNED
                 
                 if (ALIGNED=="aligned"):
