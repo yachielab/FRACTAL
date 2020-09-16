@@ -325,7 +325,7 @@ def partition_fasta(
                     for i in range(num_mono):
                         ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
                     in_handle = open(in_fasta, 'r')
-                    para   = open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'w')
+                    para   = open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
 
             
                 record = SeqIO.parse(in_handle, "fasta")
