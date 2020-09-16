@@ -67,16 +67,13 @@ else
 fi
 
 # output gzipped or not
-if [ GZIP_INTERMEDIATE = "TRUE" ]; then
+if [ $GZIP_INTERMEDIATE = "TRUE" ]; then
     gzip_output="gzip"
     out_extention=".gz"
 else
     gzip_output="cat"
     out_extention=""
 fi
-
-echo "${GZIP_INTERMEDIATE}"
-echo "cat ${input_faname} | ${gzip_input} | ${gzip_output} "
 
 # avoid gunzip & gzip
 if [ gzip_input = "gunzip" -a gzip_output = "gzip" ]; then
