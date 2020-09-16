@@ -54,7 +54,7 @@ def partition_fasta(inputFASTA_filepath, outputFASTA_dirpathlist, seqname2dirpat
             if seqname in seqname_set:
                 seqname2handle[seqname] = dirpath2handle [ dirpath ]
 
-    classify_sequences(ist, seqname2handle, ost_list)
+    classify_sequences(ist2, seqname2handle, ost_list)
 
     ist.close()
     ist2.close()
