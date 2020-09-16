@@ -84,12 +84,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         INPUT_FA               = infile_path
     ################################
 
-    ### get input file name2###
-    iterationfile_path         = WD + "/ITERATION.fa"                    + gzip_extention
-    subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          + gzip_extention
-    renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" + gzip_extention
-    ###########################
-
     ######## parameter ########
     if(SEED=="random"): random.seed(int(random.randint(0,99999)))
     elif(len(SEED)!=0): random.seed(int(SEED))
@@ -179,6 +173,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         while i<MAX_ITERATION:
             
             os.chdir(WD)
+
+            ### get input file name2###
+            iterationfile_path         = WD + "/ITERATION.fa"                    + gzip_extention
+            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          + gzip_extention
+            renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" + gzip_extention
+            ###########################
 
             ################
             # split or not #
@@ -520,7 +520,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     filenames = [
         infile_path,
         infile_path+".aligned",
-        iterationfile_path,
+        #iterationfile_path,
         "tmp.nwk",
         "SUBSAMPLE.fa.aligned.gz",
         infile_path+".gz.aligned",
