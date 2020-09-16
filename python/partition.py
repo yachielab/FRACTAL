@@ -209,6 +209,20 @@ def partition_fasta(
         DIRdict[leaf.name] = [OUT_DIR+"/d"+str(num+i),0]
         NUMdict[leaf.name.strip('{').strip('}')] = i
         i=i+1
+    
+    dirpath_set = set()
+    with open(wd + "/seqname_dirpath.txt", 'w') as handle:
+        for seqname in list(js["partition"].keys()):
+            if js["partition"][seqname] == "paraphyletic":
+                handle.write(seqname +'\t' + wd + '\tparaphyletic\n')
+            else:
+                dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
+                dirpath_set.add(dirpath)
+                handle.write(seqname +'\t' + dirpath + '\n')
+    subprocess.call(
+        "cat " + wd + "/seqname_dirpath.txt | cut -f2 | sort | uniq -c > " + wd + "/Nseq_dirpath.txt",
+        shell = True
+    )
 
     for fasta_count, in_fasta in enumerate(in_fasta_list):
 
@@ -225,15 +239,6 @@ def partition_fasta(
                     gunzip_command = "cat"
                     gzip_extention = ""
                 
-                dirpath_set = set()
-                with open(wd + "/seqname_dirpath.txt", 'w') as handle:
-                    for seqname in list(js["partition"].keys()):
-                        if js["partition"][seqname] == "paraphyletic":
-                            handle.write(seqname +'\t' + wd + '\n')
-                        else:
-                            dirpath = DIRdict['{'+str(js["partition"][seqname])+'}'][0]
-                            dirpath_set.add(dirpath)
-                            handle.write(seqname +'\t' + dirpath + '\n')
                 dirpath_list = list(sorted([wd] + list(dirpath_set)))
                 
                 # assign splitted files to each node: same as distributed placement
@@ -312,7 +317,6 @@ def partition_fasta(
                         )
                 problematic_filenames      = in_fasta.split(".")[0]+".part*"
                 problematic_concatfilename = in_fasta.split(".")[0]+".problematic"+gzip_extention
-                print(problematic_filenames, problematic_concatfilename, in_fasta.split("."))
                 subprocess.call(
                     "cat "                 +
                     problematic_filenames  +
