@@ -12,6 +12,7 @@ import random
 import gzip
 
 def classify_sequences(inputFASTA_filehandle, seqname2handle, outhandle_list):
+    print(seqname2handle)
     # open input FASTAfile
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
