@@ -7,6 +7,14 @@ import subprocess
 import gzip
 
 def rename_sequence(in_fname,out_fname):
+    is_gzipped = (in_fname.split(".")[-1] == "gz")
+    if (is_gzipped):
+        renamed   = gzip.open(out_fname, 'wt')
+        origin    = gzip.open(in_fname, 'rt')
+    else:
+        renamed   = open(out_fname, 'w')
+        origin    = open(in_fname, 'r')
+
     with gzip.open(in_fname, 'rt') as origin, gzip.open(out_fname, 'wt') as renamed:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
@@ -18,6 +26,10 @@ def rename_sequence(in_fname,out_fname):
             s.description = "s"+str(k)
             k = k + 1
             SeqIO.write(s, renamed, "fasta")
+
+    renamed.close()
+    origin.close()
+
     return name2renamed
 
 def outgroup_check_fast(in_fname, file_format):
