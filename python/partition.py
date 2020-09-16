@@ -120,10 +120,10 @@ def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_
     is_gzipped = (all_fa.split(".")[-1] == "gz")
     if (is_gzipped):
         allfa   = gzip.open(all_fa, 'rt')
-        out     = gzip.open(outputfname, 'wt')
+        out     = gzip.open(outputfname, 'at')
     else:
         allfa   = open(all_fa, 'r')
-        out     = open(outputfname, 'w')
+        out     = open(outputfname, 'a')
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
