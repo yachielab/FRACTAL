@@ -58,11 +58,6 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     edge2seqlist = {}
     with open(edge_to_sequence_file,'r') as handle:
         for line in handle:
-            '''
-            line=line.split("\n")[0]
-            if(len(line)>0): line=line[0:(len(line)-1)];place_list.append(line.split(","))
-            else: place_list.append([])
-            '''
             edge = line.split("\t")[0]
             seq  = line.split("\t")[1].split("\n")[0]
             if (edge in edge2seqlist.keys()):
@@ -276,31 +271,15 @@ def partition_fasta(
                         handle.write("PATH={}\n".format(PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                        for splitted_file in node2filelist[i]:
-                            handle.write(
-                                "python3 "                  +
-                                codedir + "/python/partition_fasta.py "     +
-                                in_fasta + ".split/" + splitted_file + " "  +
-                                ":".join(dirpath_list)+" "  +
-                                wd + "/seqname_dirpath.txt" +
-                                "\n"
-                                )
-                            if (is_gzipped):
-                                handle.write(
-                                    "gzip " 
-                                    )
-                                for dirpath in dirpath_list:
-                                    handle.write(
-                                        dirpath + "/" + splitted_file.split(".gz")[0] + " "
-                                        )
-                                handle.write(
-                                    "\n" 
-                                    )
-                            handle.write(
-                                "rm " +
-                                in_fasta + ".split/" + splitted_file + " "  +
-                                "\n"
-                                )
+                        inputFASTA_filepathlist = [in_fasta + ".split/" + splitted_file for splitted_file in node2filelist[i] ]
+                        handle.write(
+                            "python3 "                  +
+                            codedir + "/python/partition_fasta.py "  +
+                            ":".join(inputFASTA_filepathlist) + " "  +
+                            ":".join(dirpath_list)+" "  +
+                            wd + "/seqname_dirpath.txt" +
+                            "\n"
+                            )
                 # wait for all partition jobs finish
                 while(os.listdir(in_fasta + ".split") != []):
                     None
