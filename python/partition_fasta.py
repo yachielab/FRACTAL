@@ -31,7 +31,7 @@ def partition_fasta(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2di
             line     = line.split("\n")[0]
             seqname  = line.split("\t")[0]
             dirpath  = line.split("\t")[1]
-        seqname2dirpath[seqname] = dirpath
+            seqname2dirpath[seqname] = dirpath
 
     for inputFASTA_filepath in inputFASTA_filepathlist:
         is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
