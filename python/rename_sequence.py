@@ -181,6 +181,8 @@ def random_sampling_fasta( # fasta only
                 records        = SeqIO.parse(ist, 'fasta')
                 i = 0
                 for record in records:
+                    if len(local_idx_list) < 1:
+                        break 
                     if i == local_idx_list[0]:
                         if ( str(record.seq) not in seq_set ):
                             seq_set.add(str(record.seq))
