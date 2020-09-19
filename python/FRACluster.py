@@ -37,16 +37,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ###########################
 
     # remove empty input files#
-    for infile_name in os.listdir(WD):
-        if (os.path.getsize(WD+"/"+infile_name) == 0):
-            os.remove(WD+"/"+infile_name)
+    infile_namelist              = os.listdir(WD)
+    infile_pathlist              = [WD+"/"+name for name in infile_namelist]
+    fpath2seqcount               = rename_sequence.count_sequence_fast(infile_pathlist)
+    for fpath in fpath2seqcount.keys():
+        if fpath2seqcount[fpath] == 0:
+            os.remove(fpath)
     ###########################
 
     ### get input file name ###
-    infile_namelist              = os.listdir(WD)
-    infile_pathlist              = [WD+"/"+name for name in infile_namelist]
-    
-    fpath2seqcount               = rename_sequence.count_sequence_fast(infile_pathlist)
     infile_namelist              = os.listdir(WD)
     infile_pathlist              = [WD+"/"+name for name in infile_namelist]
     example_infile_fpath         = infile_pathlist[0]
@@ -56,9 +55,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ###########################
     
     ## check input file property ##
-    for fpath in fpath2seqcount.keys():
-        if fpath2seqcount[fpath] == 0:
-            os.remove(fpath)
     root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
     seq_count                 = sum(fpath2seqcount.values())
     is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
