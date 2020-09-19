@@ -249,7 +249,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
                 for filename in node2filelist[i]:
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
-                    queryfile = splitted_files_dir + filename
+                    queryfile = query_dir + "/" + filename
 
                     PATH = (subprocess.\
                                 Popen(
