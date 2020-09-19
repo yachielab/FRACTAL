@@ -311,7 +311,7 @@ def partition_fasta(
                     )
                         
             else:        
-                partition_sequences.partition_sequences(splitted_fasta_list, dirpath_list, wd + "/seqname_dirpath.txt")
+                partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
 
                 '''
                 ost=[]
