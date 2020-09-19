@@ -257,6 +257,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.mkdir(example_infile_fpath+".split")
                 for infile_path in infile_pathlist:
                     fpath2seqcount[example_infile_fpath+".split/"+infile_path.split("/")[-1]] = fpath2seqcount[infile_path]
+                    fpath2seqcount.pop(infile_path)
                     shutil.move(infile_path, example_infile_fpath+".split")
                 splitted_dirpath = example_infile_fpath+".split"
 
