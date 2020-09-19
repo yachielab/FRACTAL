@@ -59,11 +59,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     for fpath in fpath2seqcount.keys():
         if fpath2seqcount[fpath] == 0:
             os.remove(fpath)
-    infile_namelist           = os.listdir(WD)
-    try:
-        root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
-    except:
-        error_process.no_root(); exit(1)
+    root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
     seq_count                 = sum(fpath2seqcount.values())
     is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
     if (is_gzipped):
