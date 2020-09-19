@@ -89,6 +89,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
 
             query =  query_dir + "/" + filename
             os.mkdir(outdir    + "/" + filename)
+            os.chdir(outdir    + "/" + filename)
             if query.split(".")[-1] == "gz":
                 is_gzipped = True
                 extention  = ".gz"
