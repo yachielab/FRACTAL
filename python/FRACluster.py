@@ -570,13 +570,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         infile_path,
         infile_path+".aligned",
         iterationfile_path,
-        "tmp.nwk",
-        "SUBSAMPLE.fa.aligned.gz",
+        WD+"/tmp.nwk",
+        WD+"/SUBSAMPLE.fa.aligned.gz",
         infile_path+".gz.aligned",
         infile_path+".gz.aligned.tree",
-        "seqname_dirpath.txt",
+        WD+"/seqname_dirpath.txt",
         WD+"/INPUT.part*",
-        WD+"root.fa"
+        WD+"/root.fa"
         ]
     
     dirnames = [
@@ -589,10 +589,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
 
     
-    for path in filenames+dirnames:
-        subprocess.call(
-            "rm -r " + " ".join() + " &> /dev/null",
-            shell = True
+    subprocess.call(
+        "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
+        shell = True
         )
     
     elapsed_time=time.time()-start
