@@ -39,7 +39,6 @@ def rename_sequence(in_fname,out_fname):
 
 def outgroup_check_fast(in_fpathlist, file_format):
     exist_root = False
-    print(in_fpathlist)
     for in_fname in in_fpathlist:
         if (exist_root): break
         is_gzipped = (in_fname.split(".")[-1] == "gz")
@@ -52,6 +51,7 @@ def outgroup_check_fast(in_fpathlist, file_format):
 
         idx = 0
         for line in origin:
+            print(line)
             if (file_format == "fasta"):
                 if   (line           == ">root\n"): 
                     exist_root = True
