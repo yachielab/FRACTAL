@@ -519,12 +519,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print ("Error: FRACluster.py could not divide sequences into multiple subclades")
             return
         
-        FASTA_LIST = [ infile_path ]
-        if os.path.isfile(infile_path+".aligned"):
-            FASTA_LIST.append(infile_path+".aligned")
+        FASTA_DIR = [ example_infile_fpath+".split" ]
+        if os.path.exists(example_infile_fpath_aligned+".split"):
+            FASTA_DIR.append(example_infile_fpath_aligned+".split")
 
         DIRdict = partition.partition_fasta(
-            FASTA_LIST,
+            FASTA_DIR,
             NUMFILE,
             NODESDIR,
             WD,

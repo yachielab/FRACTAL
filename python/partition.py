@@ -10,6 +10,7 @@ from Bio.SeqRecord import SeqRecord
 import subprocess
 import random
 import gzip
+import partition_fasta
 #from memory_profiler import profile
 
 def rooting(nwkfilepath,newnwkpath,root):
@@ -154,7 +155,7 @@ def get_ancseq(ancseq,ancnum):
     print("no sequence named "+ancname)
 
 def partition_fasta(
-    in_fasta_list,
+    in_fasta_dirlist,
     num_file,
     OUT_DIR,
     wd,
@@ -219,27 +220,28 @@ def partition_fasta(
         shell = True
     )
 
-    for fasta_count, in_fasta in enumerate(in_fasta_list):
+    for fasta_count, splitted_fasta_dir in enumerate(in_fasta_dirlist):
+
+        is_gzipped = (os.listdir(splitted_fasta_dir)[0].split(".")[-1] == "gz")
+        splitted_fasta_list = os.listdir(splitted_fasta_dir)
+        Nfiles_total = len(splitted_fasta_list)
+
+        if (is_gzipped):
+            gzip_command   = "gzip"
+            gunzip_command = "gunzip"
+            gzip_extention = ".gz"
+        else:
+            gzip_command   = "cat"
+            gunzip_command = "cat"
+            gzip_extention = ""
 
         if (file_format=="fasta"):
 
-            if (os.path.exists(in_fasta + ".split") and nodenum > 1):
-                is_gzipped = (in_fasta.split(".")[-1] == "gz")
-                if (is_gzipped):
-                    gzip_command   = "gzip"
-                    gunzip_command = "gunzip"
-                    gzip_extention = ".gz"
-                else:
-                    gzip_command   = "cat"
-                    gunzip_command = "cat"
-                    gzip_extention = ""
+            if (nodenum > 1):
                 
                 dirpath_list = list(sorted([wd] + list(dirpath_set)))
                 
                 # assign splitted files to each node: same as distributed placement
-                splitted_fasta_dir  = in_fasta + ".split"
-                splitted_fasta_list = os.listdir(in_fasta + ".split")
-                Nfiles_total = len(splitted_fasta_list)
                 Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
                 node2filelist = []
                 for i in range(nodenum):
@@ -260,9 +262,10 @@ def partition_fasta(
                         PATH = (PATH.split('\n'))[0]
                         LD_LIBRARY_PATH = (
                             subprocess.\
-                                Popen(  'echo $LD_LIBRARY_PATH', 
-                                        stdout=subprocess.PIPE,
-                                        shell=True
+                                Popen(  
+                                    'echo $LD_LIBRARY_PATH', 
+                                    stdout=subprocess.PIPE,
+                                    shell=True
                                 ).communicate()[0]
                             ).decode('utf-8')
                         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
@@ -271,17 +274,17 @@ def partition_fasta(
                         handle.write("PATH={}\n".format(PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                        inputFASTA_filepathlist = [in_fasta + ".split/" + splitted_file for splitted_file in node2filelist[i] ]
+                        inputFASTA_filepathlist = [splitted_fasta_dir + "/" + splitted_file for splitted_file in node2filelist[i] ]
                         handle.write(
-                            "python3 "                  +
+                            "python3 "                               +
                             codedir + "/python/partition_fasta.py "  +
                             ":".join(inputFASTA_filepathlist) + " "  +
-                            ":".join(dirpath_list)+" "  +
-                            wd + "/seqname_dirpath.txt" +
+                            ":".join(dirpath_list)+" "               +
+                            wd + "/seqname_dirpath.txt"              +
                             "\n"
                             )
                 # wait for all partition jobs finish
-                while(os.listdir(in_fasta + ".split") != []):
+                while(os.listdir(splitted_fasta_dir) != []):
                     None
                 '''
                 # concat all FASTA files for each subclade
@@ -296,8 +299,8 @@ def partition_fasta(
                             shell = True
                         )
                 '''
-                problematic_filenames      = in_fasta.split(".")[0]+".part*"
-                problematic_concatfilename = wd+"/"+in_fasta.split("/")[-1]+".problematic"+gzip_extention
+                problematic_filenames      = wd + "*.part*"
+                problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
                 subprocess.call(
                     "cat "                 +
                     problematic_filenames  +
@@ -308,7 +311,9 @@ def partition_fasta(
                     )
                         
             else:        
-                is_gzipped = (in_fasta.split(".")[-1] == "gz")
+                partition_fasta.partition_fasta(splitted_fasta_list, dirpath_list, wd + "/seqname_dirpath.txt")
+
+                '''
                 ost=[]
                 if (is_gzipped):
                     for i in range(num_mono):
@@ -340,7 +345,8 @@ def partition_fasta(
                     st.close()
                 para.close()
                 in_handle.close()
-        elif(file_format=="edit"):
+                '''
+        elif(file_format=="edit"): # TO DO
             ost=[]
             for i in range(num_mono):
                 ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
