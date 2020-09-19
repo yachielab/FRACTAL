@@ -61,9 +61,8 @@ def outgroup_check_fast(in_fpathlist, file_format):
                         while line[0] is not '>':
                             root_handle.write(line)
                             line = origin.readline()
+                            if(len(line)==0): line = origin.readline()
                     break
-                elif (line[0]== '>'): 
-                    idx += 1
             if (file_format == "edit"):
                 if   (line.split()[0]== "root"   ): 
                     exist_root = True
