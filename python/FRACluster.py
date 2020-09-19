@@ -575,7 +575,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         infile_path+".gz.aligned",
         infile_path+".gz.aligned.tree",
         "seqname_dirpath.txt",
-        "INPUT.part*",
+        WD+"/INPUT.part*",
         "root.fa"
         ]
     
