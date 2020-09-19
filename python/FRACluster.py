@@ -20,6 +20,7 @@ import error_process
 import math
 import time
 import random
+import copy
 
 def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
@@ -40,7 +41,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_namelist              = os.listdir(WD)
     infile_pathlist              = [WD+"/"+name for name in infile_namelist]
     fpath2seqcount               = rename_sequence.count_sequence_fast(infile_pathlist)
-    for fpath in fpath2seqcount.keys():
+    for fpath in copy.deepcopy(list(fpath2seqcount.keys())):
         if fpath2seqcount[fpath] == 0:
             os.remove(fpath)
             fpath2seqcount.pop(fpath)
