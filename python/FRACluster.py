@@ -230,6 +230,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     file_pathlist_to_be_splitted = infile_pathlist_aligned
                 else:
                     file_pathlist_to_be_splitted = infile_pathlist
+                
+                print(file_pathlist_to_be_splitted)
 
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
                 if not os.path.exists(splitted_dirpath):
