@@ -43,6 +43,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     for fpath in fpath2seqcount.keys():
         if fpath2seqcount[fpath] == 0:
             os.remove(fpath)
+            fpath2seqcount.pop(fpath)
     ###########################
 
     ### get input file name ###
@@ -244,13 +245,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                                 fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = Nseq_per_file
                             else:
                                 fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path] % Nseq_per_file
+                        fpath2seqcount.pop(file_path)
                     for file_path in file_pathlist_to_be_splitted[1:]:
                         subprocess.call(
                             "mv " + file_path+".split/* " + splitted_dirpath + "; "
                             "rm -r " + file_path+".split",
                             shell=True
                         )
-                print(fpath2seqcount)
+                print("before", fpath2seqcount)
             else:
                 os.mkdir(example_infile_fpath+".split")
                 for infile_path in infile_pathlist:
@@ -264,7 +266,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+".fa"+gzip_extention
                 shutil.move(splitted_fpath, renamed_filepath)
                 fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
-            print(fpath2seqcount)
+            print("after", fpath2seqcount)
 
             #################
             #random sampling#
