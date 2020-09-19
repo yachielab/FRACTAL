@@ -81,6 +81,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             refseq             ,
             shell=True
         ) 
+        os.mkdir(alignment_outdir)
 
     # sequential mode
     if(nodenum<=1):
@@ -145,7 +146,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " -T "+str(threadnum)  ,
                         shell=True
                     )
-                os.chdir(outdir)
                 jplace_parse.parse_jplace(
                     outdir+"/"+filename+"/epa_result.jplace",
                     "epa-ng",
@@ -194,7 +194,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 )
             # If HMM alignments were conducted
             if(ALIGNED=="unaligned"):
-                os.mkdir(alignment_outdir)
                 subprocess.call(
                     "cat " + outdir+"/"+filename+"/ref_query.fa.query" + gzipcommand + ">" + 
                     alignment_outdir+"/"+filename+".aligned"+extention,
@@ -204,6 +203,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     outdir+"/"+filename+"/ref_query.fa.ref", 
                     WD+"/SUBSAMPLE.fa.aligned"
                     )
+        subprocess.call(
+            "mv "  + "$(ls "+outdir+"/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
+            "cat " + outdir + "/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out",
+            shell=True
+            )
 
     else: # in distributed computing mode
         dname=WD.split("/").pop()
@@ -332,6 +336,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " -q "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.query" +
                                 " -w "+outdir+"/EPANG"+str(i)+"/"+filename                       +
                                 " -T "+str(threadnum)+"\n"
+                                )
+                            subprocess.call(
+                                "cat " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" + gzipcommand +
+                                ">" + 
+                                alignment_outdir+"/"+filename+".aligned"+extention,
+                                shell = True
                                 )
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
