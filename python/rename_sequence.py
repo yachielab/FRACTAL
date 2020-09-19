@@ -176,7 +176,7 @@ def random_sampling_fasta( # fasta only
                 SeqIO.write(record, ost, 'fasta')
                 seqname_list.append(record.name)
         for fpath in sorted(list(fpath2localidx.keys())):
-            with open(fpath, 'r') as ist:
+            with almighty_open(fpath, 'r') as ist:
                 local_idx_list = fpath2localidx[fpath]
                 records        = SeqIO.parse(ist, 'fasta')
                 i = 0
