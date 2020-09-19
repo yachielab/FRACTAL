@@ -600,11 +600,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #"TREE"
         ]
 
-    
+    '''
     subprocess.call(
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
+    '''
     
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
