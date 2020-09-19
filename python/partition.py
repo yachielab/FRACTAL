@@ -312,40 +312,17 @@ def partition_fasta(
                         
             else:        
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
+                problematic_filenames      = wd + "/*"
+                problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
+                subprocess.call(
+                    "cat "                 +
+                    problematic_filenames  +
+                    ">> " + problematic_concatfilename + ";"+
+                    "rm " + problematic_filenames           +
+                    "",
+                    shell = True
+                    )
 
-                '''
-                ost=[]
-                if (is_gzipped):
-                    for i in range(num_mono):
-                        ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
-                    in_handle = gzip.open(in_fasta, 'rt')
-                    para   = gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
-                else:
-                    for i in range(num_mono):
-                        ost.append(open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'w'))
-                    in_handle = open(in_fasta, 'r')
-                    para   = open(wd+"/"+in_fasta.split("/")[-1]+".problematic",'w')
-
-            
-                record = SeqIO.parse(in_handle, "fasta")
-                i=0
-                for s in record:
-                    if(s.id=="root"):
-                        for st in ost: #ROOTING=="Origin"
-                            SeqIO.write(s, st, "fasta")
-                    elif(js["partition"][s.id]=="paraphyletic"):
-                        SeqIO.write(s, para, "fasta")
-                    else:
-                        l = NUMdict[str(js["partition"][s.id])]
-                        if( fasta_count == 0 ):
-                            DIRdict['{'+str(js["partition"][s.id])+'}'][1]+=1
-                        SeqIO.write(s, ost[l], "fasta")
-                    i += 1
-                for st in ost:
-                    st.close()
-                para.close()
-                in_handle.close()
-                '''
         elif(file_format=="edit"): # TO DO
             ost=[]
             for i in range(num_mono):
