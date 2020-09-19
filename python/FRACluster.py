@@ -201,8 +201,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             ### get input file name2###
             iterationfile_path         = WD + "/ITERATION.fa"                    + gzip_extention
-            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          + gzip_extention
-            renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" + gzip_extention
+            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          
+            renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" 
             ###########################
         
             ###########################
