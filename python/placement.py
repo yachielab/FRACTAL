@@ -188,10 +188,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     seed,
                     careful=careful
                 )
-            os.rename(
-                outdir+"/"+filename+"/edge_to_seqname.out",
-                outdir+"/"+filename+"/edge_to_seqname_all.out"
-                )
             # If HMM alignments were conducted
             if(ALIGNED=="unaligned"):
                 subprocess.call(
