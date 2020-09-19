@@ -224,6 +224,7 @@ def partition_fasta(
 
         is_gzipped = (os.listdir(splitted_fasta_dir)[0].split(".")[-1] == "gz")
         splitted_fasta_list = os.listdir(splitted_fasta_dir)
+        splitted_fpath_list = [splitted_fasta_dir + "/" + splitted_fasta for splitted_fasta in splitted_fasta_list]
         Nfiles_total = len(splitted_fasta_list)
         dirpath_list = list(sorted([wd] + list(dirpath_set)))
 
