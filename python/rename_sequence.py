@@ -51,11 +51,11 @@ def outgroup_check_fast(in_fpathlist, file_format):
 
         idx = 0
         for line in origin:
-            print(line)
             if (file_format == "fasta"):
-                if   (line           == ">root\n"): 
+                if   (line  == ">root\n"):
+                    print(line) 
                     exist_root = True
-                    root_fpath = in_fname.split("/")[-1] + "/root.fa"
+                    root_fpath = "/".join(in_fname.split("/")[:-1]) + "/root.fa"
                     with open(root_fpath, 'w') as root_handle:
                         while line[0] is not '>':
                             root_handle.write(line)
@@ -67,7 +67,7 @@ def outgroup_check_fast(in_fpathlist, file_format):
                 if   (line.split()[0]== "root"   ): 
                     exist_root = True
                     root_fpath = in_fname.split("/")[-1] + "/root.edit"
-                    with open("root.edit", 'w') as root_handle:
+                    with open(root_fpath, 'w') as root_handle:
                         root_handle.write(line)
                     break
                 else: 
