@@ -64,7 +64,7 @@ def outgroup_check_fast(in_fpathlist, file_format):
                             while(len(line)==0): line = origin.readline()
                     break
             if (file_format == "edit"):
-                if   (line.split()[0]== "root"   ): 
+                if   (line.split()[0]== "root"): 
                     exist_root = True
                     root_fpath = in_fname.split("/")[-1] + "/root.edit"
                     with open(root_fpath, 'w') as root_handle:

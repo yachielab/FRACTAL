@@ -51,7 +51,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     example_infile_fpath         = infile_pathlist[0]
     infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
     example_infile_fpath_aligned = infile_pathlist_aligned[0]
-    iterationfile_path="unspecified"
+    iterationfile_path           = "unspecified"
     ###########################
     
     ## check input file property ##
@@ -114,7 +114,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if len(infile_pathlist)>1:
             concat_infpath = WD+"/INPUT.fa"+gzip_extention
             subprocess.call(
-                "cat "+" ".join(infile_pathlist)+"|"+gzip_command+" > "+concat_infpath,
+                "cat "+" ".join(infile_pathlist) +" > "+concat_infpath,
                 shell=True
             )
         else:
