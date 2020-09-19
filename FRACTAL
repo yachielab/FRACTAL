@@ -34,7 +34,7 @@ CAREFUL_PLACEMENT=1
 GZIP_INTERMEDIATE="FALSE"
 
 function version {
-  echo "######## FRACTAL v2.4.1 ########"
+  echo "######## FRACTAL v2.5.0 ########"
 }
 
 function usage {
