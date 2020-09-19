@@ -580,7 +580,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
     
     dirnames = [
-        infile_path+gzip_extention+".split",
+        infile_path+".split",
         "EPANG",
         "PARAM",
         "PARTITION",
