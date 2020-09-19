@@ -165,7 +165,7 @@ def random_sampling_fasta( # fasta only
             idx += 1
     
     # sequence extraction
-    seq_set      = {}
+    seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
         # write root sequence
