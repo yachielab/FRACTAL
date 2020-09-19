@@ -246,8 +246,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             shell=True
                         )
             else:
-                os.mkdir(infile_pathlist+".split")
-                shutil.move(infile_pathlist, infile_pathlist+".split")
+                os.mkdir(example_infile_fpath+".split")
+                for infile_path in infile_pathlist:
+                    shutil.move(infile_path, example_infile_fpath+".split")
 
             #################
             #random sampling#
