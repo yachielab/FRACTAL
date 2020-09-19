@@ -589,11 +589,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         ]
 
     
-    
-    subprocess.call(
-        "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
-        shell = True
-    )
+    for path in filenames+dirnames:
+        subprocess.call(
+            "rm -r " + " ".join() + " &> /dev/null",
+            shell = True
+        )
     
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
