@@ -65,129 +65,144 @@ def decompose_edit2(in_file, seq_count, n_per_file = 10000):
         ohandle[i].close()
 
 def distributed_placement(  WD, EPANG, refseq, reftree, model, 
-                            query, outdir, threadnum, nodenum, 
+                            query_dir, outdir, threadnum, nodenum, 
                             codedir, seq_count, ML_or_MP, RAXMLSEQ, 
                             ALIGNED, seed, careful=1, hmm_aligner="", hmm_profiler="",
-                            file_format = "fasta", edit_list = None):
+                            file_format = "fasta", edit_list = None, alignment_outdir = None):
+    
+    splitted_fasta_list = os.listdir(query_dir)
+
+    # Profile HMM
+    if(ALIGNED=="unaligned"): # for unaligned sequences
+        # Build HMM profile
+        subprocess.call(
+            hmm_profiler + " " + 
+            refseq+".hmm "     +
+            refseq             ,
+            shell=True
+        ) 
+
+    # sequential mode
     if(nodenum<=1):
 
-        if (file_format == "edit"):
-            manage_edits.edit2fasta(query, edit_list)
-            query = query + ".fa.gz"
+        for filename in splitted_fasta_list:
 
-        if(ML_or_MP=="ML"): 
-            if(ALIGNED=="unaligned"): # for unaligned sequences
-                # Build HMM profile
-                subprocess.call(
-                    hmm_profiler + " " + 
-                    refseq+".hmm "     +
-                    refseq             ,
-                    shell=True
-                ) 
-                # One-by-one HMM alignment
-                subprocess.call(
-                    hmm_aligner+" "        +
-                    "--outformat afa "     +
-                    "--mapali "+refseq+" " +
-                    "--trim "              + # for trimming insersions
-                    refseq+".hmm "         +
-                    query +" "             +
-                    "| sed 's/\./-/g'> "   +
-                    outdir+"/ref_query.fa"
-                    ,shell=True
-                )
-                divide_ref_and_query.\
-                    divide_fasta_into_ref_and_query(
-                        outdir+"/ref_query.fa", 
-                        refseq
+            query =  query_dir + "/" + filename
+            os.mkdir(outdir    + "/" + filename)
+            if query.split(".")[-1] == "gz":
+                is_gzipped = True
+                extention  = ".gz"
+                gzipcommand= "|gzip"
+            else:
+                is_gzipped = True
+                extention  = ".gz"
+                gzipcommand= ""
+
+            if (file_format == "edit"):
+                manage_edits.edit2fasta(query, edit_list) # TO DO
+                query_dir = query + ".fa.gz"
+
+            if(ML_or_MP=="ML"): 
+                if(ALIGNED=="unaligned"):
+                    # One-by-one HMM alignment
+                    subprocess.call(
+                        hmm_aligner+" "        +
+                        "--outformat afa "     +
+                        "--mapali "+refseq+" " +
+                        "--trim "              + # for trimming insersions
+                        refseq+".hmm "         +
+                        query +" "             +
+                        "| sed 's/\./-/g'> "   +
+                        outdir+"/"+filename+"/ref_query.fa"
+                        ,shell=True
                     )
+                    divide_ref_and_query.\
+                        divide_fasta_into_ref_and_query(
+                            outdir+"/"+filename+"/ref_query.fa", 
+                            refseq
+                        )
+                    subprocess.call(
+                        EPANG                               +
+                        " --redo"                           +
+                        " -s "+outdir+"/ref_query.fa.ref"   +
+                        " -t "+reftree                      +
+                        " --model "+model                   +
+                        " -q "+outdir+"/"+filename+"/ref_query.fa.query" +
+                        " -w "+outdir+"/"+filename                       +
+                        " -T "+str(threadnum)               ,
+                        shell=True
+                    )
+                elif(ALIGNED=="aligned"): # for aligned sequences
+                    subprocess.call(
+                        EPANG                  +
+                        " --redo"              +
+                        " -s "+refseq          +
+                        " -t "+reftree         +
+                        " --model "+model      +
+                        " -q "+query           +
+                        " -w "+outdir+"/"+filename         +
+                        " -T "+str(threadnum)  ,
+                        shell=True
+                    )
+                os.chdir(outdir)
+                jplace_parse.parse_jplace(
+                    outdir+"/"+filename+"/epa_result.jplace",
+                    "epa-ng",
+                    seed,
+                    careful=careful
+                    )
+                
+            if(ML_or_MP=="MP"): 
+                if(ALIGNED=="unaligned"): # for unaligned sequences
+                    # One-by-one HMM alignment
+                    subprocess.call(
+                        hmm_aligner                +
+                        " --outformat afa"         +
+                        " --mapali "+refseq+" "    +
+                        refseq+".hmm "             +
+                        query                      +
+                        " | sed 's/\./N/g'> "      +
+                        outdir+"/"+filename+"/ref_query.fa"  ,
+                        shell=True
+                    )  
+                elif(ALIGNED=="aligned"): # for aligned sequences
+                    subprocess.call(
+                        "cat "+refseq+" "            +
+                        query                        +
+                        " | gunzip > "+outdir+"/"+filename+"/ref_query.fa" ,
+                        shell=True
+                    )
+                os.chdir(outdir)
                 subprocess.call(
-                    EPANG                               +
-                    " --redo"                           +
-                    " -s "+outdir+"/ref_query.fa.ref"   +
-                    " -t "+reftree                      +
-                    " --model "+model                   +
-                    " -q "+outdir+"/ref_query.fa.query" +
-                    " -w "+outdir                       +
-                    " -T "+str(threadnum)               ,
+                    RAXMLSEQ                      +
+                    " -n epa_result"              +
+                    " -f y -m GTRCAT"             +
+                    " -s "+outdir+"/"+filename+"/ref_query.fa" +
+                    " -t "+reftree                ,
                     shell=True
                 )
-            elif(ALIGNED=="aligned"): # for aligned sequences
+                jplace_parse.parse_jplace(
+                    outdir+"/"+filename+"/RAxML_portableTree.epa_result.jplace",
+                    "epa_MP",
+                    seed,
+                    careful=careful
+                )
+            os.rename(
+                outdir+"/"+filename+"/edge_to_seqname.out",
+                outdir+"/"+filename+"/edge_to_seqname_all.out"
+                )
+            # If HMM alignments were conducted
+            if(ALIGNED=="unaligned"):
+                os.mkdir(alignment_outdir)
                 subprocess.call(
-                    EPANG                  +
-                    " --redo"              +
-                    " -s "+refseq          +
-                    " -t "+reftree         +
-                    " --model "+model      +
-                    " -q "+query           +
-                    " -w "+outdir          +
-                    " -T "+str(threadnum)  ,
-                    shell=True
-                )
-            os.chdir(outdir)
-            jplace_parse.parse_jplace(
-                outdir+"/epa_result.jplace",
-                "epa-ng",
-                seed,
-                careful=careful
-                )
-            
-        if(ML_or_MP=="MP"): 
-            if(ALIGNED=="unaligned"): # for unaligned sequences
-                # Build HMM profile
-                subprocess.call(
-                    hmm_profiler+" "  +
-                    refseq+".hmm "    +
-                    refseq            ,
-                    shell=True
-                )
-                # One-by-one HMM alignment
-                subprocess.call(
-                    hmm_aligner                +
-                    " --outformat afa"         +
-                    " --mapali "+refseq+" "    +
-                    refseq+".hmm "             +
-                    query                      +
-                    " | sed 's/\./N/g'> "      +
-                    outdir+"/ref_query.fa"  ,
-                    shell=True
-                )  
-            elif(ALIGNED=="aligned"): # for aligned sequences
-                subprocess.call(
-                    "cat "+refseq+" "            +
-                    query                        +
-                    " | gunzip > "+outdir+"/ref_query.fa" ,
-                    shell=True
-                )
-            os.chdir(outdir)
-            subprocess.call(
-                RAXMLSEQ                      +
-                " -n epa_result"              +
-                " -f y -m GTRCAT"             +
-                " -s "+outdir+"/ref_query.fa" +
-                " -t "+reftree                ,
-                shell=True
-            )
-            jplace_parse.parse_jplace(
-                outdir+"/RAxML_portableTree.epa_result.jplace",
-                "epa_MP",
-                seed,
-                careful=careful
-            )
-        os.rename(
-            outdir+"/edge_to_seqname.out",
-            outdir+"/edge_to_seqname_all.out"
-            )
-        # If HMM alignments were conducted
-        if(ALIGNED=="unaligned"):
-            shutil.move(
-                outdir+"/ref_query.fa.query", 
-                WD+"/INPUT.fa.aligned"
-                )
-            shutil.move(
-                outdir+"/ref_query.fa.ref", 
-                WD+"/SUBSAMPLE.fa.aligned"
-                )
+                    "cat " + outdir+"/"+filename+"/ref_query.fa.query" + gzipcommand + ">" + 
+                    alignment_outdir+"/"+filename+".aligned"+extention,
+                    shell = True
+                    )
+                shutil.move(
+                    outdir+"/"+filename+"/ref_query.fa.ref", 
+                    WD+"/SUBSAMPLE.fa.aligned"
+                    )
 
     else: # in distributed computing mode
         dname=WD.split("/").pop()
@@ -206,7 +221,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     )
         elif ( file_format == "edit" ):
             moved=outdir+"/query.edit.gz"
-            shutil.move(query, moved)
+            shutil.move(query, moved) # TODO
             decompose_edit(
                 moved,
                 nodenum, 
@@ -218,22 +233,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
-        
-        # judge splitted or not
-        splitted = False
-        if (os.path.exists(query + ".split")):
-            splitted_files_dir  = query + ".split/"
-            splitted_fasta_list = os.listdir(splitted_files_dir)
-            splitted = True
 
-        if (splitted):
-            Nfiles_total = len(splitted_fasta_list)
-            Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
-            node2filelist = []
-            for i in range(nodenum):
-                node2filelist.append([])
-            for j, file_name in enumerate(splitted_fasta_list):
-                node2filelist[j%nodenum].append(file_name)
+        Nfiles_total = len(splitted_fasta_list)
+        Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+        node2filelist = []
+        for i in range(nodenum):
+            node2filelist.append([])
+        for j, file_name in enumerate(splitted_fasta_list):
+            node2filelist[j%nodenum].append(file_name)
 
         #distribution start
         for i in range(nodenum):

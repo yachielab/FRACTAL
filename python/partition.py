@@ -283,6 +283,7 @@ def partition_fasta(
                 # wait for all partition jobs finish
                 while(os.listdir(in_fasta + ".split") != []):
                     None
+                '''
                 # concat all FASTA files for each subclade
                 for subclade_dir in dirpath_list:
                     if (subclade_dir != wd):
@@ -294,6 +295,7 @@ def partition_fasta(
                             "",
                             shell = True
                         )
+                '''
                 problematic_filenames      = in_fasta.split(".")[0]+".part*"
                 problematic_concatfilename = wd+"/"+in_fasta.split("/")[-1]+".problematic"+gzip_extention
                 subprocess.call(

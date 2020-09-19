@@ -36,20 +36,29 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     SPLIT_THRESHOLD            = 10000
     ###########################
 
+    # remove empty input files#
+    for infile_name in os.listdir(WD):
+        if (os.path.getsize(WD+"/"+infile_name) == 0):
+            os.remove(WD+"/"+infile_name)
+    ###########################
+
     ### get input file name ###
-    infile_name = os.listdir(WD)[0]
-    infile_path = WD+"/"+infile_name
-    infile_aligned_path = WD+"/"+".".join(infile_name.split(".")[:-1]+["aligned",infile_name.split(".")[-1]])
+    infile_namelist              = os.listdir(WD)
+    infile_pathlist              = [WD+"/"+name for name in infile_namelist]
+    example_infile_fpath         = infile_pathlist[0]
+    infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
+    example_infile_fpath_aligned = infile_pathlist_aligned[0]
     iterationfile_path="unspecified"
     ###########################
     
     ## check input file property ##
     try:
-        root_idx = rename_sequence.outgroup_check_fast(infile_path, "fasta")
+        root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
     except:
         error_process.no_root(); exit(1)
-    seq_count                 = rename_sequence.count_sequence_fast(infile_path)
-    is_gzipped                = (infile_path.split(".")[-1] == "gz")
+    fpath2seqcount            = rename_sequence.count_sequence_fast(infile_pathlist)
+    seq_count                 = sum(fpath2seqcount.values())
+    is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
     if (is_gzipped):
         gzip_extention        = ".gz"
         gzip_command          = "gzip"
@@ -60,6 +69,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
     # check if aligned
+    '''
     if (ALIGNED=="unaligned"):
 
         if(os.path.isfile(infile_aligned_path)):
@@ -68,11 +78,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 print(WD,seq_count, seq_count_when_aligned, "alignment needed!!")
 
                 os.remove(infile_aligned_path)
-                INPUT_FA               = infile_path
                 seq_count_when_aligned = seq_count
                 
             else:
-                INPUT_FA = infile_aligned_path
                 ALIGNED  = "aligned"
         else:
             print(
@@ -81,10 +89,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 "#sequence in the last alignment:",seq_count_when_aligned,
                 "alignment needed!!"
                 )
-            INPUT_FA               = infile_path
             seq_count_when_aligned = seq_count
     elif (ALIGNED=="aligned"):
         INPUT_FA               = infile_path
+    '''
     ################################
 
     ######## parameter ########
@@ -104,8 +112,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # call direct tree reconstruction
 
     if(seq_count<=THRESHOLD):
+        concat_infpath = WD+"/INPUT.fa"+gzip_extention
+        subprocess.call(
+            "cat "+" ".join(infile_pathlist)+"|"+gzip_command+" > "+concat_infpath,
+            shell=True
+        )
         if(seq_count<4):
-            partition.tiny_tree(INPUT_FA,"TERMINAL.nwk")
+            partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
             print("seq_count < 4!")
         else:
             os.mkdir(    "TREE")
@@ -114,7 +127,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -n "  + str(tree_thread_num)       +
                             " -m "  + TREEMETHOD                 +
                             " -a "  + ALIGNED                    +
-                            " -f "  + INPUT_FA                   +
+                            " -f "  + concat_infpath             +
                             " -c "  + CODEDIR                    +
                             " -w "  + WD+"/TREE"                 +
                             " -p \""+ str(OPTION)+"\""           +
@@ -123,13 +136,19 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -s "  + ALIGNER                    ,
                             shell   = True                       )
             partition.rooting_and_remove(
-                INPUT_FA+".aligned.tree"     ,
-                WD+"/TERMINAL.nwk"           ,
+                concat_infpath+".aligned.tree" ,
+                WD+"/TERMINAL.nwk"             ,
                 "root"
             )
     
     # call fractal FRACTAL # don't forget to change!!!!!
-    elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT): 
+    elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT):
+        # To Do: remove concatenation
+        concat_infpath = WD+"/INPUT.fa"+gzip_extention
+        subprocess.call(
+            "cat "+" ".join(infile_pathlist)+"|"+gzip_command+" > "+concat_infpath,
+            shell=True
+        ) 
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
@@ -138,7 +157,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         else:
             gzip_option = ""
         FRACTAL_COMMAND = "FRACTAL"                         + \
-                          " -i " + INPUT_FA                 + \
+                          " -i " + concat_infpath           + \
                           " -k " + str(SUBSAMPLE_SIZE)      + \
                           " -b " + MODEL                    + \
                           " -p " + ML_or_MP                 + \
@@ -182,63 +201,82 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          + gzip_extention
             renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" + gzip_extention
             ###########################
-
-            ################
-            # split or not #
-            ################
-            split = seq_count > SPLIT_THRESHOLD or nodenum > 1
-
-            #################
-            #random sampling#
-            #################
-            if(os.path.isfile(infile_aligned_path)):
-                INPUT_FA = infile_aligned_path
-                ALIGNED  = "aligned"
-
+        
+            ###########################
+            # renew several directory #
+            ###########################
             if (i>1):
                 shutil.rmtree ("EPANG")
                 os    .mkdir  ("EPANG")
                 shutil.rmtree ("TREE")
                 os    .mkdir  ("TREE")
 
-            if(os.path.isfile(iterationfile_path)):
-                if (split): # if split
-                    if os.path.isfile(infile_aligned_path) and not os.path.exists(infile_aligned_path+".split"):
-                        Nseq_per_file = min(10000, seq_count//max(nodenum,1))
-                        subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+infile_aligned_path+" &> /dev/null", shell=True)
-                sampled_seq_name_list = \
-                    rename_sequence.random_sampling(
-                        iterationfile_path            ,
-                        subsamplefile_path            ,
-                        SUBSAMPLE_SIZE                ,
-                        seed=SEED
-                    )
-            else:
-                # decompose FASTA
-                if (nodenum > 1):
-                    Nseq_per_file = min(10000, seq_count//max(nodenum,1))
-                    subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+INPUT_FA, shell=True)
-                    # subsampling
-                    sampled_seq_name_list = \
-                        rename_sequence.random_sampling_from_splitted(
-                            INPUT_FA+".split"          ,
-                            subsamplefile_path         ,
-                            SUBSAMPLE_SIZE             ,
-                            SEED                       ,
-                            Nseq_per_file              ,
-                            root_idx                   ,
-                            n = seq_count              ,
-                            is_gzipped = is_gzipped
-                        )
+            ############
+            # set mode #   
+            ############
+            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
+            if(AFTER_ALIGNMENT):
+                ALIGNED         = "aligned"
+
+            ################
+            #  file split  #
+            ################
+            split = nodenum > 1
+            Nseq_per_file = min(SPLIT_THRESHOLD, seq_count//max(nodenum,1))
+            if (split):
+                if (AFTER_ALIGNMENT):
+                    file_pathlist_to_be_splitted = infile_pathlist_aligned
                 else:
-                    # subsampling
-                    sampled_seq_name_list = \
-                        rename_sequence.random_sampling(
-                            INPUT_FA                   ,
-                            subsamplefile_path         ,
-                            SUBSAMPLE_SIZE             ,
-                            seed=SEED                  ,
-                            n = seq_count
+                    file_pathlist_to_be_splitted = infile_pathlist
+
+                splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
+                if not os.path.exists(splitted_dirpath):
+                    for j, file_path in enumerate(file_pathlist_to_be_splitted):
+                        subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null", shell=True)
+                        splitted_fnamelist = sorted(os.listdir(file_path+".split"))
+                        for k, splitted_fname in enumerate(splitted_fnamelist):
+                            if (k < len(splitted_fnamelist)-1):
+                                fpath2seqcount[file_pathlist_to_be_splitted[0]+".split/" + splitted_fname] = Nseq_per_file
+                            else:
+                                fpath2seqcount[file_pathlist_to_be_splitted[0]+".split/" + splitted_fname] = seq_count % Nseq_per_file
+                    for file_path in file_pathlist_to_be_splitted[1:]:
+                        subprocess.call(
+                            "mv " + file_path+".split/* " + splitted_dirpath +
+                            "rm -r " + file_path+".split",
+                            shell=True
+                        )
+            else:
+                os.mkdir(infile_pathlist+".split")
+                shutil.move(infile_pathlist, infile_pathlist+".split")
+
+            #################
+            #random sampling#
+            #################
+
+            if (os.path.exists(iterationfile_path)):
+                sampled_seq_name_list = \
+                    rename_sequence.random_sampling_fasta( # fasta only
+                        in_dirpath = None,
+                        out_fname  = subsamplefile_path,
+                        subsample_size = SUBSAMPLE_SIZE,
+                        fpath2seqcount = None,
+                        root_fpath     = root_fpath,
+                        total_seqcount = None, 
+                        file_format    = "fasta",
+                        in_fpath       = iterationfile_path
+                        )
+            else:
+                # subsampling
+                sampled_seq_name_list = \
+                    rename_sequence.random_sampling_fasta( # fasta only
+                        in_dirpath = splitted_dirpath,
+                        out_fname  = subsamplefile_path,
+                        subsample_size = SUBSAMPLE_SIZE,
+                        fpath2seqcount = fpath2seqcount,
+                        root_fpath     = root_fpath,
+                        total_seqcount = seq_count, 
+                        file_format    = "fasta",
+                        in_fpath       = None
                         )
             
             #################
@@ -356,16 +394,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.chdir(WD)
 
                 # select sequence file to place
-                if(os.path.isfile(infile_path+".aligned")):
-                    QUERY_FA = infile_path+".aligned"
+                if(os.path.isfile(example_infile_fpath_aligned+".split")):
+                    QUERY_FA_DIR          = example_infile_fpath_aligned+".split"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
-                    QUERY_FA = infile_path
+                    QUERY_FA_DIR          = example_infile_fpath+".split"
                     ALIGNED_FOR_PLACEMENT = ALIGNED
                 
                 if (ALIGNED=="aligned"):
                     refseq = renamed_subsamplefile_path
-
                 else:
                     refseq = renamed_subsamplefile_path+".aligned"
 
@@ -376,7 +413,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     refseq                                              , 
                     WD+"/PARAM/RAxML_result.PARAM_"+str(i)              , 
                     WD+"/PARAM/RAxML_info.PARAM_"+str(i)                , 
-                    QUERY_FA                                            , 
+                    QUERY_FA_DIR                                        , 
                     WD+"/EPANG"                                         , 
                     THREAD_NUM                                          , 
                     nodenum                                             ,
@@ -386,6 +423,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     RAXMLSEQ                                            ,
                     ALIGNED_FOR_PLACEMENT                               ,
                     SEED                                                ,
+                    alignment_outdir = example_infile_fpath_aligned+".split",
                     careful=careful                                     ,
                     hmm_aligner=HMM_ALIGNER                             ,
                     hmm_profiler=HMM_PROFILER
@@ -535,7 +573,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #"TREE"
         ]
 
-    '''
+    
     for filename in filenames:
         try:
             os.remove(filename)
@@ -547,7 +585,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             shutil.rmtree(dirname)
         except:
             None
-    '''
+    
         
     
     elapsed_time=time.time()-start
