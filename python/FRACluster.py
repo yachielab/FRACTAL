@@ -250,6 +250,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             "rm -r " + file_path+".split",
                             shell=True
                         )
+                print(fpath2seqcount)
             else:
                 os.mkdir(example_infile_fpath+".split")
                 for infile_path in infile_pathlist:
@@ -263,6 +264,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+".fa"+gzip_extention
                 shutil.move(splitted_fpath, renamed_filepath)
                 fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
+            print(fpath2seqcount)
 
             #################
             #random sampling#
