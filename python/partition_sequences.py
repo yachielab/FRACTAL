@@ -23,7 +23,7 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
             outhandle = dirpath2handle[seqname2dirpath[record.id]]
             SeqIO.write(record, outhandle, "fasta")
 
-def partition_fasta(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2dir_filepath):
+def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2dir_filepath):
 
     seqname_set = set()
     for inputFASTA_filepath in inputFASTA_filepathlist:
@@ -73,7 +73,7 @@ def partition_fasta(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2di
         os.remove(inputFASTA_filepath)
 
 if __name__ == "__main__":
-    partition_fasta(
+    partition_sequences(
         inputFASTA_filepathlist = sys.argv[1].split(":"), 
         outputFASTA_dirpathlist = sys.argv[2].split(":"), 
         seqname2dir_filepath    = sys.argv[3]

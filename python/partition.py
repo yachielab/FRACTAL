@@ -10,7 +10,7 @@ from Bio.SeqRecord import SeqRecord
 import subprocess
 import random
 import gzip
-import partition_fasta
+import partition_sequences
 #from memory_profiler import profile
 
 def rooting(nwkfilepath,newnwkpath,root):
@@ -277,7 +277,7 @@ def partition_fasta(
                         inputFASTA_filepathlist = [splitted_fasta_dir + "/" + splitted_file for splitted_file in node2filelist[i] ]
                         handle.write(
                             "python3 "                               +
-                            codedir + "/python/partition_fasta.py "  +
+                            codedir + "/python/partition_sequences.py "  +
                             ":".join(inputFASTA_filepathlist) + " "  +
                             ":".join(dirpath_list)+" "               +
                             wd + "/seqname_dirpath.txt"              +
@@ -311,7 +311,7 @@ def partition_fasta(
                     )
                         
             else:        
-                partition_fasta.partition_fasta(splitted_fasta_list, dirpath_list, wd + "/seqname_dirpath.txt")
+                partition_sequences.partition_fasta(splitted_fasta_list, dirpath_list, wd + "/seqname_dirpath.txt")
 
                 '''
                 ost=[]
