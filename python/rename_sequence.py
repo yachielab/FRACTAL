@@ -50,20 +50,16 @@ def outgroup_check_fast(in_fpathlist, file_format):
             origin = open(in_fname, 'r') 
 
         idx = 0
-        for line in origin:
-            if (file_format == "fasta"):
-                if   (line  == ">root\n"):
+        if (file_format == "fasta"):
+            records = SeqIO.parse(origin, file_format)
+            for record in records:
+                if (record.name  == "root"):
                     exist_root = True
                     root_fpath = "/".join(in_fname.split("/")[:-1]) + "/root.fa"
-                    with open(root_fpath, 'w') as root_handle:
-                        root_handle.write(line)
-                        line = origin.readline()
-                        while line[0] is not '>':
-                            root_handle.write(line)
-                            line = origin.readline()
-                            while(len(line)==0): line = origin.readline()
+                    SeqIO.write(record, root_fpath, 'fasta')
                     break
-            if (file_format == "edit"):
+        elif (file_format == "edit"):
+            for line in origin:
                 if   (line.split()[0]== "root"): 
                     exist_root = True
                     root_fpath = in_fname.split("/")[-1] + "/root.edit"
