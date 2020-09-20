@@ -196,7 +196,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 
         while i<MAX_ITERATION:
-            print(os.listdir(infile_pathlist_aligned[0]+".split"))
+            try: print(os.listdir(infile_pathlist_aligned[0]+".split"))
+            except: None
             
             os.chdir(WD)
 
