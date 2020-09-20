@@ -196,7 +196,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 
         while i<MAX_ITERATION:
-            try: print(os.listdir(infile_pathlist[0]+".split"))
+            try: print(i, "line 119", len(os.listdir(infile_pathlist[0]+".split")))
             except: None
             
             os.chdir(WD)
@@ -235,6 +235,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     file_pathlist_to_be_splitted = infile_pathlist
 
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
+                print(i, "line 238", len(os.listdir(splitted_dirpath)))
                 if not os.path.exists(splitted_dirpath):
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
                         subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
@@ -266,7 +267,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             
             # rename
             
-            #print("before", fpath2seqcount)
+            print(i, "line 269", len(os.listdir(splitted_dirpath)))
             for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
                 splitted_fpath   = splitted_dirpath+"/"+splitted_fname
                 renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+".fa"+gzip_extention
