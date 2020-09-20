@@ -243,7 +243,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             if (k < len(splitted_fnamelist)-1):
                                 fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = Nseq_per_file
                             else:
-                                fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path] % Nseq_per_file
+                                if k > 0:
+                                    fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path] % Nseq_per_file
+                                else:
+                                    fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path]
                         fpath2seqcount.pop(file_path)
                     for file_path in file_pathlist_to_be_splitted[1:]:
                         subprocess.call(
