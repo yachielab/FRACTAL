@@ -196,6 +196,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 
         while i<MAX_ITERATION:
+            print(os.listdir(WD))
             
             os.chdir(WD)
 
@@ -249,7 +250,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount.pop(file_path)
                     for file_path in file_pathlist_to_be_splitted[1:]:
                         subprocess.call(
-                            "mv " + file_path+".split/* " + splitted_dirpath + "; "
+                            "mv "    + file_path+".split/* " + splitted_dirpath + "; "
                             "rm -r " + file_path+".split",
                             shell=True
                         )
