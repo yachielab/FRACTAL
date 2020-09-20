@@ -253,7 +253,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             "rm -r " + file_path+".split",
                             shell=True
                         )
-                print("before", fpath2seqcount)
             else:
                 if (not os.path.exists(example_infile_fpath+".split")):
                     os.mkdir(example_infile_fpath+".split")
@@ -264,6 +263,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     splitted_dirpath = example_infile_fpath+".split"
 
             # rename
+            print("before", fpath2seqcount)
             for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
                 splitted_fpath   = splitted_dirpath+"/"+splitted_fname
                 renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+".fa"+gzip_extention
