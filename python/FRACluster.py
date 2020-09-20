@@ -274,7 +274,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     shutil.move(splitted_fpath, renamed_filepath)
                     fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
                     fpath2seqcount.pop(splitted_fpath)
-            print("after", i, len(os.listdir(splitted_dirpath)))
+            print(i, "line 277", len(os.listdir(splitted_dirpath)))
             
 
             #################
@@ -495,6 +495,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                 if(para!=0): # if problematic sequences remained
 
+                    print(i, "line 498", len(os.listdir(splitted_dirpath)))
                     # select subsample sequence file
                     if os.path.isfile(subsamplefile_path+".aligned"):
                         ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
@@ -513,6 +514,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     else:
                         ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
+                    print(i, "line 517", len(os.listdir(splitted_dirpath)))
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
                         iterationfile_path                      ,
@@ -520,6 +522,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         SUBSAMPLE_SIZE                          ,
                         para
                         )
+                    print(i, "line 525", len(os.listdir(splitted_dirpath)))
                     i+=1
                     prev_para=para
                 elif (not resampling_needed):
