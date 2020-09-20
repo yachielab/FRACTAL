@@ -112,13 +112,14 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
         out.write(json.dumps(outputdict))
     return len(paraphyletic), max(list(leaf_to_Nseq.values()))
 
-def add_paraphyletic_fa(jpartfname, outputfname, all_fa_pathlist, subsample_size, num_of_para, file_format = "fasta"):
+def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size, num_of_para, file_format = "fasta"):
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
     # parse json format
     js = json.loads(jp)
 
+    all_fa_pathlist = [ aligned_all_dir + "/" + all_fa for all_fa in os.listdir(aligned_all_dir) ]
     for all_fa in all_fa_pathlist:
         is_gzipped = (all_fa.split(".")[-1] == "gz")
         if (is_gzipped):

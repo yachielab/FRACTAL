@@ -232,8 +232,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     file_pathlist_to_be_splitted = infile_pathlist_aligned
                 else:
                     file_pathlist_to_be_splitted = infile_pathlist
-                
-                print(file_pathlist_to_be_splitted)
 
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
                 if not os.path.exists(splitted_dirpath):
@@ -505,16 +503,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
                     
                     # select all sequence file
-                    if os.path.isfile(infile_path+".aligned"):
-                        ALIGNED_ALL = infile_path+".aligned"
-                        ALIGNED     = "aligned"
+                    if os.path.exists(example_infile_fpath_aligned+".split"):
+                        ALIGNED_ALL_DIR = example_infile_fpath_aligned+".split"
+                        ALIGNED         = "aligned"
                     else:
-                        ALIGNED_ALL = infile_path+gzip_extention
+                        ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
                         iterationfile_path                      ,
-                        infile_pathlist                         ,
+                        ALIGNED_ALL_DIR                         ,
                         SUBSAMPLE_SIZE                          ,
                         para
                         )
