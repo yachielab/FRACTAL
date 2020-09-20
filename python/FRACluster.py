@@ -49,7 +49,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ### get input file name ###
     infile_namelist              = os.listdir(WD)
     infile_pathlist              = [WD+"/"+name for name in infile_namelist]
-    print("Nfiles", len(infile_pathlist))
+    print("before1", fpath2seqcount)
     example_infile_fpath         = infile_pathlist[0]
     infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
     example_infile_fpath_aligned = infile_pathlist_aligned[0]
