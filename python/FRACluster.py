@@ -219,7 +219,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             ############
             # set mode #   
             ############
-            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
+            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath+".split")
             if(AFTER_ALIGNMENT):
                 ALIGNED         = "aligned"
 

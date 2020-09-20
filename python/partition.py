@@ -245,7 +245,7 @@ def partition_fasta(
             if (nodenum > 1):
                 
                 # assign splitted files to each node: same as distributed placement
-                Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+                #Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
                 node2filelist = []
                 for i in range(nodenum):
                     node2filelist.append([])
