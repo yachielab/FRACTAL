@@ -235,7 +235,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     file_pathlist_to_be_splitted = infile_pathlist
 
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
-                print(i, "line 238", len(os.listdir(splitted_dirpath)))
+                try: print(i, "line 238", len(os.listdir(splitted_dirpath)))
+                except: None
                 if not os.path.exists(splitted_dirpath):
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
                         subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
