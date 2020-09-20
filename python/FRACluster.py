@@ -49,7 +49,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ### get input file name ###
     infile_namelist              = os.listdir(WD)
     infile_pathlist              = [WD+"/"+name for name in infile_namelist]
-    print("before1", fpath2seqcount)
     example_infile_fpath         = infile_pathlist[0]
     infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
     example_infile_fpath_aligned = infile_pathlist_aligned[0]
@@ -265,7 +264,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             
             # rename
             
-            print("before", fpath2seqcount)
+            #print("before", fpath2seqcount)
             for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
                 splitted_fpath   = splitted_dirpath+"/"+splitted_fname
                 renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+".fa"+gzip_extention
@@ -273,7 +272,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     shutil.move(splitted_fpath, renamed_filepath)
                     fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
                     fpath2seqcount.pop(splitted_fpath)
-            print("after", fpath2seqcount)
+            #print("after", fpath2seqcount)
             
 
             #################
