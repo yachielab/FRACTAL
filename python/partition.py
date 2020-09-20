@@ -163,9 +163,7 @@ def partition_fasta(
     OUT_DIR,
     wd,
     jpart,
-    info,
     treefile,
-    subsamplefa,
     ROOTING,
     file_format="fasta", 
     nodenum=1, 
@@ -290,19 +288,6 @@ def partition_fasta(
                 # wait for all partition jobs finish
                 while(os.listdir(splitted_fasta_dir) != []):
                     None
-                '''
-                # concat all FASTA files for each subclade
-                for subclade_dir in dirpath_list:
-                    if (subclade_dir != wd):
-                        subprocess.call(
-                            "cat "                        +
-                            subclade_dir + "/* "          +
-                            "|"+gunzip_command+"|"+ gzip_command +">> " + subclade_dir + "/"  + in_fasta.split("/")[-1] + "\n" + # Q. Why gunzip|gzip? A. Epa-ng cannot read concatenated gzip file created by python
-                            "rm " + subclade_dir + "/*.part_*" +
-                            "",
-                            shell = True
-                        )
-                '''
                         
             else:        
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")

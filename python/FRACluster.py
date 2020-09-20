@@ -274,7 +274,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     shutil.move(splitted_fpath, renamed_filepath)
                     fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
                     fpath2seqcount.pop(splitted_fpath)
-            #print("after", fpath2seqcount)
+            print("after", i, len(os.listdir(splitted_dirpath)))
             
 
             #################
@@ -554,9 +554,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             NODESDIR,
             WD,
             WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
-            "PARTITION.info",
             "UPSTREAM.nwk",
-            renamed_subsamplefile_path+".gz",
             ROOTING,
             nodenum = nodenum,
             codedir = CODEDIR
