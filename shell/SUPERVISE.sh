@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 25 ]; then
+if [ $# -ne 26 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -23,21 +23,25 @@ OPTION=${13}
 MODEL=${14}
 QSUB_OPTION=${15}
 INIT_QSUB_OPTION=${16}
-SEED=${17}
-JOB_NAME=${18}
-PLACEMENT_METHOD=${19}
-ALIGNED=${20}
-max_num_of_iterations=${21}
-extraction_size=${22}
-careful=${23}
-FASTA_or_EDIT=${24}
-GZIP_INTERMEDIATE=${25}
+ASSEMBLY_QSUB_OPTION=${17}
+SEED=${18}
+JOB_NAME=${19}
+PLACEMENT_METHOD=${20}
+ALIGNED=${21}
+max_num_of_iterations=${22}
+extraction_size=${23}
+careful=${24}
+FASTA_or_EDIT=${25}
+GZIP_INTERMEDIATE=${26}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
 # QSUB OPTION
 if [ -z "$INIT_QSUB_OPTION" ]; then
   INIT_QSUB_OPTION=$QSUB_OPTION
+fi
+if [ -z "$ASSEMBLY_QSUB_OPTION" ]; then
+  ASSEMBLY_QSUB_OPTION=$QSUB_OPTION
 fi
 
 mkdir ${ROOT_DIR}
@@ -172,7 +176,7 @@ echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "python3 ${CODE_DIR}/python/TreeAssembly.py ${ROOT_DIR}/nodes/d0 ${ROOT_DIR}/final_tree/HUGE_Result.nwk TRUE" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "echo \"finished\" > ${ROOT_DIR}/final_tree/assembly_flag.txt" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub ${QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
+  qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
