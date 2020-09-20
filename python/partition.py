@@ -112,38 +112,40 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
         out.write(json.dumps(outputdict))
     return len(paraphyletic), max(list(leaf_to_Nseq.values()))
 
-def add_paraphyletic_fa(jpartfname, outputfname, all_fa, subsample_size, num_of_para, file_format = "fasta"):
-    is_gzipped = (all_fa.split(".")[-1] == "gz")
-    if (is_gzipped):
-        allfa   = gzip.open(all_fa, 'rt')
-        out     = gzip.open(outputfname, 'at')
-    else:
-        allfa   = open(all_fa, 'r')
-        out     = open(outputfname, 'a')
+def add_paraphyletic_fa(jpartfname, outputfname, all_fa_pathlist, subsample_size, num_of_para, file_format = "fasta"):
     # open .jpart file
     with open(jpartfname,"r") as jf:
         jp = jf.read()
     # parse json format
     js = json.loads(jp)
-    # add paraphyletic sequences into subsample
-    if (file_format == "fasta"):
-        handle = SeqIO.parse(allfa, "fasta")
-        for record in handle:
-            if(record.id!="root"):
-                if(js["partition"][record.id]=="paraphyletic"):
-                    SeqIO.write(record, out, "fasta")
-    elif (file_format=="edit"):
-        for line in allfa:
-            name         = line.split()[0]
-            if (name != "root"):
-                if (len(line.split())>1):
-                    editlist_str = line.split()[1]
-                else:
-                    editlist_str = ""
-                if(js["partition"][name]=="paraphyletic"):
-                    out.write(line)
-    allfa.close()
-    out.close()
+
+    for all_fa in all_fa_pathlist:
+        is_gzipped = (all_fa.split(".")[-1] == "gz")
+        if (is_gzipped):
+            allfa   = gzip.open(all_fa, 'rt')
+            out     = gzip.open(outputfname, 'at')
+        else:
+            allfa   = open(all_fa, 'r')
+            out     = open(outputfname, 'a')
+        # add paraphyletic sequences into subsample
+        if (file_format == "fasta"):
+            handle = SeqIO.parse(allfa, "fasta")
+            for record in handle:
+                if(record.id!="root"):
+                    if(js["partition"][record.id]=="paraphyletic"):
+                        SeqIO.write(record, out, "fasta")
+        elif (file_format=="edit"):
+            for line in allfa:
+                name         = line.split()[0]
+                if (name != "root"):
+                    if (len(line.split())>1):
+                        editlist_str = line.split()[1]
+                    else:
+                        editlist_str = ""
+                    if(js["partition"][name]=="paraphyletic"):
+                        out.write(line)
+        allfa.close()
+        out.close()
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
