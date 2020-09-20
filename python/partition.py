@@ -302,7 +302,7 @@ def partition_fasta(
                         
             else:        
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
-            problematic_filenames      = wd + "/*.part*"
+            problematic_filenames      = wd + "/*.part*fa"+gzip_extention
             problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
             subprocess.call(
                 "cat "                                   +
