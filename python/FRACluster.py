@@ -261,7 +261,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount.pop(infile_path)
                         shutil.move(infile_path, example_infile_fpath+".split")
                     splitted_dirpath = example_infile_fpath+".split"
-            '''
+            
             # rename
             print("before", fpath2seqcount)
             for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
@@ -270,9 +270,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 if renamed_filepath != splitted_fpath:
                     shutil.move(splitted_fpath, renamed_filepath)
                     fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
-                    fpath2seqcount.pop(splitted_fpath)
+                    #fpath2seqcount.pop(splitted_fpath)
             print("after", fpath2seqcount)
-            '''
+            
 
             #################
             #random sampling#
