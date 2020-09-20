@@ -196,7 +196,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
 
         while i<MAX_ITERATION:
-            try: print(os.listdir(infile_pathlist_aligned[0]+".split"))
+            try: print(os.listdir(infile_pathlist[0]+".split"))
             except: None
             
             os.chdir(WD)
@@ -219,7 +219,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             ############
             # set mode #   
             ############
-            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath+".split")
+            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
             if(AFTER_ALIGNMENT):
                 ALIGNED         = "aligned"
 
