@@ -148,8 +148,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT):
         # To Do: remove concatenation
         concat_infpath = WD+"/INPUT.fa"+gzip_extention
+        if (ML_or_MP == "ML" and is_gzipped):
+            command = " | gunzip | gzip " # needed to avoid error of epa-ng
+        else:
+            command = ""
         subprocess.call(
-            "cat "+" ".join(infile_pathlist)+"|"+gzip_command+" > "+concat_infpath,
+            "cat "+" ".join(infile_pathlist)+command+" > "+concat_infpath,
             shell=True
         ) 
         # Quit distribution after the available computer node saturated 
