@@ -18,8 +18,7 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
     
     for record in records:
         if (record.name == "root"):
-            for outhandle in outputFASTA_filehandlelist:
-                SeqIO.write(record, outhandle, "fasta")
+            None
         else:
             outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
             try:    outfilepath2Nseq[outfilepath] += 1
