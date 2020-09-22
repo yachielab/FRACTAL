@@ -27,6 +27,7 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
 
     seqname_set = set()
     for inputFASTA_filepath in inputFASTA_filepathlist:
+        print(inputFASTA_filepath)
         is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
         if is_gzipped:
             ist  = gzip.open(inputFASTA_filepath, 'rt')
