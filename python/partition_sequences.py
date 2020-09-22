@@ -62,6 +62,7 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             ist  = open(inputFASTA_filepath, 'r')
         ost_list = []
         filepath2handle = {}
+        dirpath2filepath = {}
         for outputFASTA_dirpath in outputFASTA_dirpathlist:
             outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
             filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
