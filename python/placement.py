@@ -126,7 +126,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     subprocess.call(
                         EPANG                               +
                         " --redo"                           +
-                        " -s "+outdir+"/ref_query.fa.ref"   +
+                        " -s "+outdir+"/"+filename+"/ref_query.fa.ref"   +
                         " -t "+reftree                      +
                         " --model "+model                   +
                         " -q "+outdir+"/"+filename+"/ref_query.fa.query" +
