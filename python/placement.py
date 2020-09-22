@@ -472,10 +472,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 shell=True
             )
             subprocess.call(
-                "gzip -c "+
+                "cat "+
                 "$(ls "+outdir+"/EPANG0/*/ref_query.fa.selectcols.ref | head -n1)"+
                 "> "+ 
-                WD+"/SUBSAMPLE.fa.aligned.gz",
+                WD+"/SUBSAMPLE.fa.aligned",
                 shell=True
                 )
 
