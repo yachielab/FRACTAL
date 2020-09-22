@@ -405,7 +405,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cat "+refseq+" "+
                                 queryfile        +
-                                "| gunzip | sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
+                                "| sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )
                         handle.write(
                             RAXMLSEQ                                      +
@@ -433,6 +433,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         handle.write(
                             "rm "+ " ".join(files_to_be_removed) + " &> /dev/null\n"
                             ) 
+                        handle.write(
+                            "cat "                                                               +
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
+                            gzipcommand + " > "                                                  +
+                            alignment_outdir+"/"+filename+".aligned"                             +
+                            extention,
+                            shell=True
+                        )
                 handle.write(
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o\n"
@@ -463,14 +471,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
 
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
-            subprocess.call(
-                "cat "                                            +
-                outdir+"/EPANG*/*/ref_query.fa.selectcols.query " +
-                gzipcommand + " > "                               +
-                WD+"/INPUT.fa.aligned"                            + 
-                extention,
-                shell=True
-            )
             subprocess.call(
                 "cat "+
                 "$(ls "+outdir+"/EPANG0/*/ref_query.fa.selectcols.ref | head -n1)"+
