@@ -231,8 +231,10 @@ def partition_fasta(
 
         if (is_gzipped):
             gzip_extention = ".gz"
+            gzip_command   = "|gzip"
         else:
             gzip_extention = ""
+            gzip_command   = ""
 
         if (file_format=="fasta"):
 
@@ -292,7 +294,7 @@ def partition_fasta(
                         subprocess.call(
                             "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; "+
                             "rm "+dirpath + "/*.count; "                               +
-                            "cp "+wd+"/root.fa "+dirpath,
+                            "cat "+wd+"/root.fa "+gzip_command+"> "+dirpath+"/root.fa"+gzip_extention,
                             shell=True
                         )
             problematic_filenames      = wd + "/*.part*fa"+gzip_extention
