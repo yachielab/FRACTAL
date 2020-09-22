@@ -56,6 +56,7 @@ def outgroup_check_fast(in_fpathlist, file_format):
                 if (record.name  == "root"):
                     exist_root = True
                     root_fpath = "/".join(in_fname.split("/")[:-1]) + "/root.fa"
+                    print(root_fpath)
                     SeqIO.write(record, root_fpath, 'fasta')
                     break
         elif (file_format == "edit"):
