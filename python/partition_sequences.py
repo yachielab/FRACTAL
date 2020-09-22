@@ -28,7 +28,7 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
             outhandle   = filepath2handle[outfilepath]
             SeqIO.write(record, outhandle, "fasta")
     
-    for outfilepath in outfilepath.keys():
+    for outfilepath in outfilepath2Nseq.keys():
         with open(outfilepath + ".count", 'w') as numhandle:
             print(outfilepath, outfilepath2Nseq[outfilepath], '\t', file = numhandle)
 
