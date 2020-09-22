@@ -11,8 +11,9 @@ import subprocess
 import random
 import gzip
 
-def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqname2dirpath, dirpath2handle):
+def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqname2dirpath, dirpath2filepath, filepath2handle):
     # open input FASTAfile
+    outfilepath2Nseq = {}
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
     for record in records:
@@ -20,14 +21,21 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
             for outhandle in outputFASTA_filehandlelist:
                 SeqIO.write(record, outhandle, "fasta")
         else:
-            outhandle = dirpath2handle[seqname2dirpath[record.id]]
+            outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
+            try:    outfilepath2Nseq[outfilepath] += 1
+            except: outfilepath2Nseq[outfilepath] = 1
+
+            outhandle   = filepath2handle[outfilepath]
             SeqIO.write(record, outhandle, "fasta")
+    
+    for outfilepath in outfilepath.keys():
+        with open(outfilepath + ".count", 'w') as numhandle:
+            print(outfilepath, outfilepath2Nseq[outfilepath], '\t', file = numhandle)
 
 def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2dir_filepath):
 
     seqname_set = set()
     for inputFASTA_filepath in inputFASTA_filepathlist:
-        print(inputFASTA_filepath)
         is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
         if is_gzipped:
             ist  = gzip.open(inputFASTA_filepath, 'rt')
@@ -53,13 +61,13 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
         else:
             ist  = open(inputFASTA_filepath, 'r')
         ost_list = []
-        dirpath2handle = {}
+        filepath2handle = {}
         for outputFASTA_dirpath in outputFASTA_dirpathlist:
             outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
-            ost_list.append(open(outputFASTA_filepath, 'w'))
-            dirpath2handle[outputFASTA_dirpath] = ost_list[-1]
+            filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
+            dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-        classify_sequences(ist, ost_list, seqname2dirpath, dirpath2handle)
+        classify_sequences(ist, ost_list, seqname2dirpath, dirpath2filepath, filepath2handle)
 
         ist.close()
         for ost in ost_list:

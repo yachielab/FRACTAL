@@ -373,11 +373,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 refseq+".hmm "+queryfile                    +
                                 " | sed 's/\./-/g' "                        +
                                 " > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa\n"
-                            )   
+                            )
                             handle.write(
                                 "cat "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa " +
                                 "| sed 's/\./N/g' > " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
-                            )   
+                            )
                             handle.write(
                                 "python3 "                                 +
                                 codedir+"/python/divide_ref_and_query.py " +
@@ -437,7 +437,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             "cat "                                                               +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
                             gzipcommand + " > "                                                  +
-                            alignment_outdir+"/"+filename+".aligned"                             +
+                            alignment_outdir+"/"+filename+".aligned"+extention                   +
                             extention,
                             shell=True
                         )

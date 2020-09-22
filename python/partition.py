@@ -230,12 +230,8 @@ def partition_fasta(
         dirpath_list = list(sorted([wd] + list(dirpath_set)))
 
         if (is_gzipped):
-            gzip_command   = "gzip"
-            gunzip_command = "gunzip"
             gzip_extention = ".gz"
         else:
-            gzip_command   = "cat"
-            gunzip_command = "cat"
             gzip_extention = ""
 
         if (file_format=="fasta"):
@@ -291,6 +287,11 @@ def partition_fasta(
                         
             else:        
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
+                for dirpath in dirpath_list:
+                    subprocess.call(
+                        "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; rm "+dirpath + "/*.count",
+                        shell=True
+                    )
             problematic_filenames      = wd + "/*.part*fa"+gzip_extention
             problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
             subprocess.call(
