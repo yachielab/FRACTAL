@@ -96,8 +96,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 extention  = ".gz"
                 gzipcommand= "|gzip"
             else:
-                is_gzipped = True
-                extention  = ".gz"
+                is_gzipped = False
+                extention  = ""
                 gzipcommand= ""
 
             if (file_format == "edit"):
@@ -230,7 +230,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             )
             node2filelist = [ ["query.edit.gz."+str(i)+".gz"] for i in range(nodenum) ]
             splitted_files_dir = outdir + "/"
-            print ("node2filelist", node2filelist)
             with open(outdir+"/editlist.txt", 'w') as handle:
                 for edit in edit_list:
                     handle.write(edit + "\n")
@@ -465,10 +464,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         # (If HMM alignments were conducted) concat aligned sequences
         if(ALIGNED=="unaligned"):
             subprocess.call(
-                "cat "+
-                outdir+"/EPANG*/*/ref_query.fa.selectcols.query "+
-                + gzipcommand + " > "+
-                WD+"/INPUT.fa.aligned" + extention,
+                "cat "                                            +
+                outdir+"/EPANG*/*/ref_query.fa.selectcols.query " +
+                gzipcommand + " > "                               +
+                WD+"/INPUT.fa.aligned"                            + 
+                extention,
                 shell=True
             )
             subprocess.call(
