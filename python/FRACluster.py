@@ -61,6 +61,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ## check input file property ##
     if (os.path.isfile(WD+"/root.fa")):
         root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
+    else:
+        root_fpath = WD+"/root.fa"
     seq_count                 = sum(fpath2seqcount.values())
     is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
     if (is_gzipped):
