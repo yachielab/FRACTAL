@@ -294,7 +294,7 @@ def partition_fasta(
                         subprocess.call(
                             "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; "+
                             "rm "+dirpath + "/*.count; "                               +
-                            "cat "+wd+"/root.fa "+gzip_command+"> "+dirpath+"/root.fa"+gzip_extention,
+                            "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
                             shell=True
                         )
             problematic_filenames      = wd + "/*.part*fa"+gzip_extention

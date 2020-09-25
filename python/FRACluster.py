@@ -41,7 +41,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_pathlist              = []
     for infilename in infile_namelist:
         if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
-            infile_pathlist.append(WD+"/"+infilename)
+            if (infilename!='root.fa'):
+                infile_pathlist.append(WD+"/"+infilename)
     fpath2seqcount               = rename_sequence.count_sequence_fast(infile_pathlist)
     for fpath in infile_pathlist:
         if fpath2seqcount[fpath] == 0:
