@@ -358,14 +358,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 extraction.fasta_extraction(
                     renamed_subsamplefile_path          ,
                     set(extracted_seq_rename_list)                      ,
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
                     )
-                subprocess.call(
-                    "cat "                                                          +
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz | "         +
-                    "gunzip > " + WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted" ,
-                    shell=True
-                )
                 os.remove(renamed_subsamplefile_path+".aligned.tree")
                 os.remove(renamed_subsamplefile_path+"")
                 os.remove(renamed_subsamplefile_path+".aligned")
@@ -375,7 +369,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     renamed_subsamplefile_path+".aligned.tree"
                     )
                 os.rename(
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.gz",
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
                     renamed_subsamplefile_path
                 )
                 os.rename(

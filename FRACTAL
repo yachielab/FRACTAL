@@ -48,7 +48,8 @@ Usage:
     [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
     [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
     [-d job_number] [-c thread_number] [-e] [-r integer] [-E] [-O qsub_option] 
-    [-I first_qsub_option] [-A last_qsub_option] [-j job_name] [-l iteration_upper_limit] [-g]
+    [-I first_qsub_option] [-A last_qsub_option] [-j job_name] [-l iteration_upper_limit] 
+    [-g]
 
 Options:
     -v
@@ -98,11 +99,12 @@ Options:
       Treat input data as edit list of each sequence
     -O "<String>"
       Options for qsub. Default: ""
-      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
+        example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
     -A "<String>"
-      Options especially for the last qsub (tree assembly). Default: the string specified by -O
+      Options especially for the last qsub (tree assembly). 
+        Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
     -l <Integer>

@@ -68,7 +68,7 @@ def create_tree(tree, name_to_numtips):
     return Phylo.BaseTree.Tree(newtree.clade)
 
 def fasta_extraction(fastafile,nameset,ext_fastafile):
-    with gzip.open(fastafile,'rt') as ihandle, gzip.open(ext_fastafile,'wt') as ohandle:
+    with open(fastafile,'rt') as ihandle, open(ext_fastafile,'wt') as ohandle:
         sequences=SeqIO.parse(ihandle,'fasta')
         for record in sequences:
             if(record.name in nameset):
