@@ -124,7 +124,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if len(infile_pathlist)>1:
             concat_infpath = WD+"/INPUT.fa"+gzip_extention
             subprocess.call(
-                "cat "+" ".join(infile_pathlist) +" > "+concat_infpath,
+                "cat root.fa "+" ".join(infile_pathlist) +" > "+concat_infpath,
                 shell=True
             )
         else:
