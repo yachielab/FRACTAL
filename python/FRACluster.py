@@ -40,9 +40,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_namelist              = os.listdir(WD)
     infile_pathlist              = []
     for infilename in infile_namelist:
-        if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
-            if (infilename!='root.fa'):
-                infile_pathlist.append(WD+"/"+infilename)
+        infile_pathlist.append(WD+"/"+infilename)
     fpath2seqcount               = rename_sequence.count_sequence_fast(infile_pathlist)
     for fpath in infile_pathlist:
         if fpath2seqcount[fpath] == 0:
@@ -55,7 +53,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_pathlist              = []
     for infilename in infile_namelist:
         if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
-            infile_pathlist.append(WD+"/"+infilename)
+            if (infilename!='root.fa'):
+                infile_pathlist.append(WD+"/"+infilename)
     example_infile_fpath         = infile_pathlist[0]
     infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
     example_infile_fpath_aligned = infile_pathlist_aligned[0]
