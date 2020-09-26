@@ -71,9 +71,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     if (is_gzipped):
         gzip_extention        = ".gz"
         gzip_command          = "gzip"
+        gunzip_command        = "| gunzip"
     else:
         gzip_extention        = ""
         gzip_command          = "cat"
+        gunzip_command        = ""
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
         seq_count_when_aligned= None
@@ -121,14 +123,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # call direct tree reconstruction
 
     if(seq_count<=THRESHOLD):
-        if len(infile_pathlist)>1:
-            concat_infpath = WD+"/INPUT.fa"+gzip_extention
-            subprocess.call(
-                "cat root.fa "+" ".join(infile_pathlist) +" > "+concat_infpath,
-                shell=True
-            )
-        else:
-            concat_infpath = infile_pathlist[0]
+        concat_infpath = WD+"/INPUT.fa"
+        subprocess.call(
+            "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+            shell=True
+        )
         if(seq_count<4):
             partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
             print("seq_count < 4!")
