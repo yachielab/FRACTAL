@@ -45,6 +45,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 infile_pathlist.append(WD+"/"+infilename)
     
     if (os.path.exists(WD + "file2Nseq.txt")):
+        print("skip reading files")
         fpath2seqcount = {}
         with open(WD + "file2Nseq.txt", 'r') as handle:
             for line in handle:
