@@ -134,7 +134,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # call direct tree reconstruction
 
     if(seq_count<=THRESHOLD):
-        concat_infpath = WD+"/INPUT.fa"
+        concat_infpath = WD+"/INPUT.terminal.fa"
         subprocess.call(
             "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
             shell=True
