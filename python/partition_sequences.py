@@ -20,6 +20,7 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
         if (record.name == "root"):
             None
         else:
+            print("writing")
             outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
             try:    outfilepath2Nseq[outfilepath] += 1
             except: outfilepath2Nseq[outfilepath] = 1
