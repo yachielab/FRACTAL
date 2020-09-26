@@ -11,9 +11,10 @@ import subprocess
 import random
 import gzip
 
-def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath, filepath2handle):
+def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath, is_gzipped):
     # open input FASTAfile
     outfilepath2Nseq = {}
+    filepath2handle  = {}
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
     
     for record in records:
@@ -21,13 +22,22 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
             None
         else:
             outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
-            try:    outfilepath2Nseq[outfilepath] += 1
-            except: outfilepath2Nseq[outfilepath] = 1
 
+            if (outfilepath not in filepath2handle.keys()):
+                filepath2handle[outfilepath] = open(outfilepath, 'w')
+                outfilepath2Nseq[outfilepath]= 1
+
+            outfilepath2Nseq[outfilepath] += 1
             outhandle   = filepath2handle[outfilepath]
             SeqIO.write(record, outhandle, "fasta")
     
-    for outfilepath in outfilepath2Nseq.keys():
+    for outfilepath in filepath2handle.keys():
+        filepath2handle[outfilepath].close()
+        if (is_gzipped):
+            subprocess.call(
+                "gzip " + outfilepath,
+                shell=True
+                )
         with open(outfilepath + ".count", 'w') as numhandle:
             numhandle.write(outfilepath+"\t"+str(outfilepath2Nseq[outfilepath])+"\n")
 
@@ -63,22 +73,13 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
         dirpath2filepath = {}
         for outputFASTA_dirpath in outputFASTA_dirpathlist:
             outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
-            filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
+            #filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
             dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-        classify_sequences(ist, seqname2dirpath, dirpath2filepath, filepath2handle)
+        classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped)
 
         ist.close()
-        for outputFASTA_dirpath in outputFASTA_dirpathlist:
-            outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
-            filepath2handle[outputFASTA_filepath].close()
-        if (is_gzipped):    
-            for outputFASTA_dirpath in outputFASTA_dirpathlist:
-                outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
-                subprocess.call(
-                    "gzip " + outputFASTA_filepath,
-                    shell=True
-                )
+            
         os.remove(inputFASTA_filepath)
 
 if __name__ == "__main__":
