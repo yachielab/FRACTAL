@@ -369,10 +369,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     )
                 os.rename(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
-                    renamed_subsamplefile_path
-                )
-                os.rename(
-                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
                     renamed_subsamplefile_path+".aligned"
                 )
 
