@@ -11,7 +11,7 @@ import subprocess
 import random
 import gzip
 
-def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqname2dirpath, dirpath2filepath, filepath2handle):
+def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath, filepath2handle):
     # open input FASTAfile
     outfilepath2Nseq = {}
     records = SeqIO.parse(inputFASTA_filehandle, "fasta")
@@ -20,7 +20,6 @@ def classify_sequences(inputFASTA_filehandle, outputFASTA_filehandlelist, seqnam
         if (record.name == "root"):
             None
         else:
-            print("writing")
             outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
             try:    outfilepath2Nseq[outfilepath] += 1
             except: outfilepath2Nseq[outfilepath] = 1
@@ -60,7 +59,6 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             ist  = gzip.open(inputFASTA_filepath, 'rt')
         else:
             ist  = open(inputFASTA_filepath, 'r')
-        ost_list = []
         filepath2handle = {}
         dirpath2filepath = {}
         for outputFASTA_dirpath in outputFASTA_dirpathlist:
@@ -68,11 +66,12 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
             dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-        classify_sequences(ist, ost_list, seqname2dirpath, dirpath2filepath, filepath2handle)
+        classify_sequences(ist, seqname2dirpath, dirpath2filepath, filepath2handle)
 
         ist.close()
-        for ost in ost_list:
-            ost.close()
+        for outputFASTA_dirpath in outputFASTA_dirpathlist:
+            outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
+            filepath2handle[outputFASTA_filepath].close()
         if (is_gzipped):    
             for outputFASTA_dirpath in outputFASTA_dirpathlist:
                 outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
