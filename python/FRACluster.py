@@ -53,10 +53,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     else:
         fpath2seqcount           = rename_sequence.count_sequence_fast(infile_pathlist)
     
-    for fpath in infile_pathlist:
-        if fpath2seqcount[fpath] == 0:
-            os.remove(fpath)
-            fpath2seqcount.pop(fpath)
+    #for fpath in infile_pathlist:
+    #    if fpath2seqcount[fpath] == 0:
+    #        os.remove(fpath)
+    #        fpath2seqcount.pop(fpath)
     ###########################
 
     ### get input file name ###
