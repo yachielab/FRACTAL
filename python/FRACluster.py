@@ -359,6 +359,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     set(extracted_seq_rename_list)                      ,
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
                     )
+                extraction.fasta_extraction(
+                    renamed_subsamplefile_path+".aligned"          ,
+                    set(extracted_seq_rename_list)                      ,
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.aligned",
+                    )
                 os.remove(renamed_subsamplefile_path+".aligned.tree")
                 os.remove(renamed_subsamplefile_path+"")
                 os.remove(renamed_subsamplefile_path+".aligned")
@@ -367,8 +372,12 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     renamed_subsamplefile_path+".aligned.extracted.tree",
                     renamed_subsamplefile_path+".aligned.tree"
                     )
-                os.rename(
+                shutil.copyfile(
                     WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted",
+                    renamed_subsamplefile_path
+                )
+                os.rename(
+                    WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa.extracted.aligned",
                     renamed_subsamplefile_path+".aligned"
                 )
 
