@@ -81,11 +81,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
     if (is_gzipped):
         gzip_extention        = ".gz"
-        gzip_command          = "gzip"
+        gzip_command          = "| gzip"
         gunzip_command        = "| gunzip"
     else:
         gzip_extention        = ""
-        gzip_command          = "cat"
+        gzip_command          = ""
         gunzip_command        = ""
     if(INIT_SEQ_COUNT==0): 
         INIT_SEQ_COUNT        = seq_count # only in d0
@@ -520,7 +520,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         ALIGNED_SUBSAMPLE = subsamplefile_path
                         
                     subprocess.call(
-                        "cat "+ALIGNED_SUBSAMPLE+" | "+gzip_command+"> "+iterationfile_path,
+                        "cat "+ALIGNED_SUBSAMPLE+gzip_command+"> "+iterationfile_path,
                         shell=True
                     )
                     
@@ -607,6 +607,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         example_infile_fpath+".gz.aligned.tree",
         WD+"/seqname_dirpath.txt",
         WD+"/INPUT.part*",
+        WD+"/INPUT.terminal*",
         WD+"/root.fa",
         WD+"/INPUT.fa",
         WD+"/INPUT.fa.gz",
