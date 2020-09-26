@@ -247,6 +247,17 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             os.mkdir(outdir+"/EPANG"+str(i))
             with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
                 for filename in node2filelist[i]:
+
+                    if query.split(".")[-1] == "gz":
+                        is_gzipped = True
+                        extention  = ".gz"
+                        gzipcommand= "|gzip"
+                    else:
+                        is_gzipped = False
+                        extention  = ""
+                        gzipcommand= ""
+
+
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
                     queryfile = query_dir + "/" + filename
 
@@ -332,11 +343,10 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 " -w "+outdir+"/EPANG"+str(i)+"/"+filename                       +
                                 " -T "+str(threadnum)+"\n"
                                 )
-                            subprocess.call(
+                            handle.write(
                                 "cat " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" + gzipcommand +
                                 ">" + 
-                                alignment_outdir+"/"+filename+".aligned"+extention,
-                                shell = True
+                                alignment_outdir+"/"+filename+".aligned"+extention+"\n"
                                 )
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
