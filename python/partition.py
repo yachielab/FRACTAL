@@ -290,14 +290,14 @@ def partition_fasta(
             else: # sequential mode
                 print(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
-                for dirpath in dirpath_list:
-                    if (dirpath != wd):
-                        subprocess.call(
-                            "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; "+
-                            "rm "+dirpath + "/*.count; "                               +
-                            "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
-                            shell=True
-                        )
+            for dirpath in dirpath_list:
+                if (dirpath != wd):
+                    subprocess.call(
+                        "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; "+
+                        "rm "+dirpath + "/*.count; "                               +
+                        "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
+                        shell=True
+                    )
             problematic_filenames      = wd + "/*.part*fa"+gzip_extention
             problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
             subprocess.call(
