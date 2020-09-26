@@ -248,7 +248,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
                 for filename in node2filelist[i]:
 
-                    if query.split(".")[-1] == "gz":
+                    if filename.split(".")[-1] == "gz":
                         is_gzipped = True
                         extention  = ".gz"
                         gzipcommand= "|gzip"
