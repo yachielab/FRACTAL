@@ -287,7 +287,8 @@ def partition_fasta(
                 while(os.listdir(splitted_fasta_dir) != []):
                     None
                         
-            else:        
+            else: # sequential mode
+                print(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
                 for dirpath in dirpath_list:
                     if (dirpath != wd):
