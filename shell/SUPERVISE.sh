@@ -96,12 +96,15 @@ for input_faname in ${filepath_list}; do
         gzip_output="cat"
     fi
 
-    cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
-done
+    copied_fpath=${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
 
-if [ -e $SEQ_NUM_FILE ]; then
-    cp $SEQ_NUM_FILE ${ROOT_DIR}/nodes/d0/file2Nseq.txt
-fi
+    cat ${input_faname} | ${gzip_input} | ${gzip_output} > $copied_fpath
+
+    if [ -e $SEQ_NUM_FILE ]; then
+        (echo -ne "${copied_fpath}\t"; cat $SEQ_NUM_FILE | grep ${input_faname} | cut f2) >> ${ROOT_DIR}/nodes/d0/file2Nseq.txt
+    fi
+
+done
 
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
