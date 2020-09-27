@@ -258,7 +258,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
                 if not os.path.exists(splitted_dirpath):
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
-                        subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
+                        if fpath2seqcount[file_path] > Nseq_per_file:
+                            subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
+                        else:
+                            os.mkdir(file_path+".split")
+                            shutil.move(file_path, file_path+".split/")
                         #subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" ", shell=True)
                         splitted_fnamelist = sorted(os.listdir(file_path+".split"))
                         for k, splitted_fname in enumerate(splitted_fnamelist):
