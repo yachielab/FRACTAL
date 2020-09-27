@@ -101,7 +101,7 @@ for input_faname in ${filepath_list}; do
     cat ${input_faname} | ${gzip_input} | ${gzip_output} > $copied_fpath
 
     if [ -e $SEQ_NUM_FILE ]; then
-        (echo -ne "${copied_fpath}\t"; cat $SEQ_NUM_FILE | grep ${input_faname} | cut -f2) >> ${ROOT_DIR}/nodes/d0/file2Nseq.txt
+        (echo -ne "${copied_fpath}\t"; cat $SEQ_NUM_FILE | grep $(basename ${input_faname}) | cut -f2) >> ${ROOT_DIR}/nodes/d0/file2Nseq.txt
     fi
 
 done
