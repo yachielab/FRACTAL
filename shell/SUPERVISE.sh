@@ -99,7 +99,7 @@ cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/$(ba
 
 if [ $SEQ_NUM_FILE ！＝ "unspecified" ]; do
     cp $SEQ_NUM_FILE ${ROOT_DIR}/nodes/d0/file2Nseq.txt
-done
+fi
 
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
