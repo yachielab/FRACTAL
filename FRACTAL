@@ -33,6 +33,7 @@ LIMITATION=10000
 FASTA_or_EDIT="fa"
 CAREFUL_PLACEMENT=1
 GZIP_INTERMEDIATE="FALSE"
+SEQ_NUM_FILE="unspecified"
 
 function version {
   echo "######## FRACTAL v2.5.0 ########"
@@ -47,9 +48,9 @@ Usage:
     [-v] [-h] [-i input_file] [-f output_file_path] [-f output_file_name]
     [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
     [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
-    [-d job_number] [-c thread_number] [-e] [-r integer] [-E] [-O qsub_option] 
-    [-I first_qsub_option] [-A last_qsub_option] [-j job_name] [-l iteration_upper_limit] 
-    [-g]
+    [-d job_number] [-c thread_number] [-e] [-r integer] [-n file_path] [-E] 
+    [-O qsub_option] [-I first_qsub_option] [-A last_qsub_option] [-j job_name] 
+    [-l iteration_upper_limit] [-g]
 
 Options:
     -v
@@ -95,6 +96,8 @@ Options:
       Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
+    -n <String>
+      File path of input sequence number. Default: unspecified
     -E 
       Treat input data as edit list of each sequence
     -O "<String>"
@@ -117,7 +120,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:O:I:A:j:m:l:z:vheugE OPT
+while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugE OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -137,6 +140,7 @@ do
     "c" ) FLG_C="TRUE" ; THREADNUM="$OPTARG";;
     "e" ) REMOVE_INTERMEDIATES="FALSE" ;;
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
+    "n" ) FLG_N="TRUE" ; SEQ_NUM_FILE="$OPTARG";;
     "E" ) FLG_E="TRUE" ; FASTA_or_EDIT="edit";;
     "O" ) FLG_O="TRUE" ; QSUB_OPTION="$OPTARG";;
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
@@ -196,7 +200,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE}
 wait
 
 #show result

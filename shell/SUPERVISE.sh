@@ -33,6 +33,7 @@ extraction_size=${23}
 careful=${24}
 FASTA_or_EDIT=${25}
 GZIP_INTERMEDIATE=${26}
+SEQ_NUM_FILE=${27}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
@@ -96,6 +97,9 @@ done
 mkdir ${ROOT_DIR}/nodes/d0
 cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
 
+if [ $SEQ_NUM_FILE ！＝ "unspecified" ]; do
+    cp $SEQ_NUM_FILE ${ROOT_DIR}/nodes/d0/file2Nseq.txt
+done
 
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
