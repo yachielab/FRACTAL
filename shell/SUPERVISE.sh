@@ -63,30 +63,40 @@ if [ "$ALIGNED" = "unaligned" ]; then
     HMM_ALIGN=$(which hmmalign)
 fi
 
-# input gzipped or not
-if [ $(echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
-    gzip_input="gunzip"
-else
-    gzip_input="cat"
+if   [ -d ${input_faname} ]; then
+    filepath_list=$(ls ${input_faname}/*)
+elif [ -f ${input_faname} ]; then
+    filepath_list=${input_faname}
 fi
 
-# output gzipped or not
-if [ $GZIP_INTERMEDIATE = "TRUE" ]; then
-    gzip_output="gzip"
-    out_extention=".gz"
-else
-    gzip_output="cat"
-    out_extention=""
-fi
+for input_faname in ${filepath_list}; do 
+    # input gzipped or not
+    if [ $(echo ${input_faname} | sed 's/^.*\.\([^\.]*\)$/\1/') = "gz" ]; then
+        gzip_input="gunzip"
+    else
+        gzip_input="cat"
+    fi
 
-# avoid gunzip & gzip
-if [ $gzip_input = "gunzip" -a $gzip_output = "gzip" ]; then
-    gzip_input="cat"
-    gzip_output="cat"
-fi
+    # output gzipped or not
+    if [ $GZIP_INTERMEDIATE = "TRUE" ]; then
+        gzip_output="gzip"
+        out_extention=".gz"
+    else
+        gzip_output="cat"
+        out_extention=""
+    fi
+
+    # avoid gunzip & gzip
+    if [ $gzip_input = "gunzip" -a $gzip_output = "gzip" ]; then
+        gzip_input="cat"
+        gzip_output="cat"
+    fi
+done
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
 cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/INPUT.${FASTA_or_EDIT}${out_extention}
+
+
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
