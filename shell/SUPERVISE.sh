@@ -64,6 +64,9 @@ if [ "$ALIGNED" = "unaligned" ]; then
     HMM_ALIGN=$(which hmmalign)
 fi
 
+# setting for the 1st qsub
+mkdir ${ROOT_DIR}/nodes/d0
+
 if   [ -d ${input_faname} ]; then
     filepath_list=$(ls ${input_faname}/*)
 elif [ -f ${input_faname} ]; then
@@ -92,10 +95,9 @@ for input_faname in ${filepath_list}; do
         gzip_input="cat"
         gzip_output="cat"
     fi
+
+    cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
 done
-# setting for the 1st qsub
-mkdir ${ROOT_DIR}/nodes/d0
-cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
 
 if [ -e $SEQ_NUM_FILE ]; then
     cp $SEQ_NUM_FILE ${ROOT_DIR}/nodes/d0/file2Nseq.txt
