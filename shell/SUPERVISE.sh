@@ -98,7 +98,7 @@ mkdir ${ROOT_DIR}/nodes/d0
 cat ${input_faname} | ${gzip_input} | ${gzip_output} > ${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
 
 echo $SEQ_NUM_FILE
-if [ $SEQ_NUM_FILE !＝ "unspecified" ]; then
+if [ "$SEQ_NUM_FILE" !＝ "unspecified" ]; then
     cp $SEQ_NUM_FILE ${ROOT_DIR}/nodes/d0/file2Nseq.txt
 fi
 
