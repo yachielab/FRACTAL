@@ -130,11 +130,15 @@ def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size
             out     = open(outputfname, 'a')
         # add paraphyletic sequences into subsample
         if (file_format == "fasta"):
+            Nwritten = 0
             handle = SeqIO.parse(allfa, "fasta")
-            for record in handle:
+            for record in handle:                                    # should be faster!
+                if (Nwritten == num_of_para):
+                    break
                 if(record.id!="root"):
-                    if(js["partition"][record.id]=="paraphyletic"):
+                    if(js["partition"][record.id]=="paraphyletic"): 
                         SeqIO.write(record, out, "fasta")
+                        Nwritten += 1
         elif (file_format=="edit"):
             for line in allfa:
                 name         = line.split()[0]
