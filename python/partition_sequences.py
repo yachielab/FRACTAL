@@ -45,15 +45,16 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
 
     seqname_set = set()
     for inputFASTA_filepath in inputFASTA_filepathlist:
-        is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
-        if is_gzipped:
-            ist  = gzip.open(inputFASTA_filepath, 'rt')
-        else:
-            ist  = open(inputFASTA_filepath, 'r')
-        records = SeqIO.parse(ist, "fasta")
-        for record in records:
-            seqname_set.add(record.name)
-        ist.close()
+        if (os.path.exists(inputFASTA_filepath)):
+            is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
+            if is_gzipped:
+                ist  = gzip.open(inputFASTA_filepath, 'rt')
+            else:
+                ist  = open(inputFASTA_filepath, 'r')
+            records = SeqIO.parse(ist, "fasta")
+            for record in records:
+                seqname_set.add(record.name)
+            ist.close()
     seqname2dirpath = {}
     with open(seqname2dir_filepath, 'r') as dicst:
         for line in dicst:
