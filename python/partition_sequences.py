@@ -64,23 +64,24 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                 seqname2dirpath[seqname] = dirpath
 
     for inputFASTA_filepath in inputFASTA_filepathlist:
-        is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
-        if is_gzipped:
-            ist  = gzip.open(inputFASTA_filepath, 'rt')
-        else:
-            ist  = open(inputFASTA_filepath, 'r')
-        filepath2handle = {}
-        dirpath2filepath = {}
-        for outputFASTA_dirpath in outputFASTA_dirpathlist:
-            outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
-            #filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
-            dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
+        if (os.path.exists(inputFASTA_filepath)):
+            is_gzipped = (inputFASTA_filepath.split(".")[-1] == "gz")
+            if is_gzipped:
+                ist  = gzip.open(inputFASTA_filepath, 'rt')
+            else:
+                ist  = open(inputFASTA_filepath, 'r')
+            filepath2handle = {}
+            dirpath2filepath = {}
+            for outputFASTA_dirpath in outputFASTA_dirpathlist:
+                outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1].split(".gz")[0]
+                #filepath2handle[outputFASTA_filepath] = open(outputFASTA_filepath, 'w')
+                dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-        classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped)
+            classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped)
 
-        ist.close()
-            
-        os.remove(inputFASTA_filepath)
+            ist.close()
+                
+            os.remove(inputFASTA_filepath)
 
 if __name__ == "__main__":
     partition_sequences(
