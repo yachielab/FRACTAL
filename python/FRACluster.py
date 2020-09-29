@@ -28,6 +28,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                seq_count_when_aligned=None,
                ):
     
+    print(SUBSAMPLE_SIZE)
+
     # start timer
     start = time.time() 
 
