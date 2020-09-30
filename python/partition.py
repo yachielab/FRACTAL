@@ -295,6 +295,8 @@ def partition_fasta(
                 Nfinished        = 0
                 while(Nunclassified != 0):
                     file_list= os.listdir(splitted_fasta_dir)
+                    Nunclassified    = 0
+                    Nfinished        = 0
                     for filename in file_list:
                         if (filename.split(".")[-1] == 'finished'):
                             Nfinished += 1
@@ -305,7 +307,6 @@ def partition_fasta(
                             "mv "+wd+"/../../executed/qsub_"+dname+".*.partition.sh " + wd+"/../../qsub_dir",
                             shell=True
                         )
-                    None
                         
             else: # sequential mode
                 print(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
