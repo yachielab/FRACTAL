@@ -64,6 +64,8 @@ if [ "$ALIGNED" = "unaligned" ]; then
     HMM_ALIGN=$(which hmmalign)
 fi
 
+<<COMMENTOUT
+
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
 
@@ -127,6 +129,8 @@ else
 fi
 mv ${ROOT_DIR}/qsub_dir/qsub_d0.sh ${ROOT_DIR}/executed/qsub_d0.sh
 sleep 5
+
+COMMENTOUT
 
 # keep looking over qsub directory & executing qsub until no job is being processed in calculation node
 
