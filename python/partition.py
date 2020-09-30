@@ -287,8 +287,24 @@ def partition_fasta(
                             wd + "/seqname_dirpath.txt"              +
                             "\n"
                             )
+                        handle.write(
+                            "echo finished > " + splitted_fasta_dir+"/"+dname+"."+str(i)+".partition.sh.finished\n"
+                            )
                 # wait for all partition jobs finish
-                while(os.listdir(splitted_fasta_dir) != []):
+                Nunclassified    = len(os.listdir(splitted_fasta_dir))
+                Nfinished        = 0
+                while(Nunclassified != 0):
+                    file_list= os.listdir(splitted_fasta_dir)
+                    for filename in file_list:
+                        if (filename.split(".")[-1] == 'finished'):
+                            Nfinished += 1
+                        elif (filename.split(".")[-1] == 'fa' or filename.split(".")[-1]=='gz'):
+                            Nunclassified += 1
+                    if (Nunclassified > 0 and Nfinished == nodenum):
+                        subprocess.call(
+                            "mv "+wd+"/../../executed/qsub_"+dname+".*.partition.sh " + wd+"/../../qsub_dir",
+                            shell=True
+                        )
                     None
                         
             else: # sequential mode

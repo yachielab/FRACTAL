@@ -55,6 +55,9 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             for record in records:
                 seqname_set.add(record.name)
             ist.close()
+    if len(seqname_set)==0:
+        return
+
     seqname2dirpath = {}
     with open(seqname2dir_filepath, 'r') as dicst:
         for line in dicst:
