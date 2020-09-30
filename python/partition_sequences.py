@@ -39,7 +39,10 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                 shell=True
                 )
         with open(outfilepath + ".count", 'w') as numhandle:
-            numhandle.write(outfilepath+"\t"+str(outfilepath2Nseq[outfilepath])+"\n")
+            if (is_gzipped):
+                numhandle.write(outfilepath+".gz\t"+str(outfilepath2Nseq[outfilepath])+"\n")
+            else:
+                numhandle.write(outfilepath+"\t"+str(outfilepath2Nseq[outfilepath])+"\n")
 
 def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2dir_filepath):
 

@@ -36,7 +36,6 @@ GZIP_INTERMEDIATE=${26}
 SEQ_NUM_FILE=${27}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
-echo $subsample_size
 
 # QSUB OPTION
 if [ -z "$INIT_QSUB_OPTION" ]; then
