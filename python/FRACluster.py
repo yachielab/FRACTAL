@@ -584,12 +584,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             codedir = CODEDIR
             )
         
+        dirpath2Nseq_filepath = WD + "/Nseq_dirpath.txt"
+
         partition.qsub_prep(
             ARGVS,
             QSUBDIR, 
             DIRdict, 
             INIT_SEQ_COUNT,
-            seq_count_when_aligned
+            seq_count_when_aligned,
+            dirpath2Nseq_filepath,
         )
 
         try: 

@@ -361,9 +361,17 @@ def partition_fasta(
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned):
+def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath):
+    dirpath2Nseq = {}
+    with open(dirpath2Nseq_filepath,'r') as handle:
+        for line in handle:
+            dirpath = line.split()[1]
+            Nseq    = int(line.split()[0])
+            dirpath2Nseq[dirpath] = Nseq
+
     for key in DIRdict.keys():
-        ls=DIRdict[key][0].split("/")
+        dirpath = DIRdict[key][0]
+        ls      = DIRdict[key][0].split("/")
         num=ls[len(ls)-1]
         
         PATH = (
@@ -386,7 +394,12 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
         
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         
-        with open(QSUBDIR+"/qsub_"+num+".sh", 'w') as qf:
+        if (dirpath2Nseq[dirpath] > 10^7):
+            job_script_filepath = QSUBDIR+"/qsub_"+num+".largemem.sh"
+        else:
+            job_script_filepath = QSUBDIR+"/qsub_"+num+".smallmem.sh"
+
+        with open(job_script_filepath, 'w') as qf:
             qf.write("#!/bin/bash\n")
             qf.write("#$ -S /bin/bash\n")
             qf.write("PATH={}\n".format(PATH))
@@ -397,7 +410,6 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
             ARGVS[20] = INITIAL_SEQ_COUNT
             if (ARGVS[14] == "unaligned"):
                 ARGVS[28] = seq_count_when_aligned
-
 
             command="python3 "
             for arg in ARGVS: 

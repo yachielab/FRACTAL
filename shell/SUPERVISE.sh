@@ -64,7 +64,7 @@ if [ "$ALIGNED" = "unaligned" ]; then
     HMM_ALIGN=$(which hmmalign)
 fi
 
-<<COMMENTOUT
+#<<COMMENTOUT
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
@@ -130,7 +130,7 @@ fi
 mv ${ROOT_DIR}/qsub_dir/qsub_d0.sh ${ROOT_DIR}/executed/qsub_d0.sh
 sleep 5
 
-COMMENTOUT
+#COMMENTOUT
 
 # keep looking over qsub directory & executing qsub until no job is being processed in calculation node
 
@@ -143,7 +143,11 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
-        qsub ${QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file}
+        if [ `echo ${file} | grep 'largemem'` ] ; then
+            qsub ${INIT_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file}
+        else
+            qsub ${QSUB_OPTION}      -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file}
+        fi
         wait
         mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
       fi
