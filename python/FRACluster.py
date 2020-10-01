@@ -36,7 +36,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ##### hyper parameter #####
     ALIGNMENT_TIMING_PARAMETER = 0.5
     SPLIT_THRESHOLD            = 10000
-    em_req_threshold          = 10^1
+    mem_req_threshold          = 10^1
     #mem_req_threshold          = 10^7
     ###########################
 
