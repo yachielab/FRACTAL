@@ -361,7 +361,10 @@ def partition_fasta(
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath):
+def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath,mem_req_threshold):
+
+    
+
     dirpath2Nseq = {}
     with open(dirpath2Nseq_filepath,'r') as handle:
         for line in handle:
@@ -394,7 +397,7 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
         
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         
-        if (dirpath2Nseq[dirpath] > 10^7):
+        if (dirpath2Nseq[dirpath] > mem_req_threshold):
             job_script_filepath = QSUBDIR+"/qsub_"+num+".largemem.sh"
         else:
             job_script_filepath = QSUBDIR+"/qsub_"+num+".smallmem.sh"

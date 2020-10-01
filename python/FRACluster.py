@@ -36,6 +36,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ##### hyper parameter #####
     ALIGNMENT_TIMING_PARAMETER = 0.5
     SPLIT_THRESHOLD            = 10000
+    em_req_threshold          = 10^1
+    #mem_req_threshold          = 10^7
     ###########################
 
     # remove empty input files#
@@ -593,6 +595,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             INIT_SEQ_COUNT,
             seq_count_when_aligned,
             dirpath2Nseq_filepath,
+            mem_req_threshold
         )
 
         try: 
