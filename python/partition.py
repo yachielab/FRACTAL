@@ -120,17 +120,22 @@ def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size
     js = json.loads(jp)
 
     all_fa_pathlist = [ aligned_all_dir + "/" + all_fa for all_fa in os.listdir(aligned_all_dir) ]
+    
+    is_gzipped = (all_fa_pathlist[0].split(".")[-1] == "gz")
+    if (is_gzipped):
+        out     = gzip.open(outputfname, 'at')
+    else:
+        out     = open(outputfname, 'a')
+    Nwritten = 0
+
     for all_fa in all_fa_pathlist:
         is_gzipped = (all_fa.split(".")[-1] == "gz")
         if (is_gzipped):
             allfa   = gzip.open(all_fa, 'rt')
-            out     = gzip.open(outputfname, 'at')
         else:
             allfa   = open(all_fa, 'r')
-            out     = open(outputfname, 'a')
         # add paraphyletic sequences into subsample
         if (file_format == "fasta"):
-            Nwritten = 0
             handle = SeqIO.parse(allfa, "fasta")
             for record in handle:                                    # should be faster!
                 if (Nwritten == num_of_para):
@@ -150,7 +155,7 @@ def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size
                     if(js["partition"][name]=="paraphyletic"):
                         out.write(line)
         allfa.close()
-        out.close()
+    out.close()
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
