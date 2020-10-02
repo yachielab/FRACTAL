@@ -259,29 +259,28 @@ def partition_fasta(
                 print ("node2filelist", node2filelist)
 
                 dname = wd.split("/")[-1]
+                PATH = (subprocess.\
+                            Popen(
+                                'echo $PATH',
+                                stdout=subprocess.PIPE,
+                                shell=True
+                            ).communicate()[0]
+                        ).decode('utf-8')
+                PATH = (PATH.split('\n'))[0]
+                LD_LIBRARY_PATH = (
+                    subprocess.\
+                        Popen(  
+                            'echo $LD_LIBRARY_PATH', 
+                            stdout=subprocess.PIPE,
+                            shell=True
+                        ).communicate()[0]
+                    ).decode('utf-8')
+                LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
                 for i in range(nodenum):
                     with open(wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".partition.sh", 'w') as handle:
-                        PATH = (subprocess.\
-                                    Popen(
-                                        'echo $PATH',
-                                        stdout=subprocess.PIPE,
-                                        shell=True
-                                    ).communicate()[0]
-                                ).decode('utf-8')
-                        PATH = (PATH.split('\n'))[0]
-                        LD_LIBRARY_PATH = (
-                            subprocess.\
-                                Popen(  
-                                    'echo $LD_LIBRARY_PATH', 
-                                    stdout=subprocess.PIPE,
-                                    shell=True
-                                ).communicate()[0]
-                            ).decode('utf-8')
-                        LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
                         handle.write("#!/bin/bash\n")
                         handle.write("#$ -S /bin/bash\n")
                         handle.write("PATH={}\n".format(PATH))
-                        handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
                         inputFASTA_filepathlist = [splitted_fasta_dir + "/" + splitted_file for splitted_file in node2filelist[i] ]
                         handle.write(
