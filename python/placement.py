@@ -243,6 +243,22 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             node2filelist[j%nodenum].append(file_name)
 
         #distribution start
+        PATH = (subprocess.\
+                    Popen(
+                        'echo $PATH',
+                        stdout=subprocess.PIPE,
+                        shell=True
+                    ).communicate()[0]
+                ).decode('utf-8')
+        PATH = (PATH.split('\n'))[0]
+        LD_LIBRARY_PATH = (
+            subprocess.\
+                Popen(  'echo $LD_LIBRARY_PATH', 
+                        stdout=subprocess.PIPE,
+                        shell=True
+                ).communicate()[0]
+            ).decode('utf-8')
+        LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         for i in range(nodenum):
             os.mkdir(outdir+"/EPANG"+str(i))
             with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
@@ -261,22 +277,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
                     queryfile = query_dir + "/" + filename
 
-                    PATH = (subprocess.\
-                                Popen(
-                                    'echo $PATH',
-                                    stdout=subprocess.PIPE,
-                                    shell=True
-                                ).communicate()[0]
-                            ).decode('utf-8')
-                    PATH = (PATH.split('\n'))[0]
-                    LD_LIBRARY_PATH = (
-                        subprocess.\
-                            Popen(  'echo $LD_LIBRARY_PATH', 
-                                    stdout=subprocess.PIPE,
-                                    shell=True
-                            ).communicate()[0]
-                        ).decode('utf-8')
-                    LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
                     handle.write("#!/bin/bash\n")
                     handle.write("#$ -S /bin/bash\n")
                     handle.write("PATH={}\n".format(PATH))
