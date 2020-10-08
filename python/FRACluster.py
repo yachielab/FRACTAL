@@ -67,7 +67,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_namelist              = list(sorted(os.listdir(WD)))
     infile_pathlist              = []
     for infilename in infile_namelist:
-        if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
+        if ".".join(infilename.split(".")[-2:]) == "fa.gz" or infilename.split(".")[-1] == "fa":
             if (infilename!='root.fa'):
                 infile_pathlist.append(WD+"/"+infilename)
     example_infile_fpath         = infile_pathlist[0]
@@ -448,7 +448,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 os.chdir(WD)
 
                 # select sequence file to place
-                if(os.path.isfile(example_infile_fpath_aligned+".split")):
+                if(os.path.exists(example_infile_fpath_aligned+".split")):
                     QUERY_FA_DIR          = example_infile_fpath_aligned+".split"
                     ALIGNED_FOR_PLACEMENT = "aligned"
                 else:
