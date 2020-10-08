@@ -653,6 +653,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 if __name__ == "__main__":
     argvs = sys.argv
 
+    try:
+        sys.setrecursionlimit(1000000000)
+    except:
+        None
+
     print(argvs)
 
     if (len(argvs)==26):
