@@ -574,8 +574,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if os.path.exists(example_infile_fpath_aligned+".split"):
             FASTA_DIR.append(example_infile_fpath_aligned+".split")
 
-        print(FASTA_DIR)
-
         DIRdict = partition.partition_fasta(
             FASTA_DIR,
             NUMFILE,
