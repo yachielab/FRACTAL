@@ -48,6 +48,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             if (infilename!='root.fa'):
                 infile_pathlist.append(WD+"/"+infilename)
     
+    subprocess.call(
+        "cat " + WD + "/*.count > " + WD + "/file2Nseq.txt",
+        shell=True
+    )
     if (os.path.exists(WD + "/file2Nseq.txt")):
         print("skip reading files")
         fpath2seqcount = {}
