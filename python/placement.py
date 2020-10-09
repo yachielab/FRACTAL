@@ -369,7 +369,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             codedir+"/python/jplace_parse.py "           +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
                             "epa-ng "                                    +
-                            queryfile                                    + 
+                            queryfile + " "                              + 
                             seed                                         +
                             "\n"
                             )
