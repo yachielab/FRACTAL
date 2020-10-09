@@ -500,7 +500,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         #my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
         subprocess.call(
             "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
-            "cat " + outdir + "/EPANG*/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out"         +
+            "cat " + outdir + "/EPANG*/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
             "cat " + outdir + "/EPANG*/*/problematic.fa > " + outdir+"/problematic.fa",
             shell=True
             )
