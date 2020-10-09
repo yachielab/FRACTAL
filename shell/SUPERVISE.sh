@@ -146,7 +146,8 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
   a=$(qstat | grep ${JOB_NAME} | wc -l)
   b=$(ls ${ROOT_DIR}/qsub_dir | wc -l)
   while [ $(expr $a + $b) -gt 0 ]; do
-    for file in $(ls ${ROOT_DIR}/qsub_dir/*placement* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*partition* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*cycle* 2>/dev/null); do
+    for fpath in $(ls ${ROOT_DIR}/qsub_dir/*placement* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*partition* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*cycle* 2>/dev/null); do
+      file=$(basename $fpath)
       NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
