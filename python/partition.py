@@ -112,7 +112,7 @@ def partition(treefile, edge_to_sequence_file, jpartitionfname, depth):
     with open(jpartitionfname,'w') as out:
         out.write(json.dumps(outputdict))
     return len(paraphyletic), max(list(leaf_to_Nseq.values()))
-
+'''
 def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size, num_of_para, file_format = "fasta"):
     # open .jpart file
     with open(jpartfname,"r") as jf:
@@ -157,6 +157,7 @@ def add_paraphyletic_fa(jpartfname, outputfname, aligned_all_dir, subsample_size
                         out.write(line)
         allfa.close()
     out.close()
+'''
 
 def get_ancseq(ancseq,ancnum):
     ancname=str(ancnum)
