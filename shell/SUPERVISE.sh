@@ -130,6 +130,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
     qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh 1> /dev/null) 2>&1) # parallel mode
     wait
   done
+  echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
   wait
@@ -145,7 +146,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
   a=$(qstat | grep ${JOB_NAME} | wc -l)
   b=$(ls ${ROOT_DIR}/qsub_dir | wc -l)
   while [ $(expr $a + $b) -gt 0 ]; do
-    for file in $(ls ${ROOT_DIR}/qsub_dir); do
+    for file in $(ls ${ROOT_DIR}/qsub_dir/*placement*) $(ls ${ROOT_DIR}/qsub_dir/*partition*) $(ls ${ROOT_DIR}/qsub_dir/*cycle*); do
       NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
@@ -157,6 +158,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
             else
                 qsub_err=$((qsub ${QSUB_OPTION}      -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
             fi
+            echo "qsub... ${ROOT_DIR}/qsub_dir/${file} submitted!" 
         done
         wait
         mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
@@ -218,6 +220,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
         qsub_err=$((qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh 1> /dev/null) 2>&1)
         wait
     done
+    echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait

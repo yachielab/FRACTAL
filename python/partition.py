@@ -402,9 +402,9 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         
         if (dirpath2Nseq[dirpath] > mem_req_threshold):
-            job_script_filepath = QSUBDIR+"/qsub_"+num+".largemem.sh"
+            job_script_filepath = QSUBDIR+"/qsub_"+num+".cycle.largemem.sh"
         else:
-            job_script_filepath = QSUBDIR+"/qsub_"+num+".smallmem.sh"
+            job_script_filepath = QSUBDIR+"/qsub_"+num+".cycle.sh"
 
         with open(job_script_filepath, 'w') as qf:
             qf.write("#!/bin/bash\n")
