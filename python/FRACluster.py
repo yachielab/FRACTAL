@@ -49,7 +49,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 infile_pathlist.append(WD+"/"+infilename)
     
     subprocess.call(
-        "cat " + WD + "/*.count > " + WD + "/file2Nseq.txt",
+        "cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi",
         shell=True
     )
     if (os.path.exists(WD + "/file2Nseq.txt")):
