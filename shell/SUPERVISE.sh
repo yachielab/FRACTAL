@@ -51,6 +51,7 @@ mkdir ${ROOT_DIR}/qsub_dir
 mkdir ${ROOT_DIR}/final_tree
 mkdir ${ROOT_DIR}/out
 mkdir ${ROOT_DIR}/err
+mkdir ${ROOT_DIR}/executing
 mkdir ${ROOT_DIR}/executed
 
 # requirement check
@@ -121,7 +122,8 @@ fi
 
 # first qsub
 if [ $max_num_of_jobs -gt 1 ]; then
-  qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh # parallel mode
+  qsub_out=$(qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh) # parallel mode
+  echo "YES!: ${qsub_out}"
   wait
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
