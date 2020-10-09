@@ -3,7 +3,7 @@
 # parse .jplace file and returns dictionary of 'tree', 'placement dictionary', and 'placement list'
 
 import json
-from Bio import Phylo
+from Bio import Phylo, SeqIO
 from io import StringIO
 import sys
 import re
@@ -34,7 +34,7 @@ def correspond(treestr):
             break
     return [corr,root]
 
-def parse_jplace(fname, placement_method,seed,careful=1):
+def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
     if(len(seed)!=0):random.seed(int(seed))
     with open(fname,"r") as jf:
         jp = jf.read()
@@ -48,6 +48,8 @@ def parse_jplace(fname, placement_method,seed,careful=1):
     placement_list = [] # edge name -> sequence name
     for i in range(len(tree.get_terminals())+len(tree.get_nonterminals())):
         placement_list.append([])
+
+    problematic_set = set()
     for placement in jdict:
         if(placement_method=="epa-ng"):
             edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
@@ -79,6 +81,10 @@ def parse_jplace(fname, placement_method,seed,careful=1):
             name = placement['n'][0]
         if(name!='root'):
             placement_list[edge].append(name)
+
+        if('{'+str(edge)+'}' == root):
+            problematic_set.add(name)
+
     with open('placement_tree.out','w') as handle:
         handle.write(treestr)
     '''
@@ -93,10 +99,16 @@ def parse_jplace(fname, placement_method,seed,careful=1):
             for seqname in seqnamelist:
                 handle.write('{'+str(i)+'}'+"\t"+seqname+"\n")
 
+    with open("problematic.fa", 'w') as handle:
+        records = SeqIO.parse(infasta_fpath,'fasta')
+        for record in records:
+            if(record.name in problematic_set):
+                SeqIO.write(record, handle, 'fasta')
+
 '''
 command line argument: "<input .fa file path> <output .fa file path>"
 '''
 if __name__ == "__main__":
     #main function
     argvs=sys.argv
-    parse_jplace(argvs[1],argvs[2],argvs[3])
+    parse_jplace(argvs[1],argvs[2],argvs[3],argvs[4])

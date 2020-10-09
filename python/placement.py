@@ -149,6 +149,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 jplace_parse.parse_jplace(
                     outdir+"/"+filename+"/epa_result.jplace",
                     "epa-ng",
+                    query,
                     seed,
                     careful=careful
                     )
@@ -185,6 +186,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 jplace_parse.parse_jplace(
                     outdir+"/"+filename+"/RAxML_portableTree.epa_result.jplace",
                     "epa_MP",
+                    " -s "+outdir+"/"+filename+"/ref_query.fa",
                     seed,
                     careful=careful
                 )
@@ -367,6 +369,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             codedir+"/python/jplace_parse.py "           +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/epa_result.jplace " +
                             "epa-ng "                                    +
+                            queryfile                                    + 
                             seed                                         +
                             "\n"
                             )
@@ -428,6 +431,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             codedir+"/python/jplace_parse.py "                              +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/RAxML_portableTree.epa_result.jplace " +
                             "epa_MP "                                                       +
+                            outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa "      +
                             seed + "\n"
                             )
                         files_to_be_removed = [
