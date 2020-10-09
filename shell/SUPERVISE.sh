@@ -153,7 +153,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
         qsub_err="yet"
         while [ -n "${qsub_err}" ]; do
-            if [ $qsub_err != "yet" ]; then
+            if [ "$qsub_err" != "yet" ]; then
                 echo ${qsub_err}
             fi
             if [ `echo ${file} | grep 'largemem'` ] ; then
