@@ -82,8 +82,8 @@ def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
         if(name!='root'):
             placement_list[edge].append(name)
 
-        if('{'+str(edge)+'}' == root):
-            problematic_set.add(name)
+            if('{'+str(edge)+'}' == root):
+                problematic_set.add(name)
 
     with open('placement_tree.out','w') as handle:
         handle.write(treestr)

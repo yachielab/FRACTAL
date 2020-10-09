@@ -203,7 +203,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     )
         subprocess.call(
             "mv "  + "$(ls "+outdir+"/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
-            "cat " + outdir + "/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out",
+            "cat " + outdir + "/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out;"        +
+            "cat " + outdir + "/*/problematic.fa > " + outdir+"/problematic.fa",
             shell=True
             )
 

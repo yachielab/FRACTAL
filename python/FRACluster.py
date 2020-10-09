@@ -227,7 +227,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             os.chdir(WD)
 
             ### get input file name2###
-            iterationfile_path         = WD + "/ITERATION.fa"                    + gzip_extention
+            iterationfile_path         = WD + "/ITERATION.fa"                   
             subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          
             renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" 
             ###########################
@@ -528,7 +528,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         ALIGNED_SUBSAMPLE = subsamplefile_path
                         
                     subprocess.call(
-                        "cat "+ALIGNED_SUBSAMPLE+gzip_command+"> "+iterationfile_path,
+                        "cat "+ALIGNED_SUBSAMPLE+" "+WD+"/EPANG/problematic.fa > "+iterationfile_path,
                         shell=True
                     )
                     
@@ -539,6 +539,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     else:
                         ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
+                    '''
                     partition.add_paraphyletic_fa(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
                         iterationfile_path                      ,
@@ -546,6 +547,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         SUBSAMPLE_SIZE                          ,
                         para
                         )
+                    '''
                     i+=1
                     prev_para=para
                 elif (not resampling_needed):
