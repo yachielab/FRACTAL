@@ -50,12 +50,12 @@ def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
         placement_list.append([])
 
     problematic_set = set()
+    root=correspond(treestr)[1]
     for placement in jdict:
         if(placement_method=="epa-ng"):
             edge_prob_list = [{'edge':pl[0], 'prob':pl[2]} for pl in placement['p']]
             if (careful>1 and len(edge_prob_list)>1 ):
                 tree.clade.name = "tree_top"
-                root=correspond(treestr)[1]
                 edge_prob_list_sorted = sorted(edge_prob_list, key=lambda x:x['prob'], reverse=True)
                 best_places  = ['{'+str(edge_prob['edge'])+'}' for edge_prob in edge_prob_list_sorted[0:careful]]
                 edge_str = tree.common_ancestor(best_places).name
@@ -75,7 +75,7 @@ def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
             else:
                 edge_str = tree.common_ancestor(equally_parsimonious_edge_list).name
                 if (edge_str == "tree_top"):
-                    root=correspond(treestr)[1]
+
                     edge_str = root
             edge = int(edge_str.split('{')[1].split('}')[0])
             name = placement['n'][0]
