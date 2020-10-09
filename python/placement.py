@@ -261,7 +261,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         for i in range(nodenum):
             os.mkdir(outdir+"/EPANG"+str(i))
-            with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".placement.sh", 'w') as handle:
+            with open(WD+"/../../prep_dir/qsub_"+dname+"."+str(i)+".placement.sh", 'w') as handle:
                 for filename in node2filelist[i]:
 
                     if filename.split(".")[-1] == "gz":
@@ -459,6 +459,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 #    "rm "+outdir+"/*."+str(i)+".gz\n"
                 #    ) 
                 # end of a distributed task
+            shutil.move(WD+"/../../prep_dir/qsub_"+dname+"."+str(i)+".placement.sh", WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".placement.sh")
         # check if all placement tasks ended
         flag = 0
         while(flag==0):

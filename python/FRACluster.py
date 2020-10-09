@@ -586,7 +586,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
         partition.qsub_prep(
             ARGVS,
-            QSUBDIR, 
+            WD, 
             DIRdict, 
             INIT_SEQ_COUNT,
             seq_count_when_aligned,

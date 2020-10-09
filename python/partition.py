@@ -11,6 +11,7 @@ import subprocess
 import random
 import gzip
 import partition_sequences
+import shutil
 #from memory_profiler import profile
 
 def rooting(nwkfilepath,newnwkpath,root):
@@ -277,7 +278,7 @@ def partition_fasta(
                     ).decode('utf-8')
                 LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
                 for i in range(nodenum):
-                    with open(wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".partition.sh", 'w') as handle:
+                    with open(wd+"/../../prep_dir/qsub_"+dname+"."+str(i)+".partition.sh", 'w') as handle:
                         handle.write("#!/bin/bash\n")
                         handle.write("#$ -S /bin/bash\n")
                         handle.write("PATH={}\n".format(PATH))
@@ -294,6 +295,7 @@ def partition_fasta(
                         handle.write(
                             "echo finished > " + splitted_fasta_dir+"/"+dname+"."+str(i)+".partition.sh.finished\n"
                             )
+                    shutil.move(wd+"/../../prep_dir/qsub_"+dname+"."+str(i)+".partition.sh", wd+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".partition.sh")
                 # wait for all partition jobs finish
                 Nunclassified    = len(os.listdir(splitted_fasta_dir))
                 Nfinished        = 0
@@ -365,7 +367,7 @@ def partition_fasta(
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath,mem_req_threshold):
+def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath,mem_req_threshold):
 
     
 
@@ -402,9 +404,9 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         
         if (dirpath2Nseq[dirpath] > mem_req_threshold):
-            job_script_filepath = QSUBDIR+"/qsub_"+num+".cycle.largemem.sh"
+            job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.largemem.sh"
         else:
-            job_script_filepath = QSUBDIR+"/qsub_"+num+".cycle.sh"
+            job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.sh"
 
         with open(job_script_filepath, 'w') as qf:
             qf.write("#!/bin/bash\n")
@@ -424,6 +426,7 @@ def qsub_prep(ARGVS, QSUBDIR, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned
                     arg="\"\""
                 command += str(arg) + " "
             qf.write(command)
+        shutil.move(job_script_filepath, WD+"/../../qsub_dir")
 
 def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
     is_gzipped = (INPUTfile.split(".")[-1] == "gz")

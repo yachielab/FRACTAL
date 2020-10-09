@@ -47,11 +47,11 @@ fi
 
 mkdir ${ROOT_DIR}
 mkdir ${ROOT_DIR}/nodes
-mkdir ${ROOT_DIR}/qsub_dir
 mkdir ${ROOT_DIR}/final_tree
 mkdir ${ROOT_DIR}/out
 mkdir ${ROOT_DIR}/err
-mkdir ${ROOT_DIR}/executing
+mkdir ${ROOT_DIR}/prep_dir
+mkdir ${ROOT_DIR}/qsub_dir
 mkdir ${ROOT_DIR}/executed
 
 # requirement check
