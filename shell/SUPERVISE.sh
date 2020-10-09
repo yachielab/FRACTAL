@@ -224,13 +224,14 @@ if [ $max_num_of_jobs -gt 1 ]; then
     qsub_err="yet"
     while [ -n "${qsub_err}" ]; do
         qsub_err=$((qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh 1> /dev/null) 2>&1)
+        
         wait
     done
+    echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait
 fi
-echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 mv ${ROOT_DIR}/qsub_dir/qsub_assembly.sh ${ROOT_DIR}/executed/qsub_assembly.sh
 
 while [ ! -e ${ROOT_DIR}/final_tree/assembly_flag.txt ]; do
