@@ -127,14 +127,16 @@ if [ $max_num_of_jobs -gt 1 ]; then
     if [ $qsub_err != "yet" ]; then
         echo ${qsub_err}
     fi
-    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1) # parallel mode
+    
+    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
+
     wait
   done
+  echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh >${ROOT_DIR}/out/qsub_d0.cycle.sh.out 2>${ROOT_DIR}/err/qsub_d0.cycle.sh.err # sequential mode
   wait
 fi
-echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh submitted!" 
 mv ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh ${ROOT_DIR}/executed/qsub_d0.cycle.sh
 sleep 5
 
