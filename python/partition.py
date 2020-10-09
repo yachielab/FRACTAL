@@ -351,18 +351,16 @@ def partition_fasta(
             for st in ost:
                 st.close()
             para.close()
-    '''
+    
     for dirpath in dirpath_list:
         if (dirpath != wd):
             subprocess.call(
-                "cat " + dirpath + "/*.count > "+dirpath+"/file2Nseq.txt; "+
-                "rm "+dirpath + "/*.count; "                               +
                 "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
                 shell=True
             )
-    with open(info, 'w') as out:
-        out.write(json.dumps(DIRdict))
-    '''
+    #with open(info, 'w') as out:
+    #    out.write(json.dumps(DIRdict))
+    
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
         leaf.name=newname
