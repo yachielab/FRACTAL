@@ -124,17 +124,17 @@ fi
 if [ $max_num_of_jobs -gt 1 ]; then
   qsub_err="yet"
   while [ -n "${qsub_err}" ]; do
-    #if [ $qsub_err != "yet" ]; then
+    if [ $qsub_err != "yet" ]; then
         echo ${qsub_err}
-    #fi
+    fi
     qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh 1> /dev/null) 2>&1) # parallel mode
     wait
   done
-  echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
   wait
 fi
+echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.sh submitted!" 
 mv ${ROOT_DIR}/qsub_dir/qsub_d0.sh ${ROOT_DIR}/executed/qsub_d0.sh
 sleep 5
 
@@ -158,9 +158,9 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
             else
                 qsub_err=$((qsub ${QSUB_OPTION}      -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
             fi
-            echo "qsub... ${ROOT_DIR}/qsub_dir/${file} submitted!" 
         done
         wait
+        echo "qsub... ${ROOT_DIR}/qsub_dir/${file} submitted!" 
         mv ${ROOT_DIR}/qsub_dir/${file} ${ROOT_DIR}/executed/${file}
       fi
     done
@@ -220,11 +220,11 @@ if [ $max_num_of_jobs -gt 1 ]; then
         qsub_err=$((qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh 1> /dev/null) 2>&1)
         wait
     done
-    echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 else
   bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
   wait
 fi
+echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 mv ${ROOT_DIR}/qsub_dir/qsub_assembly.sh ${ROOT_DIR}/executed/qsub_assembly.sh
 
 while [ ! -e ${ROOT_DIR}/final_tree/assembly_flag.txt ]; do
