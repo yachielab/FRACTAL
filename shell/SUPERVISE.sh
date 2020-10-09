@@ -111,13 +111,13 @@ done
 
 wait
 echo "1" >${ROOT_DIR}/NUMFILE
-echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.sh
-echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
-echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
+echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
+echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 if [ "$FASTA_or_EDIT" = "fa" ]; then
-    echo "python3 ${CODE_DIR}/python/FRACluster.py   ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+    echo "python3 ${CODE_DIR}/python/FRACluster.py   ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 elif [ "$FASTA_or_EDIT" = "edit" ]; then
-    echo "python3 ${CODE_DIR}/python/FRACluster.2.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.sh
+    echo "python3 ${CODE_DIR}/python/FRACluster.2.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 fi
 
 # first qsub
@@ -127,15 +127,15 @@ if [ $max_num_of_jobs -gt 1 ]; then
     if [ $qsub_err != "yet" ]; then
         echo ${qsub_err}
     fi
-    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.sh.out -e ${ROOT_DIR}/err/qsub_d0.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.sh 1> /dev/null) 2>&1) # parallel mode
+    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1) # parallel mode
     wait
   done
 else
-  bash ${ROOT_DIR}/qsub_dir/qsub_d0.sh >${ROOT_DIR}/out/qsub_d0.sh.out 2>${ROOT_DIR}/err/qsub_d0.sh.err # sequential mode
+  bash ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh >${ROOT_DIR}/out/qsub_d0.cycle.sh.out 2>${ROOT_DIR}/err/qsub_d0.cycle.sh.err # sequential mode
   wait
 fi
-echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.sh submitted!" 
-mv ${ROOT_DIR}/qsub_dir/qsub_d0.sh ${ROOT_DIR}/executed/qsub_d0.sh
+echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh submitted!" 
+mv ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh ${ROOT_DIR}/executed/qsub_d0.cycle.sh
 sleep 5
 
 #COMMENTOUT
