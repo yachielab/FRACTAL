@@ -153,6 +153,9 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       if [ $NUMBER_OF_JOBS -lt ${max_num_of_jobs} ]; then
         qsub_err="yet"
         while [ -n "${qsub_err}" ]; do
+            if [ $qsub_err != "yet" ]; then
+                echo ${qsub_err}
+            fi
             if [ `echo ${file} | grep 'largemem'` ] ; then
                 qsub_err=$((qsub ${INIT_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
             else
