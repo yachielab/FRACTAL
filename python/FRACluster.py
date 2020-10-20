@@ -27,8 +27,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
                seq_count_when_aligned=None,
                ):
-    
-    print("subsample size: ",SUBSAMPLE_SIZE)
 
     # start timer
     start = time.time() 
@@ -36,7 +34,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ##### hyper parameter #####
     ALIGNMENT_TIMING_PARAMETER = 0.5
     SPLIT_THRESHOLD            = 10000
-    #mem_req_threshold          = 10^1
     mem_req_threshold          = 10^7
     ###########################
 
@@ -47,11 +44,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
             if (infilename!='root.fa'):
                 infile_pathlist.append(WD+"/"+infilename)
+
+    # Record root.fa existed or not
+    root_in_separated_file = "root.fa" in set(infile_namelist)
     
+    # Create file2Nseq file
     subprocess.call(
         "cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi",
         shell=True
     )
+    # Create file2Nseq dictionary
     if (os.path.exists(WD + "/file2Nseq.txt")):
         print("skip reading files")
         fpath2seqcount = {}
@@ -59,13 +61,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             for line in handle:
                 fpath2seqcount[line.split()[0]] = int(line.split()[1])
     else:
-        fpath2seqcount           = rename_sequence.count_sequence_fast(infile_pathlist)
-    
-    #for fpath in infile_pathlist:
-    #    if fpath2seqcount[fpath] == 0:
-    #        os.remove(fpath)
-    #        fpath2seqcount.pop(fpath)
-    ###########################
+        fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist)
 
     ### get input file name ###
     infile_namelist              = list(sorted(os.listdir(WD)))
@@ -143,10 +139,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     if(seq_count<=THRESHOLD):
         concat_infpath = WD+"/INPUT.terminal.fa"
-        subprocess.call(
-            "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
-            shell=True
-        )
+        if (root_in_separated_file):
+            subprocess.call(
+                "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                shell=True
+            )
+        else:
+            subprocess.call(
+                "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                shell=True
+            )
         if(seq_count<4):
             partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
             print("seq_count < 4!")
@@ -175,10 +177,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT):
         # To Do: remove concatenation
         concat_infpath = WD+"/INPUT.fa.gz"
-        subprocess.call(
-            "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
-            shell=True
-        ) 
+        if (root_in_separated_file):
+            subprocess.call(
+                "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
+                shell=True
+            ) 
+        else:
+            subprocess.call(
+                "(cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
+                shell=True
+            ) 
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
@@ -267,7 +275,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         else:
                             os.mkdir(file_path+".split")
                             shutil.move(file_path, file_path+".split/")
-                        #subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" ", shell=True)
                         splitted_fnamelist = sorted(os.listdir(file_path+".split"))
                         for k, splitted_fname in enumerate(splitted_fnamelist):
                             if (k < len(splitted_fnamelist)-1):
