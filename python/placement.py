@@ -186,7 +186,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 jplace_parse.parse_jplace(
                     outdir+"/"+filename+"/RAxML_portableTree.epa_result.jplace",
                     "epa_MP",
-                    " -s "+outdir+"/"+filename+"/ref_query.fa",
+                    outdir+"/"+filename+"/ref_query.fa",
                     seed,
                     careful=careful
                 )
