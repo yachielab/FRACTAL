@@ -171,7 +171,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     subprocess.call(
                         "cat "+refseq+" "            +
                         query                        +
-                        " | gunzip > "+outdir+"/"+filename+"/ref_query.fa" ,
+                        " > "+outdir+"/"+filename+"/ref_query.fa" ,
                         shell=True
                     )
                 os.chdir(outdir)
