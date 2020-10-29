@@ -174,7 +174,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " > "+outdir+"/"+filename+"/ref_query.fa" ,
                         shell=True
                     )
-                os.chdir(outdir)
+                os.chdir(outdir+"/"+filename)
                 subprocess.call(
                     RAXMLSEQ                      +
                     " -n epa_result"              +
