@@ -454,7 +454,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             gzipcommand + " > "                                                  +
                             alignment_outdir+"/"+filename+".aligned"+extention                   +
                             extention,
-                            shell=True
                         )
                 handle.write(
                     "echo \"finished\" > "      +
