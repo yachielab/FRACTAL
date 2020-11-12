@@ -95,10 +95,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 is_gzipped = True
                 extention  = ".gz"
                 gzipcommand= "|gzip"
+                gunzipcommand = "|gunzip"
             else:
                 is_gzipped = False
                 extention  = ""
                 gzipcommand= ""
+                gunzipcommand = ""
 
             if (file_format == "edit"):
                 manage_edits.edit2fasta(query, edit_list) # TO DO
@@ -271,10 +273,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         is_gzipped = True
                         extention  = ".gz"
                         gzipcommand= "|gzip"
+                        gunzipcommand = "|gunzip"
                     else:
                         is_gzipped = False
                         extention  = ""
                         gzipcommand= ""
+                        gunzipcommand = ""
 
 
                     os.mkdir(outdir+"/EPANG"+str(i)+"/"+filename)
@@ -419,6 +423,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cat "+refseq+" "+
                                 queryfile        +
+                                gunzipcommand    +
                                 "| sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )
                         handle.write(
