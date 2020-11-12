@@ -371,8 +371,6 @@ def partition_fasta(
 
 def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath,mem_req_threshold):
 
-    
-
     dirpath2Nseq = {}
     with open(dirpath2Nseq_filepath,'r') as handle:
         for line in handle:
