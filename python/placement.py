@@ -421,7 +421,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 )
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
-                                "(cat "+refseq+"; cat"+
+                                "(cat "+refseq+"; cat "+
                                 queryfile        +
                                 gunzipcommand    +
                                 ")| sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
