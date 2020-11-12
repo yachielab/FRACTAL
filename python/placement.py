@@ -448,21 +448,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         handle.write(
                             "rm "+ " ".join(files_to_be_removed) + " &> /dev/null\n"
                             ) 
-                        if(ALIGNED=="aligned"):
+                        if(ALIGNED!="aligned"):
                             handle.write(
                                 "cat "                                                               +
                                 outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
                                 gzipcommand + " > "                                                  +
-                                alignment_outdir+"/"+filename+""+extention                   +
-                                extention + "\n",
-                            )
-                        else:
-                            handle.write(
-                                "cat "                                                               +
-                                outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
-                                gzipcommand + " > "                                                  +
-                                alignment_outdir+"/"+filename+".aligned"+extention                   +
-                                extention + "\n",
+                                alignment_outdir+"/"+filename+".aligned" + extention + "\n"          ,
                             )
                 handle.write(
                     "echo \"finished\" > "      +
