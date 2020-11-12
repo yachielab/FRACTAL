@@ -452,8 +452,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             "cat "                                                               +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
                             gzipcommand + " > "                                                  +
-                            alignment_outdir+"/"+filename+".aligned"+extention+"\n"              +
-                            extention,
+                            alignment_outdir+"/"+filename+".aligned"+extention                   +
+                            extention + "\n",
                         )
                 handle.write(
                     "echo \"finished\" > "      +
