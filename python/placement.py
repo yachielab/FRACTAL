@@ -165,15 +165,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " --mapali "+refseq+" "    +
                         refseq+".hmm "             +
                         query                      +
-                        gunzipcommand              +
                         " | sed 's/\./N/g'> "      +
                         outdir+"/"+filename+"/ref_query.fa"  ,
                         shell=True
                     )  
                 elif(ALIGNED=="aligned"): # for aligned sequences
                     subprocess.call(
-                        "cat "+refseq+" "            +
-                        query                        +
+                        "(cat "+refseq+"; cat "      +
+                        query + gunzipcommand +")"   +
                         " > "+outdir+"/"+filename+"/ref_query.fa" ,
                         shell=True
                     )
