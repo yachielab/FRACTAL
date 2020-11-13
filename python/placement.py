@@ -165,6 +165,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " --mapali "+refseq+" "    +
                         refseq+".hmm "             +
                         query                      +
+                        gunzipcommand              +
                         " | sed 's/\./N/g'> "      +
                         outdir+"/"+filename+"/ref_query.fa"  ,
                         shell=True
