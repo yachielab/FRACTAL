@@ -1,6 +1,6 @@
 ### Update Log
 
-<h4> 11/21/2020 Version 2.5.0 </h4>
+<h4> 11/14/2020 Version 2.5.0 </h4>
 1. Option: -g option was released. FRACTAL was enabled to gzip heavy intermediate files.
 
 <h4> 7/21/2020 Version 2.4.0 </h4>
