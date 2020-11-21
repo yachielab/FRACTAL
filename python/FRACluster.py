@@ -180,7 +180,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -c " + str(THREAD_NUM)          + \
                             " -e "                            + \
                             " -r " + SEED                     + \
-                            " -z " + EXTRACTION_SIZE          + \
+                            " -z " + str(EXTRACTION_SIZE)     + \
                             gzip_option
         
         if (TREEMETHOD!="unspecified"): 
