@@ -36,7 +36,7 @@ GZIP_INTERMEDIATE="FALSE"
 SEQ_NUM_FILE="unspecified"
 
 function version {
-  echo "######## FRACTAL v2.6.0 ########"
+  echo "######## FRACTAL v2.5.0 ########"
 }
 
 function usage {
