@@ -31,31 +31,33 @@ def edit2editlist(edit_file):
 
     return editlist
 
-def edit2fasta(edit_file, edit_list, out_gz = True):
-    inhandle = gzip.open(edit_file, 'rt')
-    outhandle = gzip.open( edit_file + ".fa.gz", 'wt' )
+def edit2fasta(edit_file, fasta_file, edit_list):
+    if(edit_file.split(".")[-1]=="gz"):
+        inhandle = gzip.open(edit_file, 'rt')
+    else:
+        inhandle = open(edit_file, 'r')
+    outhandle = open(fasta_file, 'w' )   # not gzipped
     
-    if (True):
-        for line in inhandle:
-            seq_name      = line.split()[0]
-            if len(line.split()) > 1:
-                seq_edit_list = line.split()[1].split(";")
+    for line in inhandle:
+        seq_name      = line.split()[0]
+        if len(line.split()) > 1:
+            seq_edit_list = line.split()[1].split(";")
+        else:
+            seq_edit_list = []
+        seq_edit_set  = set(seq_edit_list)
+        seq_str       = ""
+        seq_half_pos  = len(edit_list)//2 + 1
+        for edit in edit_list[:seq_half_pos]:
+            if (edit in seq_edit_set):
+                seq_str = seq_str + "T"
             else:
-                seq_edit_list = []
-            seq_edit_set  = set(seq_edit_list)
-            seq_str       = ""
-            seq_half_pos  = len(edit_list)//2 + 1
-            for edit in edit_list[:seq_half_pos]:
-                if (edit in seq_edit_set):
-                    seq_str = seq_str + "T"
-                else:
-                    seq_str = seq_str + "C"
-            for edit in edit_list[seq_half_pos:]:
-                if (edit in seq_edit_set):
-                    seq_str = seq_str + "A"
-                else:
-                    seq_str = seq_str + "G"
-            outhandle.write(">"+seq_name+"\n"+seq_str+"\n")
+                seq_str = seq_str + "C"
+        for edit in edit_list[seq_half_pos:]:
+            if (edit in seq_edit_set):
+                seq_str = seq_str + "A"
+            else:
+                seq_str = seq_str + "G"
+        outhandle.write(">"+seq_name+"\n"+seq_str+"\n")
             
     inhandle.close()
     outhandle.close()

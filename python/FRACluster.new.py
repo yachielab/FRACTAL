@@ -16,6 +16,7 @@ import rename_sequence
 import placement
 import extraction
 import error_process
+import manage_edits
 
 import math
 import time
@@ -23,7 +24,7 @@ import random
 
 def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-               INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,careful,
+               INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,careful,FASTA_or_EDIT,
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
                seq_count_when_aligned=None,
                ):
@@ -37,20 +38,21 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     mem_req_threshold          = 10**7
     ###########################
 
-    # remove empty input files#
-    infile_namelist              = os.listdir(WD)
+    # Enumerate input files
+    infile_namelist              = list(sorted(os.listdir(WD)))
     infile_pathlist              = []
     for infilename in infile_namelist:
-        if infilename.split(".")[-1] == "fa" or infilename.split(".")[-1] == "gz":
+        if infilename.split(".")[-1] in {"edit", "fa", "gz"}:
             if (infilename!='root.fa'):
                 infile_pathlist.append(WD+"/"+infilename)
 
     # Record root.fa existed or not
-    root_in_separated_file = "root.fa" in set(infile_namelist)
+    if (FASTA_or_EDIT == "fa"):
+        root_in_separated_file = "root.fa" in set(infile_namelist)
     
     # Create file2Nseq file
     subprocess.call(
-        "if [ -e " + WD + "/*.count ]; then cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; fi; if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi",
+        "if [ -n $(ls " + WD + "/*.count) ]; then cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; fi; if [ -e "+WD + "/file2Nseq.txt"+" ]; then if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi; fi",
         shell=True
     )
     # Create file2Nseq dictionary
@@ -61,26 +63,21 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             for line in handle:
                 fpath2seqcount[line.split()[0]] = int(line.split()[1])
     else:
-        fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist)
+        fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist, form = FASTA_or_EDIT)
 
     ### get input file name ###
-    infile_namelist              = list(sorted(os.listdir(WD)))
-    infile_pathlist              = []
-    for infilename in infile_namelist:
-        if ".".join(infilename.split(".")[-2:]) == "fa.gz" or infilename.split(".")[-1] == "fa":
-            if (infilename!='root.fa'):
-                infile_pathlist.append(WD+"/"+infilename)
     example_infile_fpath         = infile_pathlist[0]
-    infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
-    example_infile_fpath_aligned = infile_pathlist_aligned[0]
     iterationfile_path           = "unspecified"
+    if FASTA_or_EDIT == "fa":
+        infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
+        example_infile_fpath_aligned = infile_pathlist_aligned[0]
+        if (not os.path.isfile(WD+"/root.fa")):
+            root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
+        else:
+            root_fpath = WD+"/root.fa"
     ###########################
     
     ## check input file property ##
-    if (not os.path.isfile(WD+"/root.fa")):
-        root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
-    else:
-        root_fpath = WD+"/root.fa"
     seq_count                 = sum(fpath2seqcount.values())
     is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
     if (is_gzipped):
@@ -113,6 +110,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # call direct tree reconstruction
 
     if(seq_count<=THRESHOLD):
+
+        # Convert .edit(.gz) into .fa
+        if (FASTA_or_EDIT == "edit"):
+            new_infile_pathlist = []
+            for filepath in infile_pathlist:
+                edit_list = manage_edits.edit2editlist(filepath)
+                manage_edits.edit2fasta(filepath, filepath+".fa", edit_list)
+                new_infile_pathlist.append(filepath+".fa")
+            infile_pathlist = new_infile_pathlist
+
         concat_infpath = WD+"/INPUT.terminal.fa"
         if (root_in_separated_file):
             subprocess.call(
@@ -148,20 +155,29 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 "root"
             )
     
-    # call fractal FRACTAL # don't forget to change!!!!!
+    # call fractal FRACTAL 
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT):
+
         # To Do: remove concatenation
-        concat_infpath = WD+"/INPUT.fa.gz"
-        if (root_in_separated_file):
+        if (FASTA_or_EDIT == "fa"):
+            concat_infpath = WD+"/INPUT.fa.gz"
+            if (root_in_separated_file):
+                subprocess.call(
+                    "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
+                    shell=True
+                ) 
+            else:
+                subprocess.call(
+                    "(cat "+" ".join(infile_pathlist) + gunzip_command + ")|gzip > " + concat_infpath,
+                    shell=True
+                )
+        elif (FASTA_or_EDIT == "edit"):
+            concat_infpath = WD+"/INPUT.edit.gz"
             subprocess.call(
-                "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
+                "(cat "+" ".join(infile_pathlist) + gunzip_command + ")|gzip > " + concat_infpath,
                 shell=True
-            ) 
-        else:
-            subprocess.call(
-                "(cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
-                shell=True
-            ) 
+            )
+
         # Quit distribution after the available computer node saturated 
         os.mkdir("TREE")
         os.chdir(WD+"/TREE")
@@ -169,17 +185,19 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             gzip_option = " -g "
         else:
             gzip_option = ""
-        FRACTAL_COMMAND = "FRACTAL"                         + \
-                          " -i " + concat_infpath           + \
-                          " -k " + str(SUBSAMPLE_SIZE)      + \
-                          " -b " + MODEL                    + \
-                          " -p " + ML_or_MP                 + \
-                          " -t " + str(THRESHOLD)           + \
-                          " -x " + str(MAX_ITERATION)       + \
-                          " -c " + str(THREAD_NUM)          + \
-                          " -r " + SEED                     + \
-                          " -e "                            + \
-                          gzip_option
+        FRACTAL_COMMAND =   "FRACTAL"                         + \
+                            " -i " + concat_infpath           + \
+                            " -k " + str(SUBSAMPLE_SIZE)      + \
+                            " -b " + MODEL                    + \
+                            " -p " + ML_or_MP                 + \
+                            " -P "  + str(careful)            + \
+                            " -x " + str(MAX_ITERATION)       + \
+                            " -t " + str(THRESHOLD)           + \
+                            " -c " + str(THREAD_NUM)          + \
+                            " -e "                            + \
+                            " -r " + SEED                     + \
+                            " -z " + EXTRACTION_SIZE          + \
+                            gzip_option
         
         if (TREEMETHOD!="unspecified"): 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
@@ -187,6 +205,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
         if (ALIGNED=='unaligned'):
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
+        if (FASTA_or_EDIT == "edit"):
+            FRACTAL_COMMAND = FRACTAL_COMMAND+" -E "
         if (OPTION!=""):
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -a " + OPTION
         
@@ -202,18 +222,18 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         os.mkdir("PARTITION")
         
         prev_para = seq_count
-        nodenum = (NODE_COUNT*seq_count)//INIT_SEQ_COUNT-1
+        nodenum   = (NODE_COUNT * seq_count) // INIT_SEQ_COUNT - 1
 
 
         while i<MAX_ITERATION:
             
             os.chdir(WD)
 
-            ### get input file name2###
-            iterationfile_path         = WD + "/ITERATION.fa"                   
-            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE.fa"          
-            renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+".fa" 
-            ###########################
+            ### set file names###
+            iterationfile_path         = WD + "/ITERATION." + FASTA_or_EDIT                   
+            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE" + FASTA_or_EDIT             
+            renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+"." + FASTA_or_EDIT    
+            #####################
         
             ###########################
             # renew several directory #
@@ -227,9 +247,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             ############
             # set mode #   
             ############
-            AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
-            if(AFTER_ALIGNMENT):
-                ALIGNED         = "aligned"
+            if (FASTA_or_EDIT == "fa"):
+                AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
+                if(AFTER_ALIGNMENT):
+                    ALIGNED         = "aligned"
 
             ################
             #  file split  #
@@ -246,7 +267,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 if not os.path.exists(splitted_dirpath):
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
                         if fpath2seqcount[file_path] > Nseq_per_file:
-                            subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
+                            if (FASTA_or_EDIT == 'fa'):
+                                subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
+                            elif (FASTA_or_EDIT == 'edit'):
+                                os.mkdir(file_path+".split")
+                                subprocess.call(
+                                    "cd " +file_path + ".split; "+ 
+                                    "cat "+file_path + gunzip_command+"|split -l "+str(Nseq_per_file)+" &> /dev/null;"+
+                                    "rm " +file_path +
+                                    "for file in $(ls); do cat $file "+gzip_command+" >"+file_path.split(".")[-1]+".$\{file\}"+gzip_extention+"; done", 
+                                    shell=True)
                         else:
                             os.mkdir(file_path+".split")
                             shutil.move(file_path, file_path+".split/")
@@ -675,6 +705,7 @@ if __name__ == "__main__":
             ML_or_MP          = argvs[22],
             EXTRACTION_SIZE   = int(argvs[23]),  
             careful           = int(argvs[24]),
+            FASTA_or_EDIT     = argvs[25],
             ALIGNER           = "unspecified", 
             HMM_PROFILER      = "unspecified", 
             HMM_ALIGNER       = "unspecified",
@@ -707,10 +738,11 @@ if __name__ == "__main__":
             ML_or_MP          = argvs[22],
             EXTRACTION_SIZE   = int(argvs[23]),
             careful           = int(argvs[24]),
-            ALIGNER           = argvs[25],
-            HMM_PROFILER      = argvs[26],
-            HMM_ALIGNER       = argvs[27],
-            seq_count_when_aligned=int(argvs[28])
+            FASTA_or_EDIT     = argvs[25],
+            ALIGNER           = argvs[26],
+            HMM_PROFILER      = argvs[27],
+            HMM_ALIGNER       = argvs[28],
+            seq_count_when_aligned=int(argvs[29])
         )
     else:
         print("Error: Number of arguments: "+str(len(argvs))+" for FRACluster.py is wrong!")

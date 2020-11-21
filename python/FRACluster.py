@@ -168,18 +168,20 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if (is_gzipped):
             gzip_option = " -g "
         else:
-            gzip_option = ""
-        FRACTAL_COMMAND = "FRACTAL"                         + \
-                          " -i " + concat_infpath           + \
-                          " -k " + str(SUBSAMPLE_SIZE)      + \
-                          " -b " + MODEL                    + \
-                          " -p " + ML_or_MP                 + \
-                          " -t " + str(THRESHOLD)           + \
-                          " -x " + str(MAX_ITERATION)       + \
-                          " -c " + str(THREAD_NUM)          + \
-                          " -r " + SEED                     + \
-                          " -e "                            + \
-                          gzip_option
+            gzip_option =   ""
+        FRACTAL_COMMAND =   "FRACTAL"                         + \
+                            " -i " + concat_infpath           + \
+                            " -k " + str(SUBSAMPLE_SIZE)      + \
+                            " -b " + MODEL                    + \
+                            " -p " + ML_or_MP                 + \
+                            " -P "  + str(careful)            + \
+                            " -x " + str(MAX_ITERATION)       + \
+                            " -t " + str(THRESHOLD)           + \
+                            " -c " + str(THREAD_NUM)          + \
+                            " -e "                            + \
+                            " -r " + SEED                     + \
+                            " -z " + EXTRACTION_SIZE          + \
+                            gzip_option
         
         if (TREEMETHOD!="unspecified"): 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD

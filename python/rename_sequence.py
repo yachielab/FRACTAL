@@ -97,7 +97,7 @@ def count_sequence_fast(in_fname):
             elif(k==1): l+=len(line)-1
     return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
 '''
-def count_sequence_fast(in_fpathlist):
+def count_sequence_fast(in_fpathlist, form = "fa"): # form: fa or edit
     fpath2seqcount = {}
     for in_fname in in_fpathlist:
         is_gzipped = (in_fname.split(".")[-1] == "gz")
@@ -105,9 +105,11 @@ def count_sequence_fast(in_fpathlist):
         if (is_gzipped):    gunzip = "| gunzip"
         else:               gunzip = ""
 
+        if (form == "fa"):
+            grep_command = "| grep '>'"
         seq_count_str = (
             subprocess.Popen(
-                "cat " + in_fname + gunzip + " | grep '>' | wc -l",
+                "cat " + in_fname + " " + gunzip + grep_command + "| wc -l",
                 stdout=subprocess.PIPE,
                 shell=True
                 ).communicate()[0]
