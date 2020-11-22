@@ -187,6 +187,7 @@ def random_sampling_fasta( # fasta only
                         local_idx_list.pop(0)
                         seqname_list.append(record.name)
                     i += 1
+    print(seqname_list)
     return seqname_list
     
 
