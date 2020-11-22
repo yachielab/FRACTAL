@@ -327,7 +327,7 @@ def partition_fasta(
                 ">> " + problematic_concatfilename       + 
                 " 2> /dev/null;"                         +
                 "rm " + problematic_filenames            +
-                "",
+                " 2> /dev/null",
                 shell = True
                 )
 
