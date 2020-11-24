@@ -35,14 +35,14 @@ def rename_sequence(in_fname,out_fname,file_format='fa'):
     elif file_format == 'edit':
         k = 0
         name2renamed = {"root":"s0"}
-        renamed.write("s0\t\n")
         for line in origin:
             print(line)
-            name     = line.split()[0]
-            edit_str = line.split()[1]
-            name2renamed[name] = "s"+str(k)
-            renamed.write("s"+str(k)+"\t"+edit_str+"\n")
-            k += 1
+            if line != "":
+                name     = line.split()[0]
+                edit_str = line.split()[1]
+                name2renamed[name] = "s"+str(k)
+                renamed.write("s"+str(k)+"\t"+edit_str+"\n")
+                k += 1
 
     renamed.close()
     origin.close()
