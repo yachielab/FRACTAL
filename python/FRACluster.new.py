@@ -361,7 +361,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             if (FASTA_or_EDIT == 'edit'):
                 edit_list = manage_edits.edit2editlist(renamed_subsamplefile_path)
-                manage_edits.edit2fasta(renamed_subsamplefile_path, renamed_subsamplefile_path+".fa", edit_list, out_gz=True)
+                manage_edits.edit2fasta(renamed_subsamplefile_path, renamed_subsamplefile_path+".fa", edit_list)
                 renamed_subsamplefile_path = renamed_subsamplefile_path+".fa"
             
             #######################################
