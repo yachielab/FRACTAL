@@ -201,6 +201,7 @@ def random_sampling( # fasta only
                             local_idx_list.pop(0)
                         i += 1
         if (file_format == 'edit'):
+            ost.write("root\t\n")
             for fpath in sorted(list(fpath2localidx.keys())):
                 with almighty_open(fpath, 'r') as ist:
                     local_idx_list = fpath2localidx[fpath]
