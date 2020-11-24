@@ -3,8 +3,11 @@ import sys
 import gzip
 
 def edit2editlist(edit_file):
-    
-    inhandle = gzip.open(edit_file, 'rt')
+
+    if(edit_file.split(".")[-1]=="gz"):
+        inhandle = gzip.open(edit_file, 'rt')
+    else:
+        inhandle = open(edit_file, 'r')
     
     edit2seqcount  = {}
     total_seqcount = 0
