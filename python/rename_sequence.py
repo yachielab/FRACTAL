@@ -37,7 +37,7 @@ def rename_sequence(in_fname,out_fname,file_format='fa'):
         name2renamed = {"root":"s0"}
         for line in origin:
             print(line)
-            if line != "":
+            if len(line.split()) >1:
                 name     = line.split()[0]
                 edit_str = line.split()[1]
                 name2renamed[name] = "s"+str(k)
