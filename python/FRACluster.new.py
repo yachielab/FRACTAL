@@ -662,10 +662,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
-    
-    
-    
-    
+        
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
         handle.write(
@@ -686,7 +683,7 @@ if __name__ == "__main__":
 
     print(argvs)
 
-    if (len(argvs)==26):
+    if (len(argvs)==27):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
@@ -719,7 +716,7 @@ if __name__ == "__main__":
             HMM_ALIGNER       = "unspecified",
             seq_count_when_aligned=None
             )
-    elif ((len(argvs)==26+3)):
+    elif ((len(argvs)==27+3)):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],

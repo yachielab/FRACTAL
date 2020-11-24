@@ -358,7 +358,7 @@ def partition_fasta(
     Phylo.write(tree, treefile, 'newick')
     return DIRdict
 
-def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirpath2Nseq_filepath,mem_req_threshold):
+def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned, dirpath2Nseq_filepath, mem_req_threshold):
 
     dirpath2Nseq = {}
     with open(dirpath2Nseq_filepath,'r') as handle:
@@ -407,7 +407,7 @@ def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirp
             ARGVS[1]  = DIRdict[key][0]
             ARGVS[20] = INITIAL_SEQ_COUNT
             if (ARGVS[14] == "unaligned"):
-                ARGVS[28] = seq_count_when_aligned
+                ARGVS[29] = seq_count_when_aligned
 
             command="python3 "
             for arg in ARGVS: 
