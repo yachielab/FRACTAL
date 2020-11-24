@@ -210,7 +210,7 @@ def random_sampling( # fasta only
                             break 
                         if i == local_idx_list[0]:
                             seq_set.add(line)
-                            ost.write(line, ost)
+                            ost.write(line)
                             seqname_list.append(line.split()[0])
                             local_idx_list.pop(0)
                         i += 1

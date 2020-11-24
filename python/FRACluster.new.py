@@ -235,7 +235,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             ### set file names###
             iterationfile_path         = WD + "/ITERATION." + FASTA_or_EDIT                   
-            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE" + FASTA_or_EDIT             
+            subsamplefile_path         = WD + "/SUBSAMPLE/SUBSAMPLE." + FASTA_or_EDIT             
             renamed_subsamplefile_path = WD + "/SUBSAMPLE/RENAMED_"+str(i)+"." + FASTA_or_EDIT    
             #####################
         
