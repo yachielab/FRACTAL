@@ -33,11 +33,11 @@ def rename_sequence(in_fname,out_fname,file_format='fa'):
             SeqIO.write(s, renamed, "fasta")
             k += 1
     elif file_format == 'edit':
-        k = 0
         name2renamed = {"root":"s0"}
+        renamed.write("s0\t\n")
+        k = 1
         for line in origin:
-            print(line)
-            if len(line.split()) >1:
+            if len(line.split()[0]!="root"):
                 name     = line.split()[0]
                 edit_str = line.split()[1]
                 name2renamed[name] = "s"+str(k)
