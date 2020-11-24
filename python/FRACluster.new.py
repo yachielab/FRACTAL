@@ -313,7 +313,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             
             for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
                 splitted_fpath   = splitted_dirpath+"/"+splitted_fname
-                renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+"."+str(i)+".fa"+gzip_extention
+                renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+"."+str(i)+"."+FASTA_or_EDIT+gzip_extention
                 if renamed_filepath != splitted_fpath:
                     shutil.move(splitted_fpath, renamed_filepath)
                     fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
