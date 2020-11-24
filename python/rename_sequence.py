@@ -116,6 +116,8 @@ def count_sequence_fast(in_fpathlist, form = "fa"): # form: fa or edit
 
         if (form == "fa"):
             grep_command = "| grep '>'"
+        else:
+            grep_command = ""
         seq_count_str = (
             subprocess.Popen(
                 "cat " + in_fname + " " + gunzip + grep_command + "| wc -l",
