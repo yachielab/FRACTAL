@@ -75,6 +75,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
         else:
             root_fpath = WD+"/root.fa"
+    else:
+        root_fpath = WD+"/root.edit"
     ###########################
     
     ## check input file property ##
@@ -662,7 +664,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
-        
+
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
         handle.write(
