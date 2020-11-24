@@ -322,27 +322,27 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
             if (os.path.exists(iterationfile_path)):
                 sampled_seq_name_list = \
-                    rename_sequence.random_sampling_fasta( # fasta only
+                    rename_sequence.random_sampling( # fasta or edit
                         in_dirpath = None,
                         out_fname  = subsamplefile_path,
                         subsample_size = SUBSAMPLE_SIZE,
                         fpath2seqcount = None,
                         root_fpath     = root_fpath,
                         total_seqcount = None, 
-                        file_format    = "fasta",
+                        file_format    = FASTA_or_EDIT,
                         in_fpath       = iterationfile_path
                         )
             else:
                 # subsampling
                 sampled_seq_name_list = \
-                    rename_sequence.random_sampling_fasta( # fasta only
+                    rename_sequence.random_sampling( # fasta or edit
                         in_dirpath = splitted_dirpath,
                         out_fname  = subsamplefile_path,
                         subsample_size = SUBSAMPLE_SIZE,
                         fpath2seqcount = fpath2seqcount,
                         root_fpath     = root_fpath,
                         total_seqcount = seq_count, 
-                        file_format    = "fasta",
+                        file_format    = FASTA_or_EDIT,
                         in_fpath       = None
                         )
             
@@ -351,8 +351,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             seqname2renamedname = rename_sequence.rename_sequence(
                 subsamplefile_path, 
-                renamed_subsamplefile_path
+                renamed_subsamplefile_path,
+                file_format = FASTA_or_EDIT,
             )
+
+            if (FASTA_or_EDIT == 'edit'):
+                edit_list = manage_edits.edit2editlist(renamed_subsamplefile_path)
+                manage_edits.edit2fasta(renamed_subsamplefile_path, renamed_subsamplefile_path+".fa", edit_list, out_gz=True)
+                renamed_subsamplefile_path = renamed_subsamplefile_path+".fa"
             
             #######################################
             #construct subsample tree as reference#
@@ -489,6 +495,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     RAXMLSEQ                                            ,
                     ALIGNED_FOR_PLACEMENT                               ,
                     SEED                                                ,
+                    file_format = FASTA_or_EDIT                         ,
+                    edit_list = edit_list                               ,
                     alignment_outdir = example_infile_fpath_aligned+".split",
                     careful=careful                                     ,
                     hmm_aligner=HMM_ALIGNER                             ,
@@ -567,9 +575,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 else:
                     prev_para = seq_count
 
-        ##################
-        #partition .fasta#
-        ##################
+        ###########################
+        #partition .fasta or .edit#
+        ###########################
         os.chdir(WD)
         try:
             print(

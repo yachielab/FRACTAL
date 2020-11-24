@@ -17,12 +17,12 @@ def decompose_fasta(in_file, x,seq_count):
             gzip.open(in_file+"."+str(i)+".gz", 'wt')
         ) 
     with gzip.open(in_file,'rt') as ihandle:
-        allseq_itr = SeqIO.parse(ihandle, "fasta")
+        allseq_itr = SeqIO.parse(ihandle, "fa")
         l=0 # inclement constantly
         if(True):
             for record in allseq_itr:
                 i = min(l//k, x-1)
-                SeqIO.write(record,ohandle[i],'fasta')
+                SeqIO.write(record,ohandle[i],'fa')
                 l+=1
     for i in range(x):
         ohandle[i].close()
@@ -68,9 +68,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             query_dir, outdir, threadnum, nodenum, 
                             codedir, seq_count, ML_or_MP, RAXMLSEQ, 
                             ALIGNED, seed, careful=1, hmm_aligner="", hmm_profiler="",
-                            file_format = "fasta", edit_list = None, alignment_outdir = None):
+                            file_format = "fa", edit_list = None, alignment_outdir = None):
     
-    splitted_fasta_list = os.listdir(query_dir)
+    splitted_queryfile_list = os.listdir(query_dir)
 
     # Profile HMM
     if(ALIGNED=="unaligned"): # for unaligned sequences
@@ -86,7 +86,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
     # sequential mode
     if(nodenum<=1):
 
-        for filename in splitted_fasta_list:
+        for filename in splitted_queryfile_list:
 
             query =  query_dir + "/" + filename
             os.mkdir(outdir    + "/" + filename)
@@ -103,7 +103,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 gunzipcommand = ""
 
             if (file_format == "edit"):
-                manage_edits.edit2fasta(query, edit_list) # TO DO
+                manage_edits.edit2fasta(query, query + ".fa.gz", edit_list) # TO DO
                 query_dir = query + ".fa.gz"
 
             if(ML_or_MP=="ML"): 
@@ -126,14 +126,14 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             refseq
                         )
                     subprocess.call(
-                        EPANG                               +
-                        " --redo"                           +
+                        EPANG                                            +
+                        " --redo"                                        +
                         " -s "+outdir+"/"+filename+"/ref_query.fa.ref"   +
-                        " -t "+reftree                      +
-                        " --model "+model                   +
+                        " -t "+reftree                                   +
+                        " --model "+model                                +
                         " -q "+outdir+"/"+filename+"/ref_query.fa.query" +
                         " -w "+outdir+"/"+filename                       +
-                        " -T "+str(threadnum)               ,
+                        " -T "+str(threadnum)                            ,
                         shell=True
                     )
                 elif(ALIGNED=="aligned"): # for aligned sequences
@@ -213,7 +213,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
     else: # in distributed computing mode
         dname=WD.split("/").pop()
         
-        if ( file_format == "fasta" ):
+        if ( file_format == "fa" ):
             #moved=outdir+"/query.fa.gz"
             #shutil.move(query, moved)
 
@@ -239,12 +239,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 for edit in edit_list:
                     handle.write(edit + "\n")
 
-        Nfiles_total = len(splitted_fasta_list)
-        Nfiles_per_node = len(splitted_fasta_list) // nodenum # Only the last node may treat more number of files
+        Nfiles_total = len(splitted_queryfile_list)
+        Nfiles_per_node = len(splitted_queryfile_list) // nodenum # Only the last node may treat more number of files
         node2filelist = []
         for i in range(nodenum):
             node2filelist.append([])
-        for j, file_name in enumerate(splitted_fasta_list):
+        for j, file_name in enumerate(splitted_queryfile_list):
             node2filelist[j%nodenum].append(file_name)
 
         #distribution start
@@ -484,7 +484,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         for i in range(nodenum):
             os.remove(outdir+"/epang"+str(i)+".o")
         
-        if (file_format == "fasta"):
+        if (file_format == "fa"):
             None
         elif (file_format == "edit"):
             shutil.move(outdir+"/query.edit.gz",query)

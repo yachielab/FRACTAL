@@ -316,7 +316,6 @@ def partition_fasta(
                         )
                         
             else: # sequential mode
-                print(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
                 partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt")
             problematic_filenames      = wd + "/*.part*fa"+gzip_extention
             problematic_concatfilename = wd+"/INPUT.fa.problematic"+gzip_extention
@@ -331,37 +330,27 @@ def partition_fasta(
                 shell = True
                 )
 
-        elif(file_format=="edit"): # TO DO
-            ost=[]
-            for i in range(num_mono):
-                ost.append(gzip.open(OUT_DIR+"/d"+str(num+i)+"/"+in_fasta.split("/")[-1],'wt'))
-            para=gzip.open(wd+"/"+in_fasta.split("/")[-1]+".problematic.gz",'wt')
+            for dirpath in dirpath_list:
+                if (dirpath != wd):
+                    subprocess.call(
+                        "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
+                        shell=True
+                    )
 
-            with gzip.open(in_fasta,'rt') as in_handle:
-                for line in in_handle:
-                    name = line.split()[0]
-                    if(name=="root"):
-                        for st in ost: #ROOTING=="Origin"
-                            st.write(line)
-                    elif(js["partition"][name]=="paraphyletic"):
-                        para.write(line)
-                    else:
-                        l = NUMdict[str(js["partition"][name])]
-                        if( fasta_count == 0 ):
-                            DIRdict['{'+str(js["partition"][name])+'}'][1]+=1
-                        ost[l].write(line)
-            for st in ost:
-                st.close()
-            para.close()
-    
-    for dirpath in dirpath_list:
-        if (dirpath != wd):
+        elif(file_format=="edit"): 
+            partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
+            problematic_filenames      = wd + "/*.*edit"+gzip_extention
+            problematic_concatfilename = wd+"/INPUT.edit.problematic"+gzip_extention
             subprocess.call(
-                "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
-                shell=True
-            )
-    #with open(info, 'w') as out:
-    #    out.write(json.dumps(DIRdict))
+                "cat "                                   +
+                problematic_filenames                    +
+                "|seqkit grep -r -p ^root -v"            +
+                ">> " + problematic_concatfilename       + 
+                " 2> /dev/null;"                         +
+                "rm " + problematic_filenames            +
+                " 2> /dev/null",
+                shell = True
+                )
     
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
