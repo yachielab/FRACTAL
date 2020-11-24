@@ -78,6 +78,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         else:
             root_fpath = WD+"/root.fa"
     else:
+        example_infile_fpath_aligned = infile_pathlist[0]
         root_fpath = WD+"/root.edit"
     ###########################
     
