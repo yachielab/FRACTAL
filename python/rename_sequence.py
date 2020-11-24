@@ -37,7 +37,7 @@ def rename_sequence(in_fname,out_fname,file_format='fa'):
         renamed.write("s0\t\n")
         k = 1
         for line in origin:
-            if len(line.split()[0]!="root"):
+            if line.split()[0]!="root":
                 name     = line.split()[0]
                 edit_str = line.split()[1]
                 name2renamed[name] = "s"+str(k)
