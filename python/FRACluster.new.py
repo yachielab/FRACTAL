@@ -126,18 +126,20 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 manage_edits.edit2fasta(filepath, filepath+".fa", edit_list)
                 new_infile_pathlist.append(filepath+".fa")
             infile_pathlist = new_infile_pathlist
+        elif(FASTA_or_EDIT == "fa"):
+            if (root_in_separated_file):
+                subprocess.call(
+                    "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                    shell=True
+                )
+            else:
+                subprocess.call(
+                    "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                    shell=True
+                )
 
         concat_infpath = WD+"/INPUT.terminal.fa"
-        if (root_in_separated_file):
-            subprocess.call(
-                "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
-                shell=True
-            )
-        else:
-            subprocess.call(
-                "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
-                shell=True
-            )
+        
         if(seq_count<4):
             partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
             print("seq_count < 4!")
