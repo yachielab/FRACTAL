@@ -57,9 +57,13 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                 ist  = gzip.open(inputFASTA_filepath, 'rt')
             else:
                 ist  = open(inputFASTA_filepath, 'r')
-            records = SeqIO.parse(ist, "fasta")
-            for record in records:
-                seqname_set.add(record.name)
+            if   file_format == 'fa':
+                records = SeqIO.parse(ist, "fasta")
+                for record in records:
+                    seqname_set.add(record.name)
+            elif file_format == 'edit':
+                for line in ist:
+                    seqname_set.add(line.split()[0])
             ist.close()
     if len(seqname_set)==0:
         return
