@@ -71,6 +71,8 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             dirpath  = line.split("\t")[1]
             if seqname in seqname_set:
                 seqname2dirpath[seqname] = dirpath
+    
+    print(inputFASTA_filepathlist)
 
     for inputFASTA_filepath in inputFASTA_filepathlist:
         if (os.path.exists(inputFASTA_filepath)):
@@ -82,6 +84,7 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             filepath2handle = {}
             dirpath2filepath = {}
             for outputFASTA_dirpath in outputFASTA_dirpathlist:
+                print(outputFASTA_filepathlist)
                 if inputFASTA_filepath.split(".")[-1] == 'gz':
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + ".".join(inputFASTA_filepath.split("/")[-1].split(".")[:-1])
                 else:
