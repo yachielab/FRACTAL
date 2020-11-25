@@ -301,7 +301,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount = None,
                         root_fpath     = root_fpath,
                         total_seqcount = None, 
-                        file_format    = "fasta",
+                        file_format    = "fa",
                         in_fpath       = iterationfile_path
                         )
             else:
@@ -314,7 +314,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount = fpath2seqcount,
                         root_fpath     = root_fpath,
                         total_seqcount = seq_count, 
-                        file_format    = "fasta",
+                        file_format    = "fa",
                         in_fpath       = None
                         )
             
