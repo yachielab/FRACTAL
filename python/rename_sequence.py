@@ -153,7 +153,7 @@ def random_sampling( # fasta only
     
     # count total number of sequences
     if (total_seqcount == None):
-        fpath2seqcount = count_sequence_fast(fpath_list,file_format='edit')
+        fpath2seqcount = count_sequence_fast(fpath_list,form='edit')
         total_seqcount = 0
         for fpath in fpath_list:
             seqcount              = fpath2seqcount[fpath]
