@@ -126,7 +126,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
 
     #### Trace memory usage ####
     file=qsub_d0.cycle.sh
-    cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python/\/usr\/bin\/time -f "%M,KB,%e,sec," python/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
+    cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
     cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
     rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
     ############################
@@ -155,7 +155,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
       file=$(basename $fpath)
 
       #### Trace memory usage ####
-      cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python/\/usr\/bin\/time -f "%M,KB,%e,sec," python/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
+      cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
       cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
       rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
       ############################
