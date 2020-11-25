@@ -547,34 +547,51 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     resampling_needed = True
 
                 if(para!=0): # if problematic sequences remained
-
-                    # select subsample sequence file
-                    if os.path.isfile(subsamplefile_path+".aligned"):
-                        ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
-                    else:
-                        ALIGNED_SUBSAMPLE = subsamplefile_path
-                        
-                    subprocess.call(
-                        "cat "+ALIGNED_SUBSAMPLE+" "+WD+"/EPANG/problematic.fa > "+iterationfile_path,
-                        shell=True
-                    )
                     
-                    # select all sequence file
-                    if os.path.exists(example_infile_fpath_aligned+".split"):
-                        ALIGNED_ALL_DIR = example_infile_fpath_aligned+".split"
-                        ALIGNED         = "aligned"
-                    else:
-                        ALIGNED_ALL_DIR = example_infile_fpath        +".split"
-
-                    '''
-                    partition.add_paraphyletic_fa(
-                        WD+"/PARTITION/partition"+str(i)+".out" ,
-                        iterationfile_path                      ,
-                        ALIGNED_ALL_DIR                         ,
-                        SUBSAMPLE_SIZE                          ,
-                        para
+                    if (FASTA_or_EDIT == 'fa'):
+                        # select subsample sequence file
+                        if os.path.isfile(subsamplefile_path+".aligned"):
+                            ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
+                        else:
+                            ALIGNED_SUBSAMPLE = subsamplefile_path
+                            
+                        subprocess.call(
+                            "cat "+ALIGNED_SUBSAMPLE+" "+WD+"/EPANG/problematic.fa > "+iterationfile_path,
+                            shell=True
                         )
-                    '''
+                        
+                        # select all sequence file
+                        if os.path.exists(example_infile_fpath_aligned+".split"):
+                            ALIGNED_ALL_DIR = example_infile_fpath_aligned+".split"
+                            ALIGNED         = "aligned"
+                        else:
+                            ALIGNED_ALL_DIR = example_infile_fpath        +".split"
+
+                        '''
+                        partition.add_paraphyletic_fa(
+                            WD+"/PARTITION/partition"+str(i)+".out" ,
+                            iterationfile_path                      ,
+                            ALIGNED_ALL_DIR                         ,
+                            SUBSAMPLE_SIZE                          ,
+                            para
+                            )
+                        '''
+
+                    elif (FASTA_or_EDIT == 'edit'):
+                        shutil.copyfile(
+                            WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz",
+                            WD+"/ITERATION.edit.gz"
+                        )
+
+                        partition.add_paraphyletic_fa(
+                            WD+"/PARTITION/partition"+str(i)+".out" ,
+                            "ITERATION.edit.gz"                     ,
+                            "INPUT.edit.gz"                         ,
+                            SUBSAMPLE_SIZE                          ,
+                            para                                    ,
+                            file_format = "edit"
+                            )
+
                     i+=1
                     prev_para=para
                 elif (not resampling_needed):
