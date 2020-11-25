@@ -48,6 +48,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
 
 def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqname2dir_filepath, file_format = 'fa'):
 
+    print(inputFASTA_filepathlist)
     seqname_set = set()
     for inputFASTA_filepath in inputFASTA_filepathlist:
         if (os.path.exists(inputFASTA_filepath)):
@@ -71,8 +72,6 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
             dirpath  = line.split("\t")[1]
             if seqname in seqname_set:
                 seqname2dirpath[seqname] = dirpath
-    
-    print(inputFASTA_filepathlist)
 
     for inputFASTA_filepath in inputFASTA_filepathlist:
         if (os.path.exists(inputFASTA_filepath)):
