@@ -384,30 +384,31 @@ def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirp
         
         LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
         
-        if (dirpath2Nseq[dirpath] > mem_req_threshold):
-            job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.largemem.sh"
-        else:
-            job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.sh"
+        if (dirpath in dirpath2Nseq.keys()):
+            if (dirpath2Nseq[dirpath] > mem_req_threshold):
+                job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.largemem.sh"
+            else:
+                job_script_filepath = WD+"/../../prep_dir"+"/qsub_"+num+".cycle.sh"
 
-        with open(job_script_filepath, 'w') as qf:
-            qf.write("#!/bin/bash\n")
-            qf.write("#$ -S /bin/bash\n")
-            qf.write("PATH={}\n".format(PATH))
-            qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-            
-            # change arguments for the next FRACTAL iteration
-            ARGVS[1]  = DIRdict[key][0]
-            ARGVS[20] = INITIAL_SEQ_COUNT
-            if (ARGVS[14] == "unaligned"):
-                ARGVS[28] = seq_count_when_aligned
+            with open(job_script_filepath, 'w') as qf:
+                qf.write("#!/bin/bash\n")
+                qf.write("#$ -S /bin/bash\n")
+                qf.write("PATH={}\n".format(PATH))
+                qf.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
+                
+                # change arguments for the next FRACTAL iteration
+                ARGVS[1]  = DIRdict[key][0]
+                ARGVS[20] = INITIAL_SEQ_COUNT
+                if (ARGVS[14] == "unaligned"):
+                    ARGVS[28] = seq_count_when_aligned
 
-            command="python3 "
-            for arg in ARGVS: 
-                if str(arg)=="":
-                    arg="\"\""
-                command += str(arg) + " "
-            qf.write(command)
-        shutil.move(job_script_filepath, WD+"/../../qsub_dir")
+                command="python3 "
+                for arg in ARGVS: 
+                    if str(arg)=="":
+                        arg="\"\""
+                    command += str(arg) + " "
+                qf.write(command)
+            shutil.move(job_script_filepath, WD+"/../../qsub_dir")
 
 def tiny_tree(INPUTfile,OUTPUTnwk, file_format="fasta"):
     is_gzipped = (INPUTfile.split(".")[-1] == "gz")
