@@ -316,6 +316,13 @@ def partition_fasta(
                 " 2> /dev/null",
                 shell = True
                 )
+            
+            for dirpath in dirpath_list:
+                if (dirpath != wd):
+                    subprocess.call(
+                        "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
+                        shell=True
+                    )
 
         elif(file_format=="edit"):
             partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
@@ -331,7 +338,7 @@ def partition_fasta(
                 " 2> /dev/null",
                 shell = True
                 )
-    
+
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
         leaf.name=newname
