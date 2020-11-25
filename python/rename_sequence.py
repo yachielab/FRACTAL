@@ -153,11 +153,13 @@ def random_sampling( # fasta only
     
     # count total number of sequences
     if (total_seqcount == None):
-        fpath2seqcount = count_sequence_fast(fpath_list)
+        fpath2seqcount = count_sequence_fast(fpath_list,file_format='edit')
         total_seqcount = 0
         for fpath in fpath_list:
             seqcount              = fpath2seqcount[fpath]
             total_seqcount       += seqcount
+
+    print(fpath_list, )
 
     # get sequence indices to extract
     if (total_seqcount > subsample_size):
