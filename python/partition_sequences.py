@@ -15,22 +15,38 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
     # open input FASTAfile
     outfilepath2Nseq = {}
     filepath2handle  = {}
-    records = SeqIO.parse(inputFASTA_filehandle, "fasta")
-    
-    for record in records:
-        if (record.name == "root"):
-            None
-        else:
-            outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
 
-            if (outfilepath not in filepath2handle.keys()):
-                filepath2handle[outfilepath] = open(outfilepath, 'w')
-                outfilepath2Nseq[outfilepath]= 1
+    if   (file_format=='fa'):   
+        records = SeqIO.parse(inputFASTA_filehandle, "fasta")
+        
+        for record in records:
+            if (record.name == "root"):
+                None
+            else:
+                outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
 
-            outfilepath2Nseq[outfilepath] += 1
-            outhandle   = filepath2handle[outfilepath]
-            if   (file_format=='fa'):   SeqIO.write(record, outhandle, "fasta")
-            elif (file_format=='edit'): outhandle.write(record.name + '\t' + record.seq + '\n')
+                if (outfilepath not in filepath2handle.keys()):
+                    filepath2handle[outfilepath] = open(outfilepath, 'w')
+                    outfilepath2Nseq[outfilepath]= 1
+
+                outfilepath2Nseq[outfilepath] += 1
+                outhandle   = filepath2handle[outfilepath]
+                SeqIO.write(record, outhandle, "fasta")
+    elif (file_format=='edit'): 
+        for line in inputFASTA_filehandle:
+            name         = line.split()[0]
+            edit_pattern = line.split()[1]
+            if (name == "root"):
+                None
+            else:
+                outfilepath = dirpath2filepath[seqname2dirpath[name]]
+                if (outfilepath not in filepath2handle.keys()):
+                    filepath2handle[outfilepath] = open(outfilepath, 'w')
+                    outfilepath2Nseq[outfilepath]= 1
+                outfilepath2Nseq[outfilepath] += 1
+                outhandle   = filepath2handle[outfilepath]
+                outhandle.write(name + '\t' + edit_pattern + '\n')
+
     
     for outfilepath in filepath2handle.keys():
         filepath2handle[outfilepath].close()
@@ -65,7 +81,6 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                 for line in ist:
                     seqname_set.add(line.split()[0])
             ist.close()
-    print(seqname_set)
     if len(seqname_set)==0:
         return
 
