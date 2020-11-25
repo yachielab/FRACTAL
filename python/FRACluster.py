@@ -523,15 +523,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     else:
                         ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
-                    '''
-                    partition.add_paraphyletic_fa(
-                        WD+"/PARTITION/partition"+str(i)+".out" ,
-                        iterationfile_path                      ,
-                        ALIGNED_ALL_DIR                         ,
-                        SUBSAMPLE_SIZE                          ,
-                        para
-                        )
-                    '''
                     i+=1
                     prev_para=para
                 elif (not resampling_needed):

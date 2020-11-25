@@ -44,10 +44,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     infile_namelist              = list(sorted(os.listdir(WD)))
     infile_pathlist              = []
     for infilename in infile_namelist:
-        if   (FASTA_or_EDIT == "fa"  ): extentions = {"fa"  , "gz"}
-        elif (FASTA_or_EDIT == "edit"): extentions = {"edit", "gz"}
+        extentions = {FASTA_or_EDIT  , "gz"}
         if infilename.split(".")[-1] in extentions:
-            if (infilename!='root.fa'):
+            if (infilename!='root.'+FASTA_or_EDIT):
                 infile_pathlist.append(WD+"/"+infilename)
 
     # Record root.fa existed or not
@@ -122,16 +121,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
         # Convert .edit(.gz) into .fa
         if (FASTA_or_EDIT == "edit"):
-            new_infile_pathlist = []
-            for filepath in infile_pathlist:
-                edit_list = manage_edits.edit2editlist(filepath)
-                manage_edits.edit2fasta(filepath, filepath+".fa", edit_list)
-                new_infile_pathlist.append(filepath+".fa")
-            infile_pathlist = new_infile_pathlist
+            concat_editpath = WD+"/INPUT.terminal.edit"
             subprocess.call(
-                "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                "(cat root.edit "+" ".join(infile_pathlist) + gunzip_command+") > " + concat_editpath,
                 shell=True
             )
+            edit_list = manage_edits.edit2editlist(concat_infpath)
+            manage_edits.edit2fasta(concat_editpath, concat_infpath, edit_list)
+            
         elif(FASTA_or_EDIT == "fa"):
             if (root_in_separated_file):
                 subprocess.call(
