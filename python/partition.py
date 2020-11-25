@@ -339,6 +339,11 @@ def partition_fasta(
                 shell = True
                 )
 
+            for dirpath in dirpath_list:
+                if (dirpath != wd):
+                    with open(dirpath+"/root.edit", 'w') as ost:
+                        ost.write("root\t\n")
+
     for leaf in tree.get_terminals():
         newname=DIRdict[leaf.name][0]
         leaf.name=newname
