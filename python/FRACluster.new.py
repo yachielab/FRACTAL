@@ -628,7 +628,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             "UPSTREAM.nwk",
             ROOTING,
             nodenum = nodenum,
-            codedir = CODEDIR
+            codedir = CODEDIR,
+            file_format = 'edit'
             )
         
         dirpath2Nseq_filepath = WD + "/Nseq_dirpath.txt"
