@@ -656,7 +656,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             shutil.rmtree("TREE")
         except:
             None
-    '''
+    
     ##################
     #delete files    #
     ##################
@@ -694,8 +694,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
-    
-    '''
 
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
