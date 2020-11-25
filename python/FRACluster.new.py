@@ -126,7 +126,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 "(cat root.edit "+" ".join(infile_pathlist) + gunzip_command+") > " + concat_editpath,
                 shell=True
             )
-            edit_list = manage_edits.edit2editlist(concat_infpath)
+            edit_list = manage_edits.edit2editlist(concat_editpath)
             manage_edits.edit2fasta(concat_editpath, concat_infpath, edit_list)
             
         elif(FASTA_or_EDIT == "fa"):
