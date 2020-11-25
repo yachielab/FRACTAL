@@ -270,17 +270,17 @@ def random_sampling_fasta( # fasta only
                 except: fpath2localidx[fpath]     = [local_idx]
             idx += 1
     
-    print(fpath2localidx)
     
     # sequence extraction
     seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
+        print(file_format)
         if (file_format == 'fa'):
             print(seqname_list)
             # write root sequence
             with open(root_fpath, 'r') as ist:
-                records        = SeqIO.parse(ist, 'fasta')
+                records = SeqIO.parse(ist, 'fasta')
                 for record in records:
                     seq_set.add(str(record.seq))
                     SeqIO.write(record, ost, 'fasta')
@@ -300,7 +300,7 @@ def random_sampling_fasta( # fasta only
                                 seqname_list.append(record.name)
                             local_idx_list.pop(0)
                         i += 1
-        if (file_format == 'edit'):
+        elif (file_format == 'edit'):
             for fpath in sorted(list(fpath2localidx.keys())):
                 with almighty_open(fpath, 'r') as ist:
                     local_idx_list = fpath2localidx[fpath]
