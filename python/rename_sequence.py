@@ -149,7 +149,6 @@ def random_sampling( # fasta only
     else:
         fpath_list     = [in_fpath]
 
-    print(in_fpath)
     
     # count total number of sequences
     if (total_seqcount == None):
@@ -158,8 +157,6 @@ def random_sampling( # fasta only
         for fpath in fpath_list:
             seqcount              = fpath2seqcount[fpath]
             total_seqcount       += seqcount
-
-    print(fpath_list, )
 
     # get sequence indices to extract
     if (total_seqcount > subsample_size):
@@ -179,7 +176,6 @@ def random_sampling( # fasta only
                 try   : fpath2localidx[fpath].append(local_idx)
                 except: fpath2localidx[fpath]     = [local_idx]
             idx += 1
-    print(fpath2localidx)
     
     # sequence extraction
     seq_set      = set()
