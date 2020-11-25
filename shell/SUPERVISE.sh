@@ -146,6 +146,13 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
   while [ $(expr $a + $b) -gt 0 ]; do
     for fpath in $(ls ${ROOT_DIR}/qsub_dir/*placement* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*partition* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*cycle* 2>/dev/null); do
       file=$(basename $fpath)
+
+      #### Trace memory usage ####
+      cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python/\/usr\/bin\/time -f "%M,KB,%e,sec," python/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
+      cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
+      rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
+      ############################
+
       NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
       wait
       if [ -z $NUMBER_OF_JOBS ]; then NUMBER_OF_JOBS=0; fi
