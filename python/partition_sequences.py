@@ -35,7 +35,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
     elif (file_format=='edit'): 
         for line in inputFASTA_filehandle:
             name         = line.split()[0]
-            edit_pattern = line.split()[1]
+            if len(line.split())==2: edit_pattern = line.split()[1]
             if (name == "root"):
                 None
             else:
@@ -44,8 +44,9 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                     filepath2handle[outfilepath] = open(outfilepath, 'w')
                     outfilepath2Nseq[outfilepath]= 1
                 outfilepath2Nseq[outfilepath] += 1
-                outhandle   = filepath2handle[outfilepath]
-                outhandle.write(name + '\t' + edit_pattern + '\n')
+                outhandle = filepath2handle[outfilepath]
+                outhandle.write(name + '\t')
+                if len(line.split())==2: outhandle.write(edit_pattern + '\n')
 
     
     for outfilepath in filepath2handle.keys():
