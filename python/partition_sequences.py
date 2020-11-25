@@ -65,6 +65,7 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                 for line in ist:
                     seqname_set.add(line.split()[0])
             ist.close()
+    print(seqname_set)
     if len(seqname_set)==0:
         return
 
