@@ -120,7 +120,13 @@ def add_paraphyletic_edit(jpartfname, outputfname, splitted_file_dir, subsample_
     # parse json format
     js = json.loads(jp)
 
-    all_file_pathlist = [ splitted_file_dir + "/" + all_file for all_file in os.listdir(splitted_file_dir) ]
+    all_file_pathlist = []
+    for all_file in os.listdir(splitted_file_dir):
+        if   (all_file.split(".")[-1]=='edit'):
+            all_file_pathlist.append(splitted_file_dir + "/" + all_file)
+        elif (all_file.split(".")[-1]=='gz'):
+            if (all_file.split(".")[-2]=='edit'):
+                all_file_pathlist.append(splitted_file_dir + "/" + all_file)
     
     is_gzipped = (all_file_pathlist[0].split(".")[-1] == "gz")
     if (is_gzipped):
