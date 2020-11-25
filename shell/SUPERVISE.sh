@@ -123,6 +123,13 @@ if [ $max_num_of_jobs -gt 1 ]; then
     if [ $qsub_err != "yet" ]; then
         echo ${qsub_err}
     fi
+
+    #### Trace memory usage ####
+    file=qsub_d0.cycle.sh
+    cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python/\/usr\/bin\/time -f "%M,KB,%e,sec," python/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
+    cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
+    rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
+    ############################
     
     qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
 
