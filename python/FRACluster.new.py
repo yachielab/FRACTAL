@@ -579,7 +579,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     elif (FASTA_or_EDIT == 'edit'):
                         shutil.copyfile(
-                            WD+"/SUBSAMPLE/SUBSAMPLE.edit",
+                            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".edit",
                             WD+"/ITERATION.edit"
                         )
 
@@ -589,7 +589,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             splitted_dirpath                       ,
                             SUBSAMPLE_SIZE                         ,
                             para                                   ,
-                            file_format = "edit"
                             )
 
                     i+=1
