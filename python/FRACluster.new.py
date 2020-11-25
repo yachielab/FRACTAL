@@ -118,6 +118,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     if(seq_count<=THRESHOLD):
 
+        concat_infpath = WD+"/INPUT.terminal.fa"
+
         # Convert .edit(.gz) into .fa
         if (FASTA_or_EDIT == "edit"):
             new_infile_pathlist = []
@@ -126,6 +128,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 manage_edits.edit2fasta(filepath, filepath+".fa", edit_list)
                 new_infile_pathlist.append(filepath+".fa")
             infile_pathlist = new_infile_pathlist
+            subprocess.call(
+                "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                shell=True
+            )
         elif(FASTA_or_EDIT == "fa"):
             if (root_in_separated_file):
                 subprocess.call(
@@ -137,8 +143,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     "(cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
                     shell=True
                 )
-
-        concat_infpath = WD+"/INPUT.terminal.fa"
         
         if(seq_count<4):
             partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
@@ -664,7 +668,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ##################
 
     os.chdir(WD)
-
+'''
     filenames = [
         example_infile_fpath,
         example_infile_fpath+".aligned",
@@ -696,7 +700,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
-
+'''
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
         handle.write(

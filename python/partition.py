@@ -318,8 +318,7 @@ def partition_fasta(
                 shell = True
                 )
 
-        elif(file_format=="edit"): 
-            print("OK")
+        elif(file_format=="edit"):
             partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
             problematic_filenames      = wd + "/*.*edit"                + gzip_extention
             problematic_concatfilename = wd + "/INPUT.edit.problematic" + gzip_extention
