@@ -164,7 +164,7 @@ def partition_fasta(
     jpart,
     treefile,
     ROOTING,
-    file_format="fasta", 
+    file_format="fa", 
     nodenum=1, 
     codedir=None
     ):
@@ -235,7 +235,7 @@ def partition_fasta(
             gzip_extention = ""
             gzip_command   = ""
 
-        if (file_format=="fasta"):
+        if (file_format=="fa"):
 
             if (nodenum > 1):
                 
@@ -317,8 +317,6 @@ def partition_fasta(
                 " 2> /dev/null",
                 shell = True
                 )
-
-                
 
         elif(file_format=="edit"): 
             partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
