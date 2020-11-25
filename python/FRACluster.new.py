@@ -619,6 +619,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if os.path.exists(example_infile_fpath_aligned+".split"):
             FASTA_DIR.append(example_infile_fpath_aligned+".split")
 
+
+        print([FASTA_DIR,
+            NUMFILE,
+            NODESDIR,
+            WD,
+            WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
+            "UPSTREAM.nwk",
+            ROOTING,nodenum,CODEDIR,FASTA_or_EDIT])
         DIRdict = partition.partition_fasta(
             FASTA_DIR,
             NUMFILE,
@@ -629,7 +637,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             ROOTING,
             nodenum = nodenum,
             codedir = CODEDIR,
-            file_format = 'edit'
+            file_format = FASTA_or_EDIT
             )
         
         dirpath2Nseq_filepath = WD + "/Nseq_dirpath.txt"
