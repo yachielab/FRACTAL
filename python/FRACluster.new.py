@@ -488,6 +488,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 else:
                     refseq = renamed_subsamplefile_path+".aligned"
 
+                if FASTA_or_EDIT == 'fa':
+                    edit_list = None
+
                 # conduct placement
                 placement.distributed_placement(
                     WD                                                  , 
