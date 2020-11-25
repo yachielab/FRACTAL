@@ -242,7 +242,6 @@ def random_sampling_fasta( # fasta only
     else:
         fpath_list     = [in_fpath]
     
-    print(fpath_list)
 
     # count total number of sequences
     if (total_seqcount == None):
@@ -271,11 +270,14 @@ def random_sampling_fasta( # fasta only
                 except: fpath2localidx[fpath]     = [local_idx]
             idx += 1
     
+    print(fpath2localidx)
+    
     # sequence extraction
     seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
         if (file_format == 'fa'):
+            print(seqname_list)
             # write root sequence
             with open(root_fpath, 'r') as ist:
                 records        = SeqIO.parse(ist, 'fasta')
