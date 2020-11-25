@@ -46,7 +46,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     for infilename in infile_namelist:
         if   (FASTA_or_EDIT == "fa"  ): extentions = {"fa"  , "gz"}
         elif (FASTA_or_EDIT == "edit"): extentions = {"edit", "gz"}
-        if infilename.split(".")[-1] in {"edit", "fa", "gz"}:
+        if infilename.split(".")[-1] in extentions:
             if (infilename!='root.fa'):
                 infile_pathlist.append(WD+"/"+infilename)
 
