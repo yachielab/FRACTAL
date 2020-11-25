@@ -647,7 +647,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             shutil.rmtree("TREE")
         except:
             None
-
+    '''
     ##################
     #delete files    #
     ##################
@@ -695,6 +695,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             str(i)            + "," +
             "subsamplings"    + "\n"
         )
+    
+    '''
 
 if __name__ == "__main__":
     argvs = sys.argv
