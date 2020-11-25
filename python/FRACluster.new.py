@@ -579,16 +579,16 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
                     elif (FASTA_or_EDIT == 'edit'):
                         shutil.copyfile(
-                            WD+"/SUBSAMPLE/SUBSAMPLE.edit.gz",
-                            WD+"/ITERATION.edit.gz"
+                            WD+"/SUBSAMPLE/SUBSAMPLE.edit",
+                            WD+"/ITERATION.edit"
                         )
 
-                        partition.add_paraphyletic_fa(
-                            WD+"/PARTITION/partition"+str(i)+".out" ,
-                            "ITERATION.edit.gz"                     ,
-                            "INPUT.edit.gz"                         ,
-                            SUBSAMPLE_SIZE                          ,
-                            para                                    ,
+                        partition.add_paraphyletic_edit(
+                            WD+"/PARTITION/partition"+str(i)+".out",
+                            "ITERATION.edit"                       ,
+                            splitted_dirpath                       ,
+                            SUBSAMPLE_SIZE                         ,
+                            para                                   ,
                             file_format = "edit"
                             )
 

@@ -342,7 +342,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         WD+"/ITERATION.edit.gz"
                     )
 
-                    partition.add_paraphyletic_fa(
+                    partition.add_paraphyletic_edit(
                         WD+"/PARTITION/partition"+str(i)+".out" ,
                         "ITERATION.edit.gz"                     ,
                         "INPUT.edit.gz"                         ,
