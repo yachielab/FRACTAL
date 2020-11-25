@@ -432,8 +432,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     RAXMLPAR                                                        +
                     " -T "   + str(raxml_thread_num)                                +
                     " -f e"                                                         +
-                    " -s "   + renamed_subsamplefile_path+".aligned"   +
-                    " -t "   + renamed_subsamplefile_path+".aligned.tree"+
+                    " -s "   + renamed_subsamplefile_path+".aligned"                +
+                    " -t "   + renamed_subsamplefile_path+".aligned.tree"           +
                     " -n "   + "PARAM_"+str(i)                                      +
                     " -m "   + MODEL                                                ,
                     shell=True
@@ -442,8 +442,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 subprocess.call(
                     RAXMLSEQ                                                        +
                     " -f e"                                                         +
-                    " -s "   + renamed_subsamplefile_path+".aligned"   + 
-                    " -t "   + renamed_subsamplefile_path+".aligned.tree"+
+                    " -s "   + renamed_subsamplefile_path+".aligned"                + 
+                    " -t "   + renamed_subsamplefile_path+".aligned.tree"           +
                     " -n "   + "PARAM_"+str(i)                                      +
                     # " -n "   + "PARAM_"+str(i-i%2)                                  + # for test
                     " -m "   + MODEL                                                ,
@@ -685,6 +685,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
         )
+    
+    '''
 
     elapsed_time=time.time()-start
     with open(WD+"/time.out", 'w') as handle:
@@ -695,8 +697,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             str(i)            + "," +
             "subsamplings"    + "\n"
         )
-    
-    '''
 
 if __name__ == "__main__":
     argvs = sys.argv

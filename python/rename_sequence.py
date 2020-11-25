@@ -148,6 +148,8 @@ def random_sampling( # fasta only
         fpath_list     = sorted([in_dirpath + "/" + fname for fname in os.listdir(in_dirpath)])
     else:
         fpath_list     = [in_fpath]
+
+    print(in_fpath)
     
     # count total number of sequences
     if (total_seqcount == None):
@@ -175,6 +177,7 @@ def random_sampling( # fasta only
                 try   : fpath2localidx[fpath].append(local_idx)
                 except: fpath2localidx[fpath]     = [local_idx]
             idx += 1
+    print(fpath2localidx)
     
     # sequence extraction
     seq_set      = set()
