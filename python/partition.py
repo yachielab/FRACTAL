@@ -246,7 +246,6 @@ def partition_fasta(
                     node2filelist.append([])
                 for j, file_name in enumerate(splitted_fasta_list):
                     node2filelist[j%nodenum].append(file_name)
-                print ("node2filelist", node2filelist)
 
                 dname = wd.split("/")[-1]
                 PATH = (subprocess.\

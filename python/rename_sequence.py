@@ -181,7 +181,9 @@ def random_sampling( # fasta only
     seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
+        print(file_format)
         if (file_format == 'fa'):
+            print(root_fpath)
             # write root sequence
             with open(root_fpath, 'r') as ist:
                 records        = SeqIO.parse(ist, 'fasta')
