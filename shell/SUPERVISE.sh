@@ -118,7 +118,7 @@ echo "python3 ${CODE_DIR}/python/FRACluster.new.py ${ROOT_DIR}/nodes/d0 ${num_of
 
 # first qsub
 
-echo "=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)"
+echo "qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1"
 if [ $max_num_of_jobs -gt 1 ]; then
   qsub_err="yet"
   while [ -n "${qsub_err}" ]; do
