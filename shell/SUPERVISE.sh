@@ -117,6 +117,8 @@ echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 echo "python3 ${CODE_DIR}/python/FRACluster.new.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} $FASTA_or_EDIT ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 
 # first qsub
+
+echo "=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)"
 if [ $max_num_of_jobs -gt 1 ]; then
   qsub_err="yet"
   while [ -n "${qsub_err}" ]; do
