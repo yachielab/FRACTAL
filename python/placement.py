@@ -109,6 +109,16 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             if(ML_or_MP=="ML"): 
                 if(ALIGNED=="unaligned"):
                     # One-by-one HMM alignment
+                    print(
+                        hmm_aligner+" "        +
+                        "--outformat afa "     +
+                        "--mapali "+refseq+" " +
+                        "--trim "              + # for trimming insersions
+                        refseq+".hmm "         +
+                        query +" "             +
+                        "| sed 's/\./-/g'> "   +
+                        outdir+"/"+filename+"/ref_query.fa"
+                    )
                     subprocess.call(
                         hmm_aligner+" "        +
                         "--outformat afa "     +

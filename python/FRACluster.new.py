@@ -108,6 +108,30 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     tree_thread_num           = THREAD_NUM
     ###########################
 
+    '''
+    ####### check if aligned #######
+    if (ALIGNED=="unaligned"):
+        if(os.path.isfile(example_infile_fpath_aligned)):
+            if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
+                print(WD,seq_count, seq_count_when_aligned, "alignment needed!!")
+                for infile_aligned in infile_pathlist_aligned:
+                    os.remove(infile_aligned)
+                seq_count_when_aligned = seq_count
+            else:
+                ALIGNED  = "aligned"
+        else:
+            print(
+                "Directory:",WD,
+                "#sequence:",seq_count,
+                "#sequence in the last alignment:",seq_count_when_aligned,
+                "alignment needed!!"
+                )
+            seq_count_when_aligned = seq_count
+    elif (ALIGNED=="aligned"):
+        INPUT_FA  = infile_path
+    ################################
+    '''
+
     # move to Working Directory
     os.chdir(WD) 
 
@@ -573,16 +597,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         else:
                             ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
-                        '''
-                        partition.add_paraphyletic_fa(
-                            WD+"/PARTITION/partition"+str(i)+".out" ,
-                            iterationfile_path                      ,
-                            ALIGNED_ALL_DIR                         ,
-                            SUBSAMPLE_SIZE                          ,
-                            para
-                            )
-                        '''
-
                     elif (FASTA_or_EDIT == 'edit'):
                         shutil.copyfile(
                             WD+"/SUBSAMPLE/RENAMED_"+str(i)+".edit",
@@ -625,14 +639,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         if os.path.exists(example_infile_fpath_aligned+".split") and FASTA_or_EDIT=='fa':
             FASTA_DIR.append(example_infile_fpath_aligned+".split")
 
-
-        print([FASTA_DIR,
-            NUMFILE,
-            NODESDIR,
-            WD,
-            WD+"/PARTITION/partition"+str(min(i,MAX_ITERATION-1))+".out",
-            "UPSTREAM.nwk",
-            ROOTING,nodenum,CODEDIR,FASTA_or_EDIT])
         DIRdict = partition.partition_fasta(
             FASTA_DIR,
             NUMFILE,
