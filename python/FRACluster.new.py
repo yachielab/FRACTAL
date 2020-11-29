@@ -167,7 +167,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         
         if(seq_count<3):
             partition.tiny_tree(concat_infpath,"TERMINAL.nwk")
-            print("seq_count < 4!")
+            print("seq_count < 3!")
         else:
             os.mkdir(    "TREE")
             os.chdir(WD+"/TREE")
@@ -683,7 +683,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         WD+"/SUBSAMPLE.fa.aligned.gz",
         example_infile_fpath+".gz.aligned",
         example_infile_fpath+".gz.aligned.tree",
-        WD+"/seqname_dirpath.txt",
+        #WD+"/seqname_dirpath.txt",
         WD+"/INPUT.part*",
         WD+"/INPUT.terminal*",
         WD+"/root.fa",
