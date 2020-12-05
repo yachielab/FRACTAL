@@ -134,8 +134,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     # move to Working Directory
     os.chdir(WD) 
-
     i=1
+    Niteration=1
     
     # call direct tree reconstruction
 
@@ -258,8 +258,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         prev_para = seq_count
         nodenum   = (NODE_COUNT * seq_count) // INIT_SEQ_COUNT - 1
 
-
         while i<MAX_ITERATION:
+
+            Niteration = i
             
             os.chdir(WD)
 
@@ -683,7 +684,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         WD+"/SUBSAMPLE.fa.aligned.gz",
         example_infile_fpath+".gz.aligned",
         example_infile_fpath+".gz.aligned.tree",
-        #WD+"/seqname_dirpath.txt",
+        WD+"/seqname_dirpath.txt",
         WD+"/INPUT.part*",
         WD+"/INPUT.terminal*",
         WD+"/root.fa",
@@ -713,7 +714,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             str(seq_count)    + "," + 
             str(elapsed_time) + "," +
             "sec"             + "," +
-            str(i)            + "," +
+            str(Niteration)   + "," +
             "subsamplings"    + "\n"
         )
 
