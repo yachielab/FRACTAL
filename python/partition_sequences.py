@@ -42,7 +42,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                 outfilepath = dirpath2filepath[seqname2dirpath[name]]
                 if (outfilepath not in filepath2handle.keys()):
                     filepath2handle[outfilepath] = open(outfilepath, 'w')
-                    outfilepath2Nseq[outfilepath]= 1
+                    outfilepath2Nseq[outfilepath]= 0
                 outfilepath2Nseq[outfilepath] += 1
                 outhandle = filepath2handle[outfilepath]
                 outhandle.write(name + '\t')
