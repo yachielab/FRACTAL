@@ -463,7 +463,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -s "   + renamed_subsamplefile_path+".aligned"                +
                     " -t "   + renamed_subsamplefile_path+".aligned.tree"           +
                     " -n "   + "PARAM_"+str(i)                                      +
-                    " -m "   + MODEL                                                ,
+                    " -m "   + MODEL                                                +
+                    " 2> /dev/null"                                                ,
                     shell=True
                 )
             else:
@@ -474,7 +475,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -t "   + renamed_subsamplefile_path+".aligned.tree"           +
                     " -n "   + "PARAM_"+str(i)                                      +
                     # " -n "   + "PARAM_"+str(i-i%2)                                  + # for test
-                    " -m "   + MODEL                                                ,
+                    " -m "   + MODEL                                                +
+                    " 2> /dev/null"                                                 ,
                     shell=True
                 )
             
