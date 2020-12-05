@@ -55,7 +55,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     # Create file2Nseq file
     subprocess.call(
-        "if [ -n $(ls " + WD + "/*.count) ]; then cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; fi; if [ -e "+WD + "/file2Nseq.txt"+" ]; then if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi; fi",
+        "if [ -n $(ls " + WD + "/*.count 2> /dev/null) ]; then cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; fi; if [ -e "+WD + "/file2Nseq.txt"+" ]; then if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi; fi",
         shell=True
     )
     # Create file2Nseq dictionary
