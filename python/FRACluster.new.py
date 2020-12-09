@@ -314,7 +314,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                                     "cd " +file_path + ".split; "+ 
                                     "cat "+file_path + gunzip_command+"|split -l "+str(Nseq_per_file)+" &> /dev/null;"+
                                     "rm " +file_path +
-                                    "for file in $(ls); do cat $file "+gzip_command+" >"+file_path.split(".")[-1]+".$\{file\}"+gzip_extention+"; done", 
+                                    "for file in $(ls); do cat $file "+gzip_command+" >"+file_path.split(".")[-1]+".${file}"+gzip_extention+"; done", 
                                     shell=True)
                         else:
                             os.mkdir(file_path+".split")
