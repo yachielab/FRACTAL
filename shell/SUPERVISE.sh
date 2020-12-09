@@ -130,7 +130,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
     #### Trace memory usage and hostname ####
     file=qsub_d0.cycle.sh
     if [ "$benchmark" = "TRUE" ]; then
-        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname")> ${ROOT_DIR}/qsub_dir/${file}.tmp
+        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "\nhostname")> ${ROOT_DIR}/qsub_dir/${file}.tmp
         cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
         rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
     fi
@@ -161,7 +161,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
 
       #### Trace memory usage and hostname####
       if [ "$benchmark" = "TRUE" ]; then
-        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname") > ${ROOT_DIR}/qsub_dir/${file}.tmp
+        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "\nhostname") > ${ROOT_DIR}/qsub_dir/${file}.tmp
         cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
         rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
       fi
