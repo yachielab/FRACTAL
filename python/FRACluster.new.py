@@ -43,21 +43,25 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # Enumerate input files
     infile_namelist              = list(sorted(os.listdir(WD)))
     infile_pathlist              = []
+    countfile_pathlist           = []
     for infilename in infile_namelist:
         extentions = {FASTA_or_EDIT  , "gz"}
         if infilename.split(".")[-1] in extentions:
             if (infilename!='root.'+FASTA_or_EDIT):
                 infile_pathlist.append(WD+"/"+infilename)
+        elif infilename.split(".")[-1] == 'count':
+            countfile_pathlist.append(WD+"/"+infilename)
 
     # Record root.fa existed or not
     if (FASTA_or_EDIT == "fa"):
         root_in_separated_file = "root.fa" in set(infile_namelist)
     
     # Create file2Nseq file
-    subprocess.call(
-        "if [ -n $(ls " + WD + "/*.count 2> /dev/null) ]; then cat " + WD + "/*.count > " + WD + "/file2Nseq.txt 2> /dev/null; fi; if [ -e "+WD + "/file2Nseq.txt"+" ]; then if [ ! -s "+WD + "/file2Nseq.txt"+" ]; then rm "+ WD + "/file2Nseq.txt; fi; fi",
-        shell=True
-    )
+    if (len(countfile_pathlist)>0):
+        subprocess.call(
+            "for file in "+" ".join(countfile_pathlist)+"; do cat $file >> " + WD + "/file2Nseq.txt; done; rm "+ WD + "/file2Nseq.txt",
+            shell=True
+        )
     # Create file2Nseq dictionary
     if (os.path.exists(WD + "/file2Nseq.txt")):
         print("skip reading files")
@@ -327,7 +331,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount.pop(file_path)
                     for file_path in file_pathlist_to_be_splitted[1:]:
                         subprocess.call(
-                            "mv "    + file_path+".split/* " + splitted_dirpath + "; "
+                            "for file in $(ls "+ file_path+".split/); do mv "+ file_path+".split/$file " + splitted_dirpath + "; done"
                             "rm -r " + file_path+".split",
                             shell=True
                         )
