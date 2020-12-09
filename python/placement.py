@@ -215,7 +215,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     )
         
         subprocess.call(
-            "for dir in $(ls "+outdir+"/); do"+
+            "for dir in $(ls "+outdir+"/); do "+
             "mv "  + "$(ls "+outdir+"/$\{dir\}/placement_tree.out "+outdir+"/placement_tree.out;"+
             "cat " + outdir + "/$\{dir\}/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out;"        +
             "cat " + outdir + "/$\{dir\}/problematic.fa >> " + outdir+"/problematic.fa;"+
