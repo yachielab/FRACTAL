@@ -474,9 +474,6 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     "echo \"finished\" > "      +
                     outdir+"/epang"+str(i)+".o\n"
                     )
-                #handle.write(
-                #    "rm "+outdir+"/*."+str(i)+".gz\n"
-                #    ) 
                 # end of a distributed task
             shutil.move(WD+"/../../prep_dir/qsub_"+dname+"."+str(i)+".placement.sh", WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".placement.sh")
         # check if all placement tasks ended
@@ -510,14 +507,16 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 )
 
         # merge results
-        #shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
-        #my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
         subprocess.call(
-            "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
-            "cat " + outdir + "/EPANG*/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
-            "cat " + outdir + "/EPANG*/*/problematic.fa > " + outdir+"/problematic.fa",
+            "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;",
             shell=True
             )
+        for i in range(nodenum):
+            subprocess.call(
+                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
+                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" > " + outdir+"/problematic."+file_format,
+                shell=True
+                )
 
 def my_paste(outdir, nodenum, outfilename):
     handles=[]
