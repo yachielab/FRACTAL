@@ -514,12 +514,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;",
             shell=True
             )
-        for i in range(nodenum):
-            subprocess.call(
-                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out; "       +
-                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" >> " + outdir+"/problematic."+file_format,
-                shell=True
-                )
+        subprocess.call(
+            "for nodenum in $(seq 0 "+str(nodenum-1)+"); do ",
+            "   cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out; "             +
+            "   cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" >> " + outdir+"/problematic."+file_format +";" +
+            "done",
+            shell=True
+            )
 
 def my_paste(outdir, nodenum, outfilename):
     handles=[]
