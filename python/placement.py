@@ -515,9 +515,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             shell=True
             )
         subprocess.call(
-            "for nodenum in $(seq 0 "+str(nodenum-1)+"); do ",
-            "   cat " + outdir + "/EPANG${nodenum}/*/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out; "             +
-            "   cat " + outdir + "/EPANG${nodenum}/*/problematic."+file_format+" >> " + outdir+"/problematic."+file_format +";" +
+            "for nodenum in $(seq 0 "+str(nodenum-1)+"); do "                                                                       +
+            "   for dir in $(ls " + outdir + "/EPANG${nodenum}); do "                                                               +
+            "       cat " + outdir + "/EPANG${nodenum}/*/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out; "             +
+            "       cat " + outdir + "/EPANG${nodenum}/*/problematic."+file_format+" >> " + outdir+"/problematic."+file_format +";" +
+            "   done;"                                                                                                              +
             "done",
             shell=True
             )
