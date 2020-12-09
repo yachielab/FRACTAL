@@ -708,7 +708,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         #"TREE"
         ]
 
-    
+    '''
     subprocess.call(
         "rm -r " + " ".join(filenames+dirnames) + " &> /dev/null",
         shell = True
@@ -723,6 +723,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             str(Niteration)   + "," +
             "subsamplings"    + "\n"
         )
+    '''
 
 if __name__ == "__main__":
     argvs = sys.argv
