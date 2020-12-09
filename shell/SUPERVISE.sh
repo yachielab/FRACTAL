@@ -133,7 +133,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
         (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname")> ${ROOT_DIR}/qsub_dir/${file}.tmp
         cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
         rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
-    done
+    fi
     #########################################
     
     qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
@@ -164,7 +164,7 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
         (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname") > ${ROOT_DIR}/qsub_dir/${file}.tmp
         cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
         rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
-      done
+      fi
       ########################################
 
       NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
