@@ -331,7 +331,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         fpath2seqcount.pop(file_path)
                     for file_path in file_pathlist_to_be_splitted[1:]:
                         subprocess.call(
-                            "for file in $(ls "+ file_path+".split/); do mv "+ file_path+".split/$file " + splitted_dirpath + "; done"
+                            "for file in $(ls "+ file_path+".split/); do mv "+ file_path+".split/$file " + splitted_dirpath + "; done; "
                             "rm -r " + file_path+".split",
                             shell=True
                         )
