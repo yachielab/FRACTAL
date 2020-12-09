@@ -214,11 +214,15 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     WD+"/SUBSAMPLE.fa.aligned"
                     )
         subprocess.call(
-            "mv "  + "$(ls "+outdir+"/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;"+
-            "cat " + outdir + "/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out;"        +
-            "cat " + outdir + "/*/problematic.fa > " + outdir+"/problematic.fa",
+            "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;",
             shell=True
             )
+        for i in range(nodenum):
+            subprocess.call(
+                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
+                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" > " + outdir+"/problematic."+file_format,
+                shell=True
+                )
 
     else: # in distributed computing mode
         dname=WD.split("/").pop()
