@@ -34,7 +34,9 @@ careful=${24}
 FASTA_or_EDIT=${25}
 GZIP_INTERMEDIATE=${26}
 SEQ_NUM_FILE=${27}
+benchmark=${28}
 ROOT_DIR=${DATA_DIR}/${exp_num}
+
 
 
 # QSUB OPTION
@@ -125,12 +127,14 @@ if [ $max_num_of_jobs -gt 1 ]; then
         echo ${qsub_err}
     fi
 
-    #### Trace memory usage ####
+    #### Trace memory usage and hostname ####
     file=qsub_d0.cycle.sh
-    cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
-    cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
-    rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
-    ############################
+    if [ "$benchmark" = "TRUE" ]; then
+        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname")> ${ROOT_DIR}/qsub_dir/${file}.tmp
+        cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
+        rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
+    done
+    #########################################
     
     qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
 

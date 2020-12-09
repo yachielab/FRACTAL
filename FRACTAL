@@ -34,6 +34,7 @@ FASTA_or_EDIT="fa"
 CAREFUL_PLACEMENT=1
 GZIP_INTERMEDIATE="FALSE"
 SEQ_NUM_FILE="unspecified"
+benchmark="TRUE"
 
 function version {
   echo "######## FRACTAL v2.5.0 ########"
@@ -120,7 +121,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugE OPT
+while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugEB OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -151,6 +152,7 @@ do
     "l" ) FLG_u="TRUE" ; LIMITATION="$OPTARG";;
     "z" ) FLG_z="TRUE" ; EXTRACTION_SIZE="$OPTARG";;
     "g" ) FLG_g="TRUE" ; GZIP_INTERMEDIATE="TRUE";;
+    "B" ) benchmark="TRUE" ;
     * ) usage; exit 1;;
   esac
 done
@@ -200,7 +202,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE} ${benchmark}
 wait
 
 #show result
