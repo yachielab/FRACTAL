@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 27 ]; then
+if [ $# -ne 28 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -159,11 +159,13 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
     for fpath in $(ls ${ROOT_DIR}/qsub_dir/*placement* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*partition* 2>/dev/null) $(ls ${ROOT_DIR}/qsub_dir/*cycle* 2>/dev/null); do
       file=$(basename $fpath)
 
-      #### Trace memory usage ####
-      cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g' > ${ROOT_DIR}/qsub_dir/${file}.tmp
-      cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
-      rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
-      ############################
+      #### Trace memory usage and hostname####
+      if [ "$benchmark" = "TRUE" ]; then
+        (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname") > ${ROOT_DIR}/qsub_dir/${file}.tmp
+        cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
+        rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
+      done
+      ########################################
 
       NUMBER_OF_JOBS=$(qstat | grep ${JOB_NAME} | wc -l)
       wait
