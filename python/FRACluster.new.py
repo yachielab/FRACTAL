@@ -59,7 +59,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # Create file2Nseq file
     if (len(countfile_pathlist)>0):
         subprocess.call(
-            "for file in "+" ".join(countfile_pathlist)+"; do cat $file >> " + WD + "/file2Nseq.txt; done; rm "+ WD + "/file2Nseq.txt",
+            "for file in "+" ".join(countfile_pathlist)+"; do cat $file >> " + WD + "/file2Nseq.txt; done",
             shell=True
         )
     # Create file2Nseq dictionary
