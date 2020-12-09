@@ -148,8 +148,6 @@ def random_sampling( # fasta only
         fpath_list     = sorted([in_dirpath + "/" + fname for fname in os.listdir(in_dirpath)])
     else:
         fpath_list     = [in_fpath]
-
-    print(fpath_list)
     
     # count total number of sequences
     if (total_seqcount == None):
