@@ -213,16 +213,15 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     outdir+"/"+filename+"/ref_query.fa.ref", 
                     WD+"/SUBSAMPLE.fa.aligned"
                     )
+        
         subprocess.call(
-            "mv "  + "$(ls "+outdir+"/EPANG0/*/placement_tree.out | head -n1) "+outdir+"/placement_tree.out;",
+            "for dir in $(ls "+outdir+"/); do"+
+            "mv "  + "$(ls "+outdir+"/$\{dir\}/placement_tree.out "+outdir+"/placement_tree.out;"+
+            "cat " + outdir + "/$\{dir\}/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out;"        +
+            "cat " + outdir + "/$\{dir\}/problematic.fa >> " + outdir+"/problematic.fa;"+
+            "done",
             shell=True
             )
-        for i in range(nodenum):
-            subprocess.call(
-                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
-                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" > " + outdir+"/problematic."+file_format,
-                shell=True
-                )
 
     else: # in distributed computing mode
         dname=WD.split("/").pop()
@@ -517,8 +516,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             )
         for i in range(nodenum):
             subprocess.call(
-                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out > " + outdir+"/edge_to_seqname_all.out; "       +
-                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" > " + outdir+"/problematic."+file_format,
+                "cat " + outdir + "/EPANG"+str(i)+"/*/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out; "       +
+                "cat " + outdir + "/EPANG"+str(i)+"/*/problematic."+file_format+" >> " + outdir+"/problematic."+file_format,
                 shell=True
                 )
 
