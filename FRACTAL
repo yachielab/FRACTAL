@@ -152,7 +152,7 @@ do
     "l" ) FLG_u="TRUE" ; LIMITATION="$OPTARG";;
     "z" ) FLG_z="TRUE" ; EXTRACTION_SIZE="$OPTARG";;
     "g" ) FLG_g="TRUE" ; GZIP_INTERMEDIATE="TRUE";;
-    "B" ) benchmark="TRUE" ;
+    "B" ) benchmark="TRUE" ;;
     * ) usage; exit 1;;
   esac
 done
