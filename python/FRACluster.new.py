@@ -79,7 +79,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
         example_infile_fpath_aligned = infile_pathlist_aligned[0]
         if (not os.path.isfile(WD+"/root.fa")):
-            root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
+            if (FASTA_or_EDIT=="fa"):
+                root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
         else:
             root_fpath = WD+"/root.fa"
     else:
