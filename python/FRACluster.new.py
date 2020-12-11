@@ -58,10 +58,10 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     # Create file2Nseq file
     if (len(countfile_pathlist)>0):
-        subprocess.call(
-            "for file in "+" ".join(countfile_pathlist)+"; do cat $file >> " + WD + "/file2Nseq.txt; done",
-            shell=True
-        )
+        with open(WD + "/file2Nseq.txt", 'w') as ohandle:
+            for countfile in countfile_pathlist:
+                with open(countfile,'r') as ihandle:
+                    ohandle.write(ihandle.read())
     # Create file2Nseq dictionary
     if (os.path.exists(WD + "/file2Nseq.txt")):
         print("skip reading files")
@@ -79,8 +79,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
         example_infile_fpath_aligned = infile_pathlist_aligned[0]
         if (not os.path.isfile(WD+"/root.fa")):
-            if (FASTA_or_EDIT=="fa"):
-                root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
+            root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
         else:
             root_fpath = WD+"/root.fa"
     else:

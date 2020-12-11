@@ -330,16 +330,17 @@ def partition_fasta(
             partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
             problematic_filenames      = wd + "/*.*edit"                + gzip_extention
             problematic_concatfilename = wd + "/INPUT.edit.problematic" + gzip_extention
-            subprocess.call(
-                "cat "                                   +
-                problematic_filenames                    +
-                "|seqkit grep -r -p ^root -v"            +
-                ">> " + problematic_concatfilename       + 
-                " 2> /dev/null;"                         +
-                "rm " + problematic_filenames            +
-                " 2> /dev/null",
-                shell = True
-                )
+            if (len(glob.glob(problematic_filenames))>0):
+                subprocess.call(
+                    "cat "                                   +
+                    problematic_filenames                    +
+                    "|seqkit grep -r -p ^root -v"            +
+                    ">> " + problematic_concatfilename       + 
+                    " 2> /dev/null;"                         +
+                    "rm " + problematic_filenames            +
+                    " 2> /dev/null",
+                    shell = True
+                    )
 
             for dirpath in dirpath_list:
                 if (dirpath != wd):
