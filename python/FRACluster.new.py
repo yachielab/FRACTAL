@@ -62,6 +62,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             for countfile in countfile_pathlist:
                 with open(countfile,'r') as ihandle:
                     ohandle.write(ihandle.read())
+                os.remove(countfile)
     # Create file2Nseq dictionary
     if (os.path.exists(WD + "/file2Nseq.txt")):
         print("skip reading files")
