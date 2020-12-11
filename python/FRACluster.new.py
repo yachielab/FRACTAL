@@ -224,7 +224,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         else:
             gzip_option = ""
         
-        open(WD+"/file2seq.txt",'w').write(concat_infpath+"\t"+str(seq_count)+"\n")
+        open(WD+"/file2Nseq.txt",'w').write(concat_infpath+"\t"+str(seq_count)+"\n")
 
         FRACTAL_COMMAND =   "FRACTAL"                         + \
                             " -i " + concat_infpath           + \
@@ -238,7 +238,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -e "                            + \
                             " -r " + SEED                     + \
                             " -z " + str(EXTRACTION_SIZE)     + \
-                            " -n " + WD+"/file2seq.txt"       + \
+                            " -n " + WD+"/file2Nseq.txt"       + \
                             gzip_option
         
         if (TREEMETHOD!="unspecified"): 
