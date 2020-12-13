@@ -570,7 +570,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 #get paraphyletic sequences and make ITERATION.fa.gz#
                 #####################################################
                 resampling_needed = False
-                if(para>prev_para):
+                if(para>prev_para or Nseq_in_largest_subclade == seq_count):
                     
                     # if i == 0, start from random sampling again, else use the result of previous i
                     if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
@@ -582,11 +582,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             os.remove(iterationfile_path)
                         i += 1
                         resampling_needed = True
-                
-                if( not Nseq_in_largest_subclade < seq_count-1 ):
-                    
-                    i += 1
-                    resampling_needed = True
 
                 if(para!=0): # if problematic sequences remained
                     
@@ -643,7 +638,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         except:
             None
         
-        if (Nseq_in_largest_subclade == seq_count - 1 ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
+        if (Nseq_in_largest_subclade == seq_count ): # if all sequences were classified into one subclade, FRACTAL gives up for inference of this clade
             print ("Error: FRACluster.py could not divide sequences into multiple subclades")
             return
         
