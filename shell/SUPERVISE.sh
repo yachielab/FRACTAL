@@ -137,7 +137,7 @@ fi
         echo ${qsub_err}
     fi
     
-    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/ -e ${ROOT_DIR}/err/ ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
+    qsub_err=$((qsub -N ${JOB_NAME} ${INIT_QSUB_OPTION} -o ${ROOT_DIR}/out/qsub_d0.cycle.sh.out -e ${ROOT_DIR}/err/qsub_d0.cycle.sh.err ${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh 1> /dev/null) 2>&1)
 
     wait
   done
@@ -179,9 +179,9 @@ if [ $max_num_of_jobs -gt 1 ]; then # parallel mode
                 echo ${qsub_err}
             fi
             if [ `echo ${file} | grep 'largemem'` ] ; then
-                qsub_err=$((qsub ${INIT_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/ -e ${ROOT_DIR}/err/ ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
+                qsub_err=$((qsub ${INIT_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
             else
-                qsub_err=$((qsub ${QSUB_OPTION}      -N ${JOB_NAME} -o -e ${ROOT_DIR}/err/${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
+                qsub_err=$((qsub ${QSUB_OPTION}      -N ${JOB_NAME} -o ${ROOT_DIR}/out/${file}.out -e ${ROOT_DIR}/err/${file}.err ${ROOT_DIR}/qsub_dir/${file} 1> /dev/null) 2>&1)
             fi
         done
         wait
@@ -242,7 +242,7 @@ echo "echo \"finished\" > ${ROOT_DIR}/final_tree/assembly_flag.txt" >>${ROOT_DIR
 if [ $max_num_of_jobs -gt 1 ]; then
     qsub_err="yet"
     while [ -n "${qsub_err}" ]; do
-        qsub_err=$((qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/ -e ${ROOT_DIR}/err/ ${ROOT_DIR}/qsub_dir/qsub_assembly.sh 1> /dev/null) 2>&1)
+        qsub_err=$((qsub ${ASSEMBLY_QSUB_OPTION} -N ${JOB_NAME} -o ${ROOT_DIR}/out/qsub_assembly.sh.out -e ${ROOT_DIR}/err/qsub_assembly.sh.err ${ROOT_DIR}/qsub_dir/qsub_assembly.sh 1> /dev/null) 2>&1)
         
         wait
     done
