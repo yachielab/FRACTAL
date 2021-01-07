@@ -565,7 +565,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     hmm_profiler=HMM_PROFILER
                 )
 
-                if (placemnt_exit_code == 1):
+                if (placemnt_exit_code == 1 or not(os.path.exists(WD+"/EPANG/placement_tree.out"))):
 
                     print("Placement failed...")
 
