@@ -602,12 +602,15 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
                         i -= 1
                         para  = prev_para
+                        Nseq_in_largest_subclade = prev_Nseq_in_largest_subclade
                         break
                     else:
                         if(os.path.isfile(iterationfile_path)):
                             os.remove(iterationfile_path)
                         i += 1
                         resampling_needed = True
+                
+                prev_Nseq_in_largest_subclade = Nseq_in_largest_subclade
 
                 if(para!=0): # if problematic sequences remained
                     
