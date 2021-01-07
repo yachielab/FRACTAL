@@ -528,7 +528,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     edit_list = None
 
                 # conduct placement
-                placement.distributed_placement(
+                placemnt_exit_code = placement.distributed_placement(
                     WD                                                  , 
                     EPANG                                               ,  
                     refseq                                              , 
@@ -551,7 +551,20 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     hmm_aligner=HMM_ALIGNER                             ,
                     hmm_profiler=HMM_PROFILER
                 )
-                
+
+                if (placemnt_exit_code == 1):
+
+                    print("Placement failed...")
+
+                    # if i == 0, start from random sampling again, else use the result of previous i
+                    if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
+                        i -= 1
+                        para  = prev_para
+                        break
+                    else:
+                        if(os.path.isfile(iterationfile_path)):
+                            os.remove(iterationfile_path)
+                        i += 1
                 
                 ####################
                 #parse .jplace file#
@@ -687,6 +700,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         example_infile_fpath+".aligned",
         iterationfile_path,
         WD+"/tmp.nwk",
+        WD+"/SUBSAMPLE.fa.aligned",
         WD+"/SUBSAMPLE.fa.aligned.gz",
         example_infile_fpath+".gz.aligned",
         example_infile_fpath+".gz.aligned.tree",

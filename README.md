@@ -25,11 +25,12 @@
 1. Python3 (version: 3.7.0 or later) with Biopython (version: 1.76) module *required*
 2. RAxML (raxmlHPC-PTHREADS-SSE3 and raxmlHPC-SSE3) (version: 8.2.12) *required*
 3. EPA-ng (version: 0.3.5) *required*
-4. RapidNJ (version: 2.3.2) *optional; if you want to use NJ for lineage reconstruction*
-5. FastTreeMP (version: 2.1.10) *optional; if you want to use ML for lineage reconstruction*
-6. MAFFT (version: 7.464) *optional; if you want to reconstruct a lineage from unaligned sequences*
-7. HMMER (version: 3.3) *optional; if you want to reconstruct a lineage from unaligned sequences*
-8. Trimal (version: 1.4.1) *optional; if you want to reconstruct a lineage from unaligned sequences*
+4. Seqkit (version: 0.11.0) *required*
+5. RapidNJ (version: 2.3.2) *optional; if you want to use NJ for lineage reconstruction*
+6. FastTreeMP (version: 2.1.10) *optional; if you want to use ML for lineage reconstruction*
+7. MAFFT (version: 7.464) *optional; if you want to reconstruct a lineage from unaligned sequences*
+8. HMMER (version: 3.3) *optional; if you want to reconstruct a lineage from unaligned sequences*
+9. Trimal (version: 1.4.1) *optional; if you want to reconstruct a lineage from unaligned sequences*
 
 ### Software installation
 
@@ -102,6 +103,14 @@ Each installation step will take less than ~1 min
 
    ```shell
    conda install -c bioconda epa-ng
+   ```
+
+####Installation of [Seqkit](https://bioinf.shenwei.me/seqkit/) (required)
+
+1. Install Seqkit by
+
+   ```shell
+   conda install -c bioconda seqkit
    ```
 
 #### Installation of [RapidNJ](http://birc.au.dk/software/rapidnj/) (optional)

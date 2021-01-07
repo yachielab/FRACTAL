@@ -185,13 +185,19 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                     " -t "+reftree                ,
                     shell=True
                 )
-                jplace_parse.parse_jplace(
-                    outdir+"/"+filename+"/RAxML_portableTree.epa_result.jplace",
-                    "epa_MP",
-                    outdir+"/"+filename+"/ref_query.fa",
-                    seed,
-                    careful=careful
-                )
+
+                
+                try:
+                    jplace_parse.parse_jplace(
+                        outdir+"/"+filename+"/RAxML_portableTree.epa_result.jplace",
+                        "epa_MP",
+                        outdir+"/"+filename+"/ref_query.fa",
+                        seed,
+                        careful=careful
+                    )
+                except:
+                    return 1 # irregular exit code
+                    
             # If HMM alignments were conducted
             if(ALIGNED=="unaligned"):
                 subprocess.call(
@@ -513,6 +519,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             "done",
             shell=True
             )
+        
+        return 0 # regular exit code
 
 def my_paste(outdir, nodenum, outfilename):
     handles=[]
