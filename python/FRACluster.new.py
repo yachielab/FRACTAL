@@ -423,6 +423,19 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 " -s "  + ALIGNER                               ,
                 shell=True
             )
+
+            if (not os.path.exists(renamed_subsamplefile_path+".aligned.tree")):
+                print("Tree reconstruction failed...")
+
+                # if i == 0, start from random sampling again, else use the result of previous i
+                if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
+                    i -= 1
+                    para  = prev_para
+                    break
+                else:
+                    if(os.path.isfile(iterationfile_path)):
+                        os.remove(iterationfile_path)
+                    i += 1
             
             # Subsample tree extraction
 
