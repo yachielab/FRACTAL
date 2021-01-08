@@ -140,8 +140,11 @@ def random_sampling( # fasta only
     root_fpath,
     total_seqcount=None, 
     file_format   ="fa",
-    in_fpath      =None
+    in_fpath      =None,
+    seed = 0
     ):
+    
+    random.seed(seed)
 
     # set input file path list
     if (in_fpath == None):

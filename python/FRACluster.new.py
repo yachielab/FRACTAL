@@ -374,7 +374,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         root_fpath     = root_fpath,
                         total_seqcount = None, 
                         file_format    = FASTA_or_EDIT,
-                        in_fpath       = iterationfile_path
+                        in_fpath       = iterationfile_path,
+                        seed           = random.randint(0,99999)
                         )
             else:
                 # subsampling
@@ -387,7 +388,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         root_fpath     = root_fpath,
                         total_seqcount = seq_count, 
                         file_format    = FASTA_or_EDIT,
-                        in_fpath       = None
+                        in_fpath       = None,
+                        seed           = random.randint(0,99999)
                         )
             
             #################
