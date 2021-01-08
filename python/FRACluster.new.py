@@ -579,80 +579,82 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             os.remove(iterationfile_path)
                         i += 1
                 
-                ####################
-                #parse .jplace file#
-                ####################
-                os.chdir(WD)
-                para, Nseq_in_largest_subclade = \
-                    partition.partition(
-                        WD+"/EPANG/placement_tree.out"          ,
-                        WD+"/EPANG/edge_to_seqname_all.out"     ,
-                        WD+"/PARTITION/partition"+str(i)+".out" ,
-                        depth
-                    )
-                print("detected "+str(para)+" paraphyletic sequences")
-
-                #####################################################
-                #get paraphyletic sequences and make ITERATION.fa.gz#
-                #####################################################
-                resampling_needed = False
-                if(para>prev_para or Nseq_in_largest_subclade == seq_count):
-                    
-                    # if i == 0, start from random sampling again, else use the result of previous i
-                    if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
-                        i -= 1
-                        para  = prev_para
-                        Nseq_in_largest_subclade = prev_Nseq_in_largest_subclade
-                        break
-                    else:
-                        if(os.path.isfile(iterationfile_path)):
-                            os.remove(iterationfile_path)
-                        i += 1
-                        resampling_needed = True
+                else:
                 
-                prev_Nseq_in_largest_subclade = Nseq_in_largest_subclade
-
-                if(para!=0): # if problematic sequences remained
-                    
-                    if (FASTA_or_EDIT == 'fa'):
-                        # select subsample sequence file
-                        if os.path.isfile(subsamplefile_path+".aligned"):
-                            ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
-                        else:
-                            ALIGNED_SUBSAMPLE = subsamplefile_path
-                            
-                        subprocess.call(
-                            "cat "+ALIGNED_SUBSAMPLE+" "+WD+"/EPANG/problematic.fa > "+iterationfile_path,
-                            shell=True
+                    ####################
+                    #parse .jplace file#
+                    ####################
+                    os.chdir(WD)
+                    para, Nseq_in_largest_subclade = \
+                        partition.partition(
+                            WD+"/EPANG/placement_tree.out"          ,
+                            WD+"/EPANG/edge_to_seqname_all.out"     ,
+                            WD+"/PARTITION/partition"+str(i)+".out" ,
+                            depth
                         )
+                    print("detected "+str(para)+" paraphyletic sequences")
+
+                    #####################################################
+                    #get paraphyletic sequences and make ITERATION.fa.gz#
+                    #####################################################
+                    resampling_needed = False
+                    if(para>prev_para or Nseq_in_largest_subclade == seq_count):
                         
-                        # select all sequence file
-                        if os.path.exists(example_infile_fpath_aligned+".split"):
-                            ALIGNED_ALL_DIR = example_infile_fpath_aligned+".split"
-                            ALIGNED         = "aligned"
+                        # if i == 0, start from random sampling again, else use the result of previous i
+                        if(i > 1 and os.path.isfile(WD+"/PARTITION/partition"+str(i-1)+".out") ): 
+                            i -= 1
+                            para  = prev_para
+                            Nseq_in_largest_subclade = prev_Nseq_in_largest_subclade
+                            break
                         else:
-                            ALIGNED_ALL_DIR = example_infile_fpath        +".split"
+                            if(os.path.isfile(iterationfile_path)):
+                                os.remove(iterationfile_path)
+                            i += 1
+                            resampling_needed = True
+                    
+                    prev_Nseq_in_largest_subclade = Nseq_in_largest_subclade
 
-                    elif (FASTA_or_EDIT == 'edit'):
-                        shutil.copyfile(
-                            WD+"/SUBSAMPLE/RENAMED_"+str(i)+".edit",
-                            WD+"/ITERATION.edit"
-                        )
+                    if(para!=0): # if problematic sequences remained
+                        
+                        if (FASTA_or_EDIT == 'fa'):
+                            # select subsample sequence file
+                            if os.path.isfile(subsamplefile_path+".aligned"):
+                                ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
+                            else:
+                                ALIGNED_SUBSAMPLE = subsamplefile_path
+                                
+                            subprocess.call(
+                                "cat "+ALIGNED_SUBSAMPLE+" "+WD+"/EPANG/problematic.fa > "+iterationfile_path,
+                                shell=True
+                            )
+                            
+                            # select all sequence file
+                            if os.path.exists(example_infile_fpath_aligned+".split"):
+                                ALIGNED_ALL_DIR = example_infile_fpath_aligned+".split"
+                                ALIGNED         = "aligned"
+                            else:
+                                ALIGNED_ALL_DIR = example_infile_fpath        +".split"
 
-                        partition.add_paraphyletic_edit(
-                            WD+"/PARTITION/partition"+str(i)+".out",
-                            "ITERATION.edit"                       ,
-                            splitted_dirpath                       ,
-                            SUBSAMPLE_SIZE                         ,
-                            para                                   ,
+                        elif (FASTA_or_EDIT == 'edit'):
+                            shutil.copyfile(
+                                WD+"/SUBSAMPLE/RENAMED_"+str(i)+".edit",
+                                WD+"/ITERATION.edit"
                             )
 
-                    i+=1
-                    prev_para=para
-                elif (not resampling_needed):
-                    break
-                else:
-                    prev_para = seq_count
+                            partition.add_paraphyletic_edit(
+                                WD+"/PARTITION/partition"+str(i)+".out",
+                                "ITERATION.edit"                       ,
+                                splitted_dirpath                       ,
+                                SUBSAMPLE_SIZE                         ,
+                                para                                   ,
+                                )
+
+                        i+=1
+                        prev_para=para
+                    elif (not resampling_needed):
+                        break
+                    else:
+                        prev_para = seq_count
 
         ###########################
         #partition .fasta or .edit#
