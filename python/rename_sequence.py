@@ -141,7 +141,7 @@ def random_sampling( # fasta only
     total_seqcount=None, 
     file_format   ="fa",
     in_fpath      =None,
-    seed = 0
+    #seed = 0
     ):
     
     #print("seed",seed)
