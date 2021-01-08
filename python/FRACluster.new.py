@@ -364,6 +364,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #random sampling#
             #################
 
+            sampling_seed = random.randint(0,99999)
+
             if (os.path.exists(iterationfile_path)):
                 sampled_seq_name_list = \
                     rename_sequence.random_sampling( # fasta or edit
@@ -375,7 +377,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         total_seqcount = None, 
                         file_format    = FASTA_or_EDIT,
                         in_fpath       = iterationfile_path,
-                        seed           = random.randint(0,99999)
+                        seed           = sampling_seed
                         )
             else:
                 # subsampling
@@ -389,7 +391,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         total_seqcount = seq_count, 
                         file_format    = FASTA_or_EDIT,
                         in_fpath       = None,
-                        seed           = random.randint(0,99999)
+                        seed           = sampling_seed
                         )
             
             #################
