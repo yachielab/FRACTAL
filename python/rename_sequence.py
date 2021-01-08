@@ -215,10 +215,11 @@ def random_sampling( # fasta only
                         if len(local_idx_list) < 1:
                             break 
                         if i == local_idx_list[0]:
-                            seq_set.add(line)
-                            ost.write(line)
-                            seqname_list.append(line.split()[0])
-                            local_idx_list.pop(0)
+                            if line.split()[0] != "s0":
+                                seq_set.add(line)
+                                ost.write(line)
+                                seqname_list.append(line.split()[0])
+                                local_idx_list.pop(0)
                         i += 1
     return seqname_list
 
