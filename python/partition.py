@@ -337,9 +337,9 @@ def partition_fasta(
                     "|seqkit grep -r -p ^root -v"            +
                     ">> " + problematic_concatfilename       + 
                     " 2> /dev/null;"                         +
-                    "rm " + problematic_filenames            +
-                    " 2> /dev/null",
-                    shell = True
+                    #"rm " + problematic_filenames            +
+                    #" 2> /dev/null"
+                    ,shell = True
                     )
 
             for dirpath in dirpath_list:
