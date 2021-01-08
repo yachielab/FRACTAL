@@ -144,6 +144,7 @@ def random_sampling( # fasta only
     seed = 0
     ):
     
+    print("seed",seed)
     random.seed(seed)
 
     # set input file path list
