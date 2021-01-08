@@ -36,7 +36,7 @@ def correspond(treestr):
     return [corr,root]
 
 def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
-    if(len(seed)!=0):random.seed(int(seed))
+    #if(len(seed)!=0):random.seed(int(seed))
     with open(fname,"r") as jf:
         jp = jf.read()
     # parse json format
