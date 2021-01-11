@@ -1,4 +1,0 @@
-    256 /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d1
-    253 /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d2
-    245 /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d3
-    256 /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d4

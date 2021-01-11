@@ -66,7 +66,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
 
     # Record root.fa existed or not
     if (FASTA_or_EDIT == "fa"):
-        root_in_separated_file = os.path.exists(WD + "/INPUT/count/root.fa")
+        root_in_separated_file = os.path.exists(WD + "/INPUT/root/root.fa")
     
     # Create file2Nseq file
     if (len(countfile_pathlist)>0):
@@ -91,9 +91,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     if FASTA_or_EDIT == "fa":
         infile_pathlist_aligned      = [ WD + "/INPUT/aligned/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]
         example_infile_fpath_aligned = infile_pathlist_aligned[0]
-        if (not os.path.isfile(WD + "/INPUT/count/root.fa")):
-            rename_sequence.outgroup_check_fast(infile_pathlist, "fasta", WD + "/INPUT/count/root.fa")
-        root_fpath = WD + "/INPUT/count/root.fa"
+        if (not os.path.isfile(WD + "/INPUT/root/root.fa")):
+            rename_sequence.outgroup_check_fast(infile_pathlist, "fasta", WD + "/INPUT/root/root.fa")
+        root_fpath = WD + "/INPUT/root/root.fa"
     else:
         example_infile_fpath_aligned = infile_pathlist[0]
         root_fpath = WD + "/INPUT/count/root.edit"
@@ -172,7 +172,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         elif(FASTA_or_EDIT == "fa"):
             if (root_in_separated_file):
                 subprocess.call(
-                    "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
+                    "(cat "+root_fpath+"; cat "+" ".join(infile_pathlist) + gunzip_command+") > "+concat_infpath,
                     shell=True
                 )
             else:

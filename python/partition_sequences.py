@@ -56,7 +56,9 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                 "gzip " + outfilepath,
                 shell=True
                 )
-        with open(outfilepath + ".count", 'w') as numhandle:
+
+        countfilepath = "/".join(outfilepath.split("/")[:-2]) + "/count/" + outfilepath.split("/")[-1] + ".count"
+        with open(countfilepath, 'w') as numhandle:
             if (is_gzipped):
                 numhandle.write(outfilepath + ".gz\t" + str(outfilepath2Nseq[outfilepath]) + "\n")
             else:

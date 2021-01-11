@@ -202,6 +202,8 @@ def partition_fasta(
                 os.mkdir(OUT_DIR+"/d"+str(num+i)+"/INPUT/edit")
                 os.mkdir(OUT_DIR+"/d"+str(num+i)+"/INPUT/aligned")
                 os.mkdir(OUT_DIR+"/d"+str(num+i)+"/INPUT/unaligned")
+                os.mkdir(OUT_DIR+"/d"+str(num+i)+"/INPUT/count")
+                os.mkdir(OUT_DIR+"/d"+str(num+i)+"/INPUT/root")
             break
         except Exception as e:
             print(e)
@@ -332,7 +334,7 @@ def partition_fasta(
             for dirpath in dirpath_list:
                 if (dirpath != wd):
                     subprocess.call(
-                        "cat "+wd+"/root.fa > "+dirpath+"/root.fa",
+                        "cat "+wd+"/INPUT/root/root.fa > "+dirpath+"/INPUT/root/root.fa",
                         shell=True
                     )
 
