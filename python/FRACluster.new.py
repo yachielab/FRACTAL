@@ -41,20 +41,32 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     ###########################
 
     # Enumerate input files
-    infile_namelist              = list(sorted(os.listdir(WD)))
-    infile_pathlist              = []
-    countfile_pathlist           = []
-    for infilename in infile_namelist:
-        extentions = {FASTA_or_EDIT  , "gz"}
-        if infilename.split(".")[-1] in extentions:
-            if (infilename!='root.'+FASTA_or_EDIT):
-                infile_pathlist.append(WD+"/"+infilename)
-        elif infilename.split(".")[-1] == 'count':
-            countfile_pathlist.append(WD+"/"+infilename)
+
+    if (FASTA_or_EDIT == "edit"):
+        
+        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/edit")))
+        infile_pathlist = [ WD + "/INPUT/edit/" + infile_name for infile_name in infile_namelist ]
+
+    elif (FASTA_or_EDIT == "fa" and ALIGNED == "aligned"):
+        
+        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/aligned")))
+        infile_pathlist = [ WD + "/INPUT/aligned/" + infile_name for infile_name in infile_namelist ]
+    
+    elif (FASTA_or_EDIT == "fa" and ALIGNED == "unaligned"):
+
+        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/unaligned")))
+        infile_pathlist = [ WD + "/INPUT/unaligned/" + infile_name for infile_name in infile_namelist ]
+
+    else:
+
+        print("Error: FASTA_or_EDIT is not 'fa' or 'edit'", file = sys.stderr)
+
+    countfile_namelist = list(sorted(os.listdir(WD+"/INPUT/count")))
+    countfile_pathlist = [ WD + "/INPUT/count/" + countfile_name for countfile_name in countfile_namelist ]
 
     # Record root.fa existed or not
     if (FASTA_or_EDIT == "fa"):
-        root_in_separated_file = "root.fa" in set(infile_namelist)
+        root_in_separated_file = os.path.exists(WD + "/INPUT/count/root.fa")
     
     # Create file2Nseq file
     if (len(countfile_pathlist)>0):
@@ -77,15 +89,14 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     example_infile_fpath         = infile_pathlist[0]
     iterationfile_path           = "unspecified"
     if FASTA_or_EDIT == "fa":
-        infile_pathlist_aligned      = [infile_path+".aligned" for infile_path in infile_pathlist]
+        infile_pathlist_aligned      = [ WD + "/INPUT/aligned/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]
         example_infile_fpath_aligned = infile_pathlist_aligned[0]
-        if (not os.path.isfile(WD+"/root.fa")):
-            root_fpath = rename_sequence.outgroup_check_fast(infile_pathlist, "fasta")
-        else:
-            root_fpath = WD+"/root.fa"
+        if (not os.path.isfile(WD + "/INPUT/count/root.fa")):
+            rename_sequence.outgroup_check_fast(infile_pathlist, "fasta", WD + "/INPUT/count/root.fa")
+        root_fpath = WD + "/INPUT/count/root.fa"
     else:
         example_infile_fpath_aligned = infile_pathlist[0]
-        root_fpath = WD+"/root.edit"
+        root_fpath = WD + "/INPUT/count/root.edit"
     ###########################
     
     ## check input file property ##
@@ -239,7 +250,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             " -e "                            + \
                             " -r " + SEED                     + \
                             " -z " + str(EXTRACTION_SIZE)     + \
-                            " -n " + WD+"/file2Nseq.txt"       + \
+                            " -n " + WD+"/file2Nseq.txt"      + \
                             gzip_option
         
         if (TREEMETHOD!="unspecified"): 
@@ -677,12 +688,26 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             print ("Error: FRACluster.py could not divide sequences into multiple subclades")
             return
         
-        FASTA_DIR = [ example_infile_fpath+".split" ]
-        if os.path.exists(example_infile_fpath_aligned+".split") and FASTA_or_EDIT=='fa':
-            FASTA_DIR.append(example_infile_fpath_aligned+".split")
+
+        example_infile_dirname = example_infile_fpath.split("/")[-1]+".split"
+        if (FASTA_or_EDIT == "edit"):
+        
+            INPUT_FILE_DIR_list = [ WD + "/INPUT/edit/" + example_infile_dirname ]
+
+        elif (FASTA_or_EDIT == "fa" and ALIGNED == "aligned"):
+            
+            INPUT_FILE_DIR_list = [ WD + "/INPUT/aligned/" + example_infile_dirname ]
+        
+        elif (FASTA_or_EDIT == "fa" and ALIGNED == "unaligned"):
+
+            INPUT_FILE_DIR_list = [ WD + "/INPUT/unaligned/" + example_infile_dirname, WD + "/INPUT/aligned/" + example_infile_dirname ]
+
+        else:
+
+            print("Error: FASTA_or_EDIT is not 'fa' or 'edit'", file = sys.stderr)
 
         DIRdict = partition.partition_fasta(
-            FASTA_DIR,
+            INPUT_FILE_DIR_list,
             NUMFILE,
             NODESDIR,
             WD,

@@ -71,6 +71,13 @@ fi
 
 # setting for the 1st qsub
 mkdir ${ROOT_DIR}/nodes/d0
+mkdir ${ROOT_DIR}/nodes/d0/INPUT
+mkdir ${ROOT_DIR}/nodes/d0/INPUT/unaligned
+mkdir ${ROOT_DIR}/nodes/d0/INPUT/aligned
+mkdir ${ROOT_DIR}/nodes/d0/INPUT/edit
+mkdir ${ROOT_DIR}/nodes/d0/INPUT/count
+mkdir ${ROOT_DIR}/nodes/d0/INPUT/root
+
 
 if   [ -d ${input_faname} ]; then
     filepath_list=$(ls ${input_faname}/*)
@@ -101,12 +108,28 @@ for input_faname in ${filepath_list}; do
         gzip_output="cat"
     fi
 
-    copied_fpath=${ROOT_DIR}/nodes/d0/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
+    if [ $FASTA_or_EDIT = "edit" ]; then
+
+        copied_fpath=${ROOT_DIR}/nodes/d0/INPUT/edit/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
+
+    elif [ $FASTA_or_EDIT = "fa" ]; then
+
+        if [ $ALIGNED = "unaligned" ]; then
+        
+            copied_fpath=${ROOT_DIR}/nodes/d0/INPUT/unaligned/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
+        
+        else
+
+            copied_fpath=${ROOT_DIR}/nodes/d0/INPUT/aligned/$(basename ${input_faname}).${FASTA_or_EDIT}${out_extention}
+        
+        fi
+
+    fi
 
     cat ${input_faname} | ${gzip_input} | ${gzip_output} > $copied_fpath
 
     if [ -e $SEQ_NUM_FILE ]; then
-        (echo -ne "${copied_fpath}\t"; cat $SEQ_NUM_FILE | grep $(basename ${input_faname}) | cut -f2) >> ${ROOT_DIR}/nodes/d0/file2Nseq.txt
+        (echo -ne "${copied_fpath}\t"; cat $SEQ_NUM_FILE | grep $(basename ${input_faname}) | cut -f2) >> ${ROOT_DIR}/nodes/d0/INPUT/count/file2Nseq.txt
     fi
 
 done

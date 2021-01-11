@@ -88,28 +88,10 @@ def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
 
     with open('placement_tree.out','w') as handle:
         handle.write(treestr)
-    '''
-    with open("edge_to_seqname.out",'w') as handle:
-        for seqnamelist in placement_list:
-            for seqname in seqnamelist:
-                handle.write(seqname+",")
-            handle.write("\n")
-    '''
     with open("edge_to_seqname.out",'w') as handle:
         for i, seqnamelist in enumerate(placement_list):
             for seqname in seqnamelist:
                 handle.write('{'+str(i)+'}'+"\t"+seqname+"\n")
-
-    if (infasta_fpath.split(".")[-1] == "gz"):
-        infasta_handle = gzip.open(infasta_fpath, 'rt')
-    else:
-        infasta_handle = open(infasta_fpath, 'r')
-    with open("problematic.fa", 'w') as handle:
-        records = SeqIO.parse(infasta_handle,'fasta')
-        for record in records:
-            if(record.name in problematic_set):
-                SeqIO.write(record, handle, 'fasta')
-    infasta_handle.close()
 
 '''
 command line argument: "<input .fa file path> <output .fa file path>"

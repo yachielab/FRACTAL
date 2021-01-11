@@ -1,0 +1,13 @@
+cat: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/problematic.fa: No such file or directory
+Traceback (most recent call last):
+  File "/home/naoki-konno/code/FRACTAL_beta/python/FRACluster.new.py", line 829, in <module>
+    seq_count_when_aligned=None
+  File "/home/naoki-konno/code/FRACTAL_beta/python/FRACluster.new.py", line 719, in FRACluster
+    file_format = FASTA_or_EDIT
+  File "/lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/python/partition.py", line 340, in partition_fasta
+    partition_sequences.partition_sequences(splitted_fpath_list, dirpath_list, wd + "/seqname_dirpath.txt", file_format = 'edit')
+  File "/lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/python/partition_sequences.py", line 114, in partition_sequences
+    classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped, file_format = file_format)
+  File "/lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/python/partition_sequences.py", line 42, in classify_sequences
+    outfilepath = dirpath2filepath[seqname2dirpath[name]]
+KeyError: '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d2/INPUT/d0'

@@ -1,0 +1,22 @@
+INFO Selected: Output dir: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/
+INFO Selected: Query file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz
+INFO Selected: Tree file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_result.PARAM_1
+INFO Selected: Reference MSA: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/SUBSAMPLE/RENAMED_1.edit.fa
+INFO Selected: Automatic switching of use of per rate scalers
+INFO Selected: Preserving the root of the input tree
+INFO Selected: Specified model file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_info.PARAM_1
+INFO    Rate heterogeneity: GAMMA (4 cats, mean),  alpha: 1 (user),  weights&rates: (0.25,0.136954) (0.25,0.476752) (0.25,1) (0.25,2.38629) 
+        Base frequencies (user): 0.013292 0.487452 0.486553 0.012703 
+        Substitution rates (user): 0.0001 213.516 0.336306 0.0001 212.878 1
+INFO Selected: Using threads: 1
+INFO     ______ ____   ___           _   __ ______
+        / ____// __ \ /   |         / | / // ____/
+       / __/  / /_/ // /| | ______ /  |/ // / __  
+      / /___ / ____// ___ |/_____// /|  // /_/ /  
+     /_____//_/    /_/  |_|      /_/ |_/ \____/ (v0.3.5)
+WARN File name '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz' ends in '.gz', but the file does not seem to contain gzip content.
+WARN File name '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz' ends in '.gz', but the file does not seem to contain gzip content.
+INFO Output file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/epa_result.jplace
+INFO 1010 Sequences done!
+INFO Time spent placing: 4s
+INFO Elapsed Time: 4s

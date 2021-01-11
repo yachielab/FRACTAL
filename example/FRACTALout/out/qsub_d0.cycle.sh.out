@@ -1,0 +1,182 @@
+Already aligned!
+Option -T does not have any effect with the sequential or parallel MPI version.
+It is used to specify the number of threads for the Pthreads-based parallelization
+
+RAxML can't, parse the alignment file as phylip file 
+it will now try to parse it as FASTA file
+
+
+
+Using BFGS method to optimize GTR rate parameters, to disable this specify "--no-bfgs" 
+
+
+
+This is RAxML version 8.2.12 released by Alexandros Stamatakis on May 2018.
+
+With greatly appreciated code contributions by:
+Andre Aberer      (HITS)
+Simon Berger      (HITS)
+Alexey Kozlov     (HITS)
+Kassian Kobert    (HITS)
+David Dao         (KIT and HITS)
+Sarah Lutteropp   (KIT and HITS)
+Nick Pattengale   (Sandia)
+Wayne Pfeiffer    (SDSC)
+Akifumi S. Tanabe (NRIFS)
+Charlie Taylor    (UF)
+
+
+Alignment has 422 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 0.00%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 1 inferences on the original alignment using 1 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+ML estimate of 25 per site rate categories
+
+Likelihood of final tree will be evaluated and optimized under GAMMA
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 422
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/naoki-konno/local/bin/raxmlHPC-SSE3 -s /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/SUBSAMPLE/RENAMED_1.edit.fa.aligned -y -n raxml -T 4 -m GTRCAT -p 12345 
+
+
+Partition: 0 with name: No Name Provided
+Base frequencies: 0.013 0.487 0.487 0.013 
+
+
+ Warning: tree evaluation with CAT model of rate heterogeneity
+Only compare likelihood values for identical rate category assignments
+CAT-based Branch lengths are on average shorter by factor 0.5 than GAMMA-based branch lengths
+... but highly correlated with GAMMA branch lengths
+
+RAxML can't, parse the alignment file as phylip file 
+it will now try to parse it as FASTA file
+
+
+
+Using BFGS method to optimize GTR rate parameters, to disable this specify "--no-bfgs" 
+
+
+
+This is RAxML version 8.2.12 released by Alexandros Stamatakis on May 2018.
+
+With greatly appreciated code contributions by:
+Andre Aberer      (HITS)
+Simon Berger      (HITS)
+Alexey Kozlov     (HITS)
+Kassian Kobert    (HITS)
+David Dao         (KIT and HITS)
+Sarah Lutteropp   (KIT and HITS)
+Nick Pattengale   (Sandia)
+Wayne Pfeiffer    (SDSC)
+Akifumi S. Tanabe (NRIFS)
+Charlie Taylor    (UF)
+
+
+Alignment has 422 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 0.00%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+ML estimate of 25 per site rate categories
+
+Likelihood of final tree will be evaluated and optimized under GAMMA
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 422
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/naoki-konno/local/bin/raxmlHPC-SSE3 -f e -s /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/SUBSAMPLE/RENAMED_1.edit.fa.aligned -t /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/SUBSAMPLE/RENAMED_1.edit.fa.aligned.tree -n PARAM_1 -m GTRCAT 
+
+
+
+Model parameters (binary file format) written to: /lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_binaryModelParameters.PARAM_1
+1.143342 -22473.359107
+
+
+Overall Time for Tree Evaluation 1.165084
+Final GAMMA  likelihood: -22473.359107
+
+Number of free parameters for AIC-TEST(BR-LEN): 208
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 1.000000
+Tree-Length: 4.095720
+rate A <-> C: 0.000100
+rate A <-> G: 213.516256
+rate A <-> T: 0.336306
+rate C <-> G: 0.000100
+rate C <-> T: 212.878116
+rate G <-> T: 1.000000
+
+freq pi(A): 0.013292
+freq pi(C): 0.487452
+freq pi(G): 0.486553
+freq pi(T): 0.012703
+
+Final tree written to:                 /lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_result.PARAM_1
+Execution Log File written to:         /lustre7/home/lustre4/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_log.PARAM_1
+INFO Selected: Output dir: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/
+INFO Selected: Query file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz
+INFO Selected: Tree file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_result.PARAM_1
+INFO Selected: Reference MSA: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/SUBSAMPLE/RENAMED_1.edit.fa
+INFO Selected: Automatic switching of use of per rate scalers
+INFO Selected: Preserving the root of the input tree
+INFO Selected: Specified model file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/PARAM/RAxML_info.PARAM_1
+INFO    Rate heterogeneity: GAMMA (4 cats, mean),  alpha: 1 (user),  weights&rates: (0.25,0.136954) (0.25,0.476752) (0.25,1) (0.25,2.38629) 
+        Base frequencies (user): 0.013292 0.487452 0.486553 0.012703 
+        Substitution rates (user): 0.0001 213.516 0.336306 0.0001 212.878 1
+INFO Selected: Using threads: 1
+INFO     ______ ____   ___           _   __ ______
+        / ____// __ \ /   |         / | / // ____/
+       / __/  / /_/ // /| | ______ /  |/ // / __  
+      / /___ / ____// ___ |/_____// /|  // /_/ /  
+     /_____//_/    /_/  |_|      /_/ |_/ \____/ (v0.3.5)
+WARN File name '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz' ends in '.gz', but the file does not seem to contain gzip content.
+WARN File name '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/INPUT.part0.d0.1.edit.fa.gz' ends in '.gz', but the file does not seem to contain gzip content.
+INFO Output file: /home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0/EPANG/INPUT.part0.d0.1.edit/epa_result.jplace
+INFO 1010 Sequences done!
+INFO Time spent placing: 4s
+INFO Elapsed Time: 4s
+['/home/naoki-konno/code/FRACTAL_beta/python/FRACluster.new.py', '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes/d0', '5', '100', '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/nodes', '500', '1', '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/NUMFILE', '/home/naoki-konno/code/FRACTAL_beta/example/FRACTALout/qsub_dir', '/home/naoki-konno/code/FRACTAL_beta', 'Origin', 'GTRCAT', '', 'raxmlMP', 'aligned', '/home/naoki-konno/software/anaconda3/bin/epa-ng', '/home/naoki-konno/local/bin/raxmlHPC-SSE3', '/home/naoki-konno/local/bin/raxmlHPC-PTHREADS-SSE3', '/home/naoki-konno/local/bin/raxmlHPC-SSE3', '1', '0', '0', 'ML', '10000000000', '1', 'edit', '0']
+FASTA_or_EDIT: edit
+rand_idx_list [864, 394, 776, 911, 430, 41, 265, 988, 523, 497, 414, 940, 802, 849, 310, 991, 488, 366, 597, 913, 929, 223, 516, 142, 288, 143, 773, 97, 633, 818, 256, 931, 545, 722, 829, 616, 923, 150, 317, 101, 747, 75, 920, 870, 700, 338, 483, 573, 103, 362, 444, 323, 625, 655, 934, 209, 565, 993, 453, 886, 533, 266, 63, 824, 998, 561, 937, 14, 95, 736, 860, 408, 727, 844, 803, 684, 640, 1, 626, 505, 847, 888, 341, 249, 969, 333, 720, 891, 64, 195, 581, 227, 244, 822, 145, 916, 556, 458, 93, 82]
+edit
+detected 0 paraphyletic sequences
+<Sequence count> Input:1010
+  Largest subclade    :256
+  Problematic         :0
