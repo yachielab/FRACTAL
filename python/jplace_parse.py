@@ -93,6 +93,18 @@ def parse_jplace(fname, placement_method, infasta_fpath, seed, careful=1):
             for seqname in seqnamelist:
                 handle.write('{'+str(i)+'}'+"\t"+seqname+"\n")
 
+    if (infasta_fpath.split(".")[-1] == "gz"):
+        infasta_handle = gzip.open(infasta_fpath, 'rt')
+    else:
+        infasta_handle = open(infasta_fpath, 'r')
+    with open("problematic.fa", 'w') as handle:
+        print("writing problematic.fa...", file = sys.stdout)
+        records = SeqIO.parse(infasta_handle,'fasta')
+        for record in records:
+            if(record.name in problematic_set):
+                SeqIO.write(record, handle, 'fasta')
+    infasta_handle.close()
+
 '''
 command line argument: "<input .fa file path> <output .fa file path>"
 '''

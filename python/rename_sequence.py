@@ -162,7 +162,6 @@ def random_sampling( # fasta only
     # get sequence indices to extract
     if (total_seqcount > subsample_size):
         rand_idx_list=random.sample(range(total_seqcount),subsample_size) # n-1: not include root
-        print("rand_idx_list",rand_idx_list)
         rand_idx_list.sort()
     else:
         rand_idx_list=list(range(total_seqcount))

@@ -11,7 +11,7 @@ import subprocess
 import random
 import gzip
 
-def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath, is_gzipped, file_format):
+def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath, is_gzipped, file_format, data_type):
     # open input FASTAfile
     outfilepath2Nseq = {}
     filepath2handle  = {}
@@ -22,6 +22,12 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
         for record in records:
             if (record.name == "root"):
                 None
+                #if (data_type == "aligned"):
+                #    print("writing root.fa")
+                #    for dirpath in list(seqname2dirpath.values()):
+                #        outfilepath = dirpath2filepath[dirpath]
+                #        with open("/".join(outfilepath.split("/")[:-2]) + "/root/root.aligned.fa", 'w') as outhandle:
+                #            SeqIO.write(record, outhandle, "fasta")
             else:
                 outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
 
@@ -57,7 +63,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                 shell=True
                 )
 
-        countfilepath = "/".join(outfilepath.split("/")[:-2]) + "/count/" + outfilepath.split("/")[-1] + ".count"
+        countfilepath = "/".join(outfilepath.split("/")[:-2]) + "/count/" + outfilepath.split("/")[-1] + "." + data_type + ".count"
         with open(countfilepath, 'w') as numhandle:
             if (is_gzipped):
                 numhandle.write(outfilepath + ".gz\t" + str(outfilepath2Nseq[outfilepath]) + "\n")
@@ -113,8 +119,9 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1]
                 dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-            classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped, file_format = file_format)
+            classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped, file_format = file_format, data_type = data_type)
             ist.close()
+            #print("Remind: Remove undeleted files: partition_sequence.py", file = sys.stderr)
             os.remove(inputFASTA_filepath)
 
 if __name__ == "__main__":

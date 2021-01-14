@@ -29,8 +29,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                seq_count_when_aligned=None,
                ):
 
-    print ("FASTA_or_EDIT:",FASTA_or_EDIT)
-
     # start timer
     start = time.time() 
 
@@ -40,113 +38,134 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     mem_req_threshold          = 10**7
     ###########################
 
+    
+    root_fpath       = WD + "/INPUT/root/root.fa"
+    ALIGNED_original = ALIGNED
+
     # Enumerate input files
 
-    if (FASTA_or_EDIT == "edit"):
+    while True:
+
+        if (FASTA_or_EDIT == "edit"):
+            
+            infile_namelist = list(sorted(os.listdir(WD+"/INPUT/edit")))
+            infile_pathlist = [ WD + "/INPUT/edit/" + infile_name for infile_name in infile_namelist ]
+
+        elif (FASTA_or_EDIT == "fa" and ALIGNED == "aligned"):
+            
+            infile_namelist = list(sorted(os.listdir(WD+"/INPUT/aligned")))
+            infile_pathlist = [ WD + "/INPUT/aligned/" + infile_name for infile_name in infile_namelist ]
         
-        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/edit")))
-        infile_pathlist = [ WD + "/INPUT/edit/" + infile_name for infile_name in infile_namelist ]
+        elif (FASTA_or_EDIT == "fa" and ALIGNED == "unaligned"):
 
-    elif (FASTA_or_EDIT == "fa" and ALIGNED == "aligned"):
-        
-        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/aligned")))
-        infile_pathlist = [ WD + "/INPUT/aligned/" + infile_name for infile_name in infile_namelist ]
-    
-    elif (FASTA_or_EDIT == "fa" and ALIGNED == "unaligned"):
+            infile_namelist = list(sorted(os.listdir(WD+"/INPUT/unaligned")))
+            infile_pathlist = [ WD + "/INPUT/unaligned/" + infile_name for infile_name in infile_namelist ]
 
-        infile_namelist = list(sorted(os.listdir(WD+"/INPUT/unaligned")))
-        infile_pathlist = [ WD + "/INPUT/unaligned/" + infile_name for infile_name in infile_namelist ]
-
-    else:
-
-        print("Error: FASTA_or_EDIT is not 'fa' or 'edit'", file = sys.stderr)
-
-    countfile_namelist = list(sorted(os.listdir(WD+"/INPUT/count")))
-    countfile_pathlist = [ WD + "/INPUT/count/" + countfile_name for countfile_name in countfile_namelist ]
-
-    # Record root.fa existed or not
-    if (FASTA_or_EDIT == "fa"):
-        root_in_separated_file = os.path.exists(WD + "/INPUT/root/root.fa")
-    
-    # Create file2Nseq file
-    if (len(countfile_pathlist)>0):
-        with open(WD + "/file2Nseq.txt", 'w') as ohandle:
-            for countfile in countfile_pathlist:
-                with open(countfile,'r') as ihandle:
-                    ohandle.write(ihandle.read())
-                os.remove(countfile)
-    # Create file2Nseq dictionary
-    if (os.path.exists(WD + "/file2Nseq.txt")):
-        print("skip reading files")
-        fpath2seqcount = {}
-        with open(WD + "/file2Nseq.txt", 'r') as handle:
-            for line in handle:
-                fpath2seqcount[line.split()[0]] = int(line.split()[1])
-    else:
-        fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist, form = FASTA_or_EDIT)
-
-    ### get input file name ###
-    example_infile_fpath         = infile_pathlist[0]
-    iterationfile_path           = "unspecified"
-    if FASTA_or_EDIT == "fa":
-        infile_pathlist_aligned      = [ WD + "/INPUT/aligned/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]
-        example_infile_fpath_aligned = infile_pathlist_aligned[0]
-        if (not os.path.isfile(WD + "/INPUT/root/root.fa")):
-            rename_sequence.outgroup_check_fast(infile_pathlist, "fasta", WD + "/INPUT/root/root.fa")
-        root_fpath = WD + "/INPUT/root/root.fa"
-    else:
-        example_infile_fpath_aligned = infile_pathlist[0]
-        root_fpath = WD + "/INPUT/count/root.edit"
-    ###########################
-    
-    ## check input file property ##
-    seq_count                 = sum(fpath2seqcount.values())
-    is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
-    if (is_gzipped):
-        gzip_extention        = ".gz"
-        gzip_command          = "| gzip"
-        gunzip_command        = "| gunzip"
-    else:
-        gzip_extention        = ""
-        gzip_command          = ""
-        gunzip_command        = ""
-    if(INIT_SEQ_COUNT==0): 
-        INIT_SEQ_COUNT        = seq_count # only in d0
-        seq_count_when_aligned= seq_count
-    ################################
-
-    ######## parameter ########
-    if(SEED=="random"): random.seed(int(random.randint(0,99999)))
-    elif(len(SEED)!=0): random.seed(int(SEED))
-    else:print("-r Error: invalid random seed!")
-    raxml_thread_num          = 1
-    depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
-    tree_thread_num           = THREAD_NUM
-    ###########################
-
-    '''
-    ####### check if aligned #######
-    if (ALIGNED=="unaligned"):
-        if(os.path.isfile(example_infile_fpath_aligned)):
-            if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
-                print(WD,seq_count, seq_count_when_aligned, "alignment needed!!")
-                for infile_aligned in infile_pathlist_aligned:
-                    os.remove(infile_aligned)
-                seq_count_when_aligned = seq_count
-            else:
-                ALIGNED  = "aligned"
         else:
+
+            print("Error: FASTA_or_EDIT is not 'fa' or 'edit'", file = sys.stderr)
+
+        countfile_namelist = list(sorted(os.listdir(WD+"/INPUT/count")))
+        countfile_pathlist = [ WD + "/INPUT/count/" + countfile_name for countfile_name in countfile_namelist ]
+
+        
+        
+        # Create file2Nseq file
+        if (len(countfile_pathlist)>0):
+            with open(WD + "/file2Nseq.txt", 'w') as ohandle:
+                for countfile in countfile_pathlist:
+                    with open(countfile,'r') as ihandle:
+                        ohandle.write(ihandle.read())
+                    os.remove(countfile)
+        # Create file2Nseq dictionary
+        if (os.path.exists(WD + "/file2Nseq.txt")):
+            print("skip reading files")
+            fpath2seqcount = {}
+            with open(WD + "/file2Nseq.txt", 'r') as handle:
+                for line in handle:
+                    fpath2seqcount[line.split()[0]] = int(line.split()[1])
+        else:
+            fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist, form = FASTA_or_EDIT)
+
+        # Record root.fa existed or not
+        if (FASTA_or_EDIT == "fa"):
+            root_in_separated_file = os.path.exists(root_fpath)
+
+        ### get input file name ###
+        example_infile_fpath         = infile_pathlist[0]
+        iterationfile_path           = "unspecified"
+        if root_fpath != WD + "/INPUT/root/root.aligned.fa":
+            if FASTA_or_EDIT == "fa":
+                infile_pathlist_aligned      = [ WD + "/INPUT/aligned/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]
+                example_infile_fpath_aligned = infile_pathlist_aligned[0]
+                if (not os.path.isfile(WD + "/INPUT/root/root.fa")):
+                    rename_sequence.outgroup_check_fast(infile_pathlist, "fasta", WD + "/INPUT/root/root.fa")
+                root_fpath = WD + "/INPUT/root/root.fa"
+            else:
+                example_infile_fpath_aligned = infile_pathlist[0]
+                root_fpath = WD + "/INPUT/count/root.edit"
+        ###########################
+        
+        ## check input file property ##
+        seq_count                 = sum([fpath2seqcount[infile_path] for infile_path in infile_pathlist])
+        is_gzipped                = (example_infile_fpath.split(".")[-1] == "gz")
+        if (is_gzipped):
+            gzip_extention        = ".gz"
+            gzip_command          = "| gzip"
+            gunzip_command        = "| gunzip"
+        else:
+            gzip_extention        = ""
+            gzip_command          = ""
+            gunzip_command        = ""
+        if(INIT_SEQ_COUNT==0): 
+            INIT_SEQ_COUNT        = seq_count # only in d0
+            seq_count_when_aligned= seq_count
+        ################################
+
+        ######## parameter ########
+        if(SEED=="random"): random.seed(int(random.randint(0,99999)))
+        elif(len(SEED)!=0): random.seed(int(SEED))
+        else:print("-r Error: invalid random seed!")
+        raxml_thread_num          = 1
+        depth                     = max(math.floor(math.log2(seq_count/THRESHOLD))+2,2)
+        tree_thread_num           = THREAD_NUM
+        ###########################
+
+        
+        ####### check if aligned #######
+        if (ALIGNED=="unaligned"):
             print(
-                "Directory:",WD,
-                "#sequence:",seq_count,
+                "Directory:",WD,"\n",
+                "#sequence:",seq_count,"\n",
                 "#sequence in the last alignment:",seq_count_when_aligned,
-                "alignment needed!!"
-                )
-            seq_count_when_aligned = seq_count
-    elif (ALIGNED=="aligned"):
-        INPUT_FA  = infile_path
-    ################################
-    '''
+                sep=""
+            )
+            if(os.path.isfile(example_infile_fpath_aligned)):
+                if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
+                    for infile_aligned in infile_pathlist_aligned:
+                        os.remove(infile_aligned)
+                        os.remove(WD + "/INPUT/root/root.aligned.fa")
+                    seq_count_when_aligned = seq_count
+                    print(
+                    "Alignment is needed because the last alignment is too old..."
+                    )
+                    break
+                else:
+                    ALIGNED  = "aligned"
+                    root_fpath = WD + "/INPUT/root/root.aligned.fa"
+                    print(
+                        "Alignment is not needed..."
+                    )
+                    # -----> Go back to start
+            else:
+                print(
+                    "Alignment is needed because there is not aligned fasta files..."
+                    )
+                seq_count_when_aligned = seq_count
+                break
+        elif (ALIGNED=="aligned"):
+            break
+        ################################
 
     # move to Working Directory
     os.chdir(WD) 
@@ -305,24 +324,30 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             if (FASTA_or_EDIT == "fa"):
                 AFTER_ALIGNMENT = os.path.exists(example_infile_fpath_aligned+".split")
                 if(AFTER_ALIGNMENT):
-                    ALIGNED         = "aligned"
+                    ALIGNED     = "aligned"
 
             ################
             #  file split  #
             ################
             split = nodenum > 1
             Nseq_per_file = min(SPLIT_THRESHOLD, seq_count//max(nodenum,1))
-            if (split):
-                if (AFTER_ALIGNMENT):
-                    file_pathlist_to_be_splitted = infile_pathlist_aligned
-                else:
-                    file_pathlist_to_be_splitted = infile_pathlist
+            
+            if   ALIGNED_original == "aligned" :
+                file_pathlist_to_be_splitted = infile_pathlist
+            elif ALIGNED == "aligned" :
+                file_pathlist_to_be_splitted = infile_pathlist + [ WD + "/INPUT/unaligned/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]
+            else:
+                file_pathlist_to_be_splitted = infile_pathlist
+
+            print("file_pathlist_to_be_splitted:", file_pathlist_to_be_splitted)
+            
+            if split:
 
                 splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
                 if not os.path.exists(splitted_dirpath):
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
                         if fpath2seqcount[file_path] > Nseq_per_file:
-                            if (FASTA_or_EDIT == 'fa'):
+                            if   (FASTA_or_EDIT == 'fa'):
                                 subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
                             elif (FASTA_or_EDIT == 'edit'):
                                 os.mkdir(file_path+".split")
@@ -352,13 +377,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                             shell=True
                         )
             else:
-                if (not os.path.exists(example_infile_fpath+".split")):
-                    os.mkdir(example_infile_fpath+".split")
-                    for infile_path in infile_pathlist:
-                        fpath2seqcount[example_infile_fpath+".split/"+infile_path.split("/")[-1]] = fpath2seqcount[infile_path]
+                for infile_path in file_pathlist_to_be_splitted:
+                    if (not os.path.exists(infile_path+".split")):
+                        os.mkdir(infile_path+".split")
+                        fpath2seqcount[infile_path+".split/"+infile_path.split("/")[-1]] = fpath2seqcount[infile_path]
                         fpath2seqcount.pop(infile_path)
-                        shutil.move(infile_path, example_infile_fpath+".split")
-                    splitted_dirpath = example_infile_fpath+".split"
+                        shutil.move(infile_path, infile_path+".split")
+                splitted_dirpath = example_infile_fpath+".split"
             
             # rename
             
@@ -374,8 +399,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #################
             #random sampling#
             #################
-
-            #sampling_seed = random.randint(0,99999)
 
             if (os.path.exists(iterationfile_path)):
                 sampled_seq_name_list = \
@@ -501,7 +524,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -t "   + renamed_subsamplefile_path+".aligned.tree"           +
                     " -n "   + "PARAM_"+str(i)                                      +
                     " -m "   + MODEL                                                +
-                    " 2> /dev/null"                                                ,
+                    " &> /dev/null"                                                ,
                     shell=True
                 )
             else:
@@ -513,7 +536,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     " -n "   + "PARAM_"+str(i)                                      +
                     # " -n "   + "PARAM_"+str(i-i%2)                                  + # for test
                     " -m "   + MODEL                                                +
-                    " 2> /dev/null"                                                 ,
+                    " &> /dev/null"                                                 ,
                     shell=True
                 )
             
@@ -579,6 +602,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     hmm_aligner=HMM_ALIGNER                             ,
                     hmm_profiler=HMM_PROFILER
                 )
+                    
 
                 if (placemnt_exit_code == 1 or not(os.path.exists(WD+"/EPANG/placement_tree.out"))):
 
@@ -633,8 +657,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                         
                         if (FASTA_or_EDIT == 'fa'):
                             # select subsample sequence file
-                            if os.path.isfile(subsamplefile_path+".aligned"):
-                                ALIGNED_SUBSAMPLE = subsamplefile_path+".aligned"
+                            if os.path.isfile(WD+"/SUBSAMPLE.fa.aligned"):
+                                ALIGNED_SUBSAMPLE = WD+"/SUBSAMPLE.fa.aligned"
+                                root_fpath = WD + "/INPUT/root/root.aligned.fa"
                             else:
                                 ALIGNED_SUBSAMPLE = subsamplefile_path
                                 
@@ -690,6 +715,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         
 
         example_infile_dirname = example_infile_fpath.split("/")[-1]+".split"
+
+        ALIGNED = ALIGNED_original # change back ALIGNED
         if (FASTA_or_EDIT == "edit"):
         
             INPUT_FILE_DIR_list = [ WD + "/INPUT/edit/" + example_infile_dirname ]
@@ -752,12 +779,6 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         example_infile_fpath+".gz.aligned",
         example_infile_fpath+".gz.aligned.tree",
         WD+"/seqname_dirpath.txt",
-        WD+"/INPUT.part*",
-        WD+"/INPUT.terminal*",
-        WD+"/root.fa",
-        WD+"/INPUT.fa",
-        WD+"/INPUT.fa.gz",
-        WD+"/INPUT.fa*aligned*"
         ]
     
     dirnames = [
@@ -766,6 +787,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
         "PARAM",
         "PARTITION",
         "SUBSAMPLE",
+        #"INPUT"
         #"TREE"
         ]
 
@@ -793,7 +815,7 @@ if __name__ == "__main__":
     except:
         None
 
-    print(argvs)
+    #print(argvs)
 
     if (len(argvs)==27):
         FRACluster(

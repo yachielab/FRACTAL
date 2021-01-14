@@ -78,9 +78,13 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         subprocess.call(
             hmm_profiler + " " + 
             refseq+".hmm "     +
-            refseq             ,
+            refseq             +
+            "&> /dev/null"     
+            ,
             shell=True
         ) 
+
+    if (not os.path.exists(alignment_outdir)):
         os.mkdir(alignment_outdir)
 
     # sequential mode
@@ -125,15 +129,17 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             outdir+"/"+filename+"/ref_query.fa", 
                             refseq
                         )
+                    query = outdir+"/"+filename+"/ref_query.fa.query"
                     subprocess.call(
                         EPANG                                            +
                         " --redo"                                        +
                         " -s "+outdir+"/"+filename+"/ref_query.fa.ref"   +
                         " -t "+reftree                                   +
                         " --model "+model                                +
-                        " -q "+outdir+"/"+filename+"/ref_query.fa.query" +
+                        " -q "+query                                     +
                         " -w "+outdir+"/"+filename                       +
-                        " -T "+str(threadnum)                            ,
+                        " -T "+str(threadnum)                            +
+                        " &> /dev/null"                                  ,
                         shell=True
                     )
                 elif(ALIGNED=="aligned"): # for aligned sequences
@@ -145,7 +151,8 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                         " --model "+model      +
                         " -q "+query           +
                         " -w "+outdir+"/"+filename         +
-                        " -T "+str(threadnum)  ,
+                        " -T "+str(threadnum)  +
+                        " &> /dev/null"        ,
                         shell=True
                     )
                 jplace_parse.parse_jplace(
@@ -202,7 +209,12 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
             if(ALIGNED=="unaligned"):
                 subprocess.call(
                     "cat " + outdir+"/"+filename+"/ref_query.fa.query" + gzipcommand + ">" + 
-                    alignment_outdir+"/"+filename+".aligned"+extention,
+                    alignment_outdir+"/"+filename+extention,
+                    shell = True
+                    )
+                subprocess.call(
+                    "cat " + outdir+"/"+filename+"/ref_query.fa.ref | seqkit grep -r -p ^s0 | sed 's/s0/root/g' > " + 
+                    WD + "/INPUT/root/root.aligned.fa",
                     shell = True
                     )
                 shutil.move(
@@ -212,9 +224,9 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
         
         subprocess.call(
             "for dir in $(ls "+outdir+"); do "+
-            "   mv "  + outdir + "/${dir}/placement_tree.out "+outdir+"/placement_tree.out;"+
-            "   cat " + outdir + "/${dir}/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out;"        +
-            "   cat " + outdir + "/${dir}/problematic.fa >> " + outdir+"/problematic.fa;"+
+            "   mv "  + outdir + "/${dir}/placement_tree.out "+outdir+"/placement_tree.out;"           +
+            "   cat " + outdir + "/${dir}/edge_to_seqname.out >> " + outdir+"/edge_to_seqname_all.out;"+
+            "   cat " + outdir + "/${dir}/problematic.fa      >> " + outdir+"/problematic.fa;"         +
             "done",
             shell=True
             )
@@ -362,7 +374,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             handle.write(
                                 "cat " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" + gzipcommand +
                                 ">" + 
-                                alignment_outdir+"/"+filename+".aligned"+extention+"\n"
+                                alignment_outdir+"/"+filename+extention+"\n"
                                 )
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
@@ -467,7 +479,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 "cat "                                                               +
                                 outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query" +
                                 gzipcommand + " > "                                                  +
-                                alignment_outdir+"/"+filename+".aligned" + extention + "\n"          ,
+                                alignment_outdir+"/"+filename + extention + "\n"          ,
                             )
                 handle.write(
                     "echo \"finished\" > "      +
@@ -503,6 +515,11 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                 "> "+ 
                 WD+"/SUBSAMPLE.fa.aligned",
                 shell=True
+                )
+            subprocess.call(
+                "for file in $(ls "+outdir+"/EPANG0/*/ref_query.fa.ref | head -n1); do cat ${file} | seqkit grep -r -p ^s0 | seqkit head -n1 | sed 's/s0/root/g' > " + 
+                WD + "/INPUT/root/root.aligned.fa; done",
+                shell = True
                 )
 
         # merge results
