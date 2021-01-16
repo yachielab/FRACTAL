@@ -231,9 +231,12 @@ def partition_fasta(
     )
 
     for fasta_count, splitted_fasta_dir in enumerate(in_fasta_dirlist):
+        print("Partitioning sequences...")
 
         # edit, unaligned, or aligned
         data_type = splitted_fasta_dir.split("/")[-2]
+
+        print("Target:"+str(fasta_count), splitted_fasta_dir, "is", data_type)
 
         is_gzipped = (os.listdir(splitted_fasta_dir)[0].split(".")[-1] == "gz")
         splitted_fasta_list = os.listdir(splitted_fasta_dir)
@@ -300,7 +303,7 @@ def partition_fasta(
                 # wait for all partition jobs finish
                 Nunclassified    = len(os.listdir(splitted_fasta_dir))
                 Nfinished        = 0
-                while(Nunclassified != 0):
+                while(Nfinished < nodenum):
                     file_list= os.listdir(splitted_fasta_dir)
                     Nunclassified    = 0
                     Nfinished        = 0
@@ -309,11 +312,11 @@ def partition_fasta(
                             Nfinished += 1
                         elif (filename.split(".")[-1] == 'fa' or filename.split(".")[-1]=='gz'):
                             Nunclassified += 1
-                    if (Nunclassified > 0 and Nfinished == nodenum):
-                        subprocess.call(
-                            "mv "+wd+"/../../executed/qsub_"+dname+".*.partition.sh " + wd+"/../../qsub_dir",
-                            shell=True
-                        )
+                    #if (Nunclassified > 0 and Nfinished == nodenum):
+                    #    subprocess.call(
+                    #        "mv "+wd+"/../../executed/qsub_"+dname+".*.partition.sh " + wd+"/../../qsub_dir",
+                    #        shell=True
+                    #    )
                         
             else: # sequential mode
                 partition_sequences.partition_sequences(splitted_fpath_list, [ dirpath+ "/INPUT/" + data_type for dirpath in dirpath_list ], wd + "/seqname_dirpath.txt")
@@ -337,7 +340,7 @@ def partition_fasta(
                     if (dirpath != wd):
                         subprocess.call(
                             "cat "+wd+"/INPUT/root/root.fa         > "+dirpath+"/INPUT/root/root.fa;       " +
-                            "cat "+wd+"/INPUT/root/root.aligned.fa > "+dirpath+"/INPUT/root/root.aligned.fa",
+                            "if [ -e "+wd+"/INPUT/root/root.aligned.fa ]; then cat "+wd+"/INPUT/root/root.aligned.fa > "+dirpath+"/INPUT/root/root.aligned.fa; fi",
                             shell=True
                         )
 

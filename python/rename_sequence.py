@@ -141,7 +141,6 @@ def random_sampling( # fasta only
     in_fpath      =None,
     #seed = 0
     ):
-    
     #print("seed",seed)
     #random.seed(seed)
 
@@ -182,9 +181,9 @@ def random_sampling( # fasta only
     seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
-        print(file_format)
+        #print(file_format)
         if (file_format == 'fa'):
-            print(root_fpath)
+            #print(root_fpath)
             # write root sequence
             with open(root_fpath, 'r') as ist:
                 records        = SeqIO.parse(ist, 'fasta')
@@ -276,9 +275,9 @@ def random_sampling_fasta( # fasta only
     seq_set      = set()
     seqname_list = []
     with open(out_fname, 'w') as ost:
-        print(file_format)
+        #print(file_format)
         if (file_format == 'fa'):
-            print(seqname_list)
+            #print(seqname_list)
             # write root sequence
             with open(root_fpath, 'r') as ist:
                 records = SeqIO.parse(ist, 'fasta')

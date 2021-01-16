@@ -37,7 +37,7 @@ SEQ_NUM_FILE="unspecified"
 benchmark="TRUE"
 
 function version {
-  echo "######## FRACTAL v2.5.0 ########"
+  echo "######## FRACTAL v2.6.0 ########"
 }
 
 function usage {
@@ -100,7 +100,8 @@ Options:
     -n <String>
       File path of input sequence number. Default: unspecified
     -E 
-      Treat input data as edit list of each sequence
+      Treat input data as edit list of each sequence. 
+      Currently, this option can be used only with "-p MP -d 1", and "-g" option is not supported.
     -O "<String>"
       Options for qsub. Default: ""
         example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 

@@ -42,6 +42,9 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     root_fpath       = WD + "/INPUT/root/root.fa"
     ALIGNED_original = ALIGNED
 
+    # for debug
+    #shutil.copytree(WD + "/INPUT", WD + "/INPUT_copy")
+
     # Enumerate input files
 
     while True:
@@ -79,12 +82,13 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                     os.remove(countfile)
         # Create file2Nseq dictionary
         if (os.path.exists(WD + "/file2Nseq.txt")):
-            print("skip reading files")
+            print("Skip counting sequences")
             fpath2seqcount = {}
             with open(WD + "/file2Nseq.txt", 'r') as handle:
                 for line in handle:
                     fpath2seqcount[line.split()[0]] = int(line.split()[1])
         else:
+            print("Counting sequences...")
             fpath2seqcount = rename_sequence.count_sequence_fast(infile_pathlist, form = FASTA_or_EDIT)
 
         # Record root.fa existed or not
@@ -142,9 +146,11 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             )
             if(os.path.isfile(example_infile_fpath_aligned)):
                 if (seq_count < seq_count_when_aligned * ALIGNMENT_TIMING_PARAMETER):
+                    #print("infile_pathlist_aligned:",infile_pathlist_aligned)
+                    #print("infile_pathlist:",infile_pathlist)
                     for infile_aligned in infile_pathlist_aligned:
                         os.remove(infile_aligned)
-                        os.remove(WD + "/INPUT/root/root.aligned.fa")
+                    os.remove(WD + "/INPUT/root/root.aligned.fa")
                     seq_count_when_aligned = seq_count
                     print(
                     "Alignment is needed because the last alignment is too old..."
@@ -175,6 +181,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     # call direct tree reconstruction
 
     if(seq_count<=THRESHOLD):
+        print("Start direct tree construction...")
 
         concat_infpath = WD+"/INPUT.terminal.fa"
 
@@ -226,18 +233,19 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     
     # call fractal FRACTAL 
     elif(NODE_COUNT>1 and seq_count<=INIT_SEQ_COUNT//NODE_COUNT):
+        print("Call fractal FRACTAL...")
 
         # To Do: remove concatenation
         if (FASTA_or_EDIT == "fa"):
             concat_infpath = WD+"/INPUT.fa.gz"
             if (root_in_separated_file):
                 subprocess.call(
-                    "(cat root.fa; cat "+" ".join(infile_pathlist) + gunzip_command+")|gzip > "+concat_infpath,
+                    "(cat "+ WD + "/INPUT/root/root.fa; cat "+" ".join([ WD + "/INPUT/"+ALIGNED_original+"/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ]) + gunzip_command+")|gzip > "+concat_infpath,
                     shell=True
-                ) 
+                )
             else:
                 subprocess.call(
-                    "(cat "+" ".join(infile_pathlist) + gunzip_command + ")|gzip > " + concat_infpath,
+                    "(cat "+" ".join([ WD + "/INPUT/"+ALIGNED_original+"/" + infile_path.split("/")[-1] for infile_path in infile_pathlist ])  + gunzip_command + ")|gzip > " + concat_infpath,
                     shell=True
                 )
         elif (FASTA_or_EDIT == "edit"):
@@ -276,7 +284,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -m "+TREEMETHOD
         else: 
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -s "+SOFTWARE
-        if (ALIGNED=='unaligned'):
+        if (ALIGNED_original=='unaligned'):
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -u "
         if (FASTA_or_EDIT == "edit"):
             FRACTAL_COMMAND = FRACTAL_COMMAND+" -E "
@@ -339,13 +347,29 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             else:
                 file_pathlist_to_be_splitted = infile_pathlist
 
-            print("file_pathlist_to_be_splitted:", file_pathlist_to_be_splitted)
+            #print ("debug", file_pathlist_to_be_splitted)
             
-            if split:
 
-                splitted_dirpath = file_pathlist_to_be_splitted[0]+".split"
-                if not os.path.exists(splitted_dirpath):
+            splitted_dirpath_set = set()
+
+            split_was_done = os.path.exists(example_infile_fpath + ".split")
+
+            if not split_was_done:
+                if split:
+                    print("Splitting files...")
+                
                     for j, file_path in enumerate(file_pathlist_to_be_splitted):
+                        data_type = file_path.split("/")[-2]
+                        if   ( data_type == "aligned"):
+                            splitted_dirpath = WD + "/INPUT/aligned/"   + example_infile_fpath.split("/")[-1] + ".split"
+                        elif ( data_type == "unaligned"):
+                            splitted_dirpath = WD + "/INPUT/unaligned/" + example_infile_fpath.split("/")[-1] + ".split"
+
+                        splitted_dirpath_set.add(splitted_dirpath)
+
+                        print("Splitting files...", file_path, splitted_dirpath)
+                        #print(fpath2seqcount)
+
                         if fpath2seqcount[file_path] > Nseq_per_file:
                             if   (FASTA_or_EDIT == 'fa'):
                                 subprocess.call("seqkit split2 -s "+str(Nseq_per_file)+" "+file_path+" &> /dev/null; rm "+file_path, shell=True)
@@ -369,37 +393,64 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                                     fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path] % Nseq_per_file
                                 else:
                                     fpath2seqcount[splitted_dirpath + "/" + splitted_fname] = fpath2seqcount[file_path]
-                        fpath2seqcount.pop(file_path)
-                    for file_path in file_pathlist_to_be_splitted[1:]:
-                        subprocess.call(
-                            "for file in $(ls "+ file_path+".split/); do mv "+ file_path+".split/$file " + splitted_dirpath + "; done; "
-                            "rm -r " + file_path+".split",
-                            shell=True
-                        )
-            else:
-                for infile_path in file_pathlist_to_be_splitted:
-                    if (not os.path.exists(infile_path+".split")):
-                        os.mkdir(infile_path+".split")
-                        fpath2seqcount[infile_path+".split/"+infile_path.split("/")[-1]] = fpath2seqcount[infile_path]
-                        fpath2seqcount.pop(infile_path)
-                        shutil.move(infile_path, infile_path+".split")
-                splitted_dirpath = example_infile_fpath+".split"
+
+                    for file_path in file_pathlist_to_be_splitted:
+                        data_type = file_path.split("/")[-2]
+                        if   ( data_type == "aligned"):
+                            splitted_dirpath = WD + "/INPUT/aligned/"   + example_infile_fpath.split("/")[-1] + ".split"
+                        elif ( data_type == "unaligned"):
+                            splitted_dirpath = WD + "/INPUT/unaligned/" + example_infile_fpath.split("/")[-1] + ".split"
+                        
+                        #print ("debug:", file_path, data_type, splitted_dirpath)
+                        
+                        if file_path+".split" != splitted_dirpath:
+                            subprocess.call(
+                                "for file in $(ls "+ file_path+".split/); do mv "+ file_path+".split/$file " + splitted_dirpath + "; done; "
+                                "rm -r " + file_path+".split",
+                                shell=True
+                            )
+                else:
+                    print("Skip splitting files...")
+                    for infile_path in file_pathlist_to_be_splitted:
+                        data_type = infile_path.split("/")[-2]
+                        if   ( data_type == "aligned"):
+                            splitted_dirpath = WD + "/INPUT/aligned/"   + example_infile_fpath.split("/")[-1] + ".split"
+                        elif ( data_type == "unaligned"):
+                            splitted_dirpath = WD + "/INPUT/unaligned/" + example_infile_fpath.split("/")[-1] + ".split"
+                        elif ( data_type == "edit"):
+                            splitted_dirpath = WD + "/INPUT/edit/" + example_infile_fpath.split("/")[-1] + ".split"
+
+
+                        if (not os.path.exists(splitted_dirpath)):
+                            os.mkdir(splitted_dirpath)
+                        if infile_path+".split/" != splitted_dirpath:
+                            fpath2seqcount[splitted_dirpath+"/"+infile_path.split("/")[-1]] = fpath2seqcount[infile_path]
+                            fpath2seqcount.pop(infile_path)
+                            shutil.move(infile_path, splitted_dirpath)
+                        splitted_dirpath_set.add(splitted_dirpath)
             
             # rename
+
+            for splitted_dirpath in splitted_dirpath_set:
             
-            for j, splitted_fname in enumerate(os.listdir(splitted_dirpath)):
-                splitted_fpath   = splitted_dirpath+"/"+splitted_fname
-                renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+"."+str(i)+"."+FASTA_or_EDIT+gzip_extention
-                if renamed_filepath != splitted_fpath:
-                    shutil.move(splitted_fpath, renamed_filepath)
-                    fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
-                    fpath2seqcount.pop(splitted_fpath)
+                for j, splitted_fname in enumerate(sorted(os.listdir(splitted_dirpath))):
+                    splitted_fpath   = splitted_dirpath+"/"+splitted_fname
+                    renamed_filepath = splitted_dirpath+"/INPUT.part"+str(j)+"."+WD.split("/")[-1]+"."+str(i)+"."+FASTA_or_EDIT+gzip_extention
+                    if renamed_filepath != splitted_fpath:
+                        shutil.move(splitted_fpath, renamed_filepath)
+                        fpath2seqcount[renamed_filepath] = fpath2seqcount[splitted_fpath]
+                        fpath2seqcount.pop(splitted_fpath)
             
 
             #################
             #random sampling#
             #################
-
+            print ("Subsampling sequences...")
+            if    (FASTA_or_EDIT == "fa"):
+                splitted_dirpath = WD + "/INPUT/" + ALIGNED + "/"   + example_infile_fpath.split("/")[-1] + ".split"
+            elif  (FASTA_or_EDIT == "edit"):
+                splitted_dirpath = WD + "/INPUT/edit/"     + example_infile_fpath.split("/")[-1] + ".split"
+            print ("Input sequence directory:", splitted_dirpath)
             if (os.path.exists(iterationfile_path)):
                 sampled_seq_name_list = \
                     rename_sequence.random_sampling( # fasta or edit
@@ -445,6 +496,8 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #######################################
             #construct subsample tree as reference#
             #######################################
+            print ("Constructing a sample tree...")
+
             os.chdir(WD+"/TREE")
             
             subprocess.call(
@@ -560,6 +613,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
                 ########################################
                 #Phylogenetic placement & visualization#
                 ########################################
+                print("Start placement...")
                 os.chdir(WD)
 
                 # select sequence file to place
@@ -770,24 +824,20 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     os.chdir(WD)
     
     filenames = [
-        example_infile_fpath,
-        example_infile_fpath+".aligned",
         iterationfile_path,
         WD+"/tmp.nwk",
         WD+"/SUBSAMPLE.fa.aligned",
         WD+"/SUBSAMPLE.fa.aligned.gz",
-        example_infile_fpath+".gz.aligned",
-        example_infile_fpath+".gz.aligned.tree",
         WD+"/seqname_dirpath.txt",
+        WD+"/INPUT.terminal*"
         ]
     
     dirnames = [
-        example_infile_fpath+".split",
         "EPANG",
         "PARAM",
         "PARTITION",
         "SUBSAMPLE",
-        #"INPUT"
+        "INPUT",
         #"TREE"
         ]
 

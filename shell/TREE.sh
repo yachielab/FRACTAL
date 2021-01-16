@@ -53,7 +53,7 @@ cd $WD
 
 # Alignment
 if [ $ALIGNED = 'aligned' ]; then
-    echo "Already aligned!"
+    #echo "Already aligned!"
     cat ${FILE} | ${gzip_input}> ${FILE}.aligned
 elif [ $ALIGNED = "unaligned" ]; then
     ${ALIGNER} --quiet <(cat ${FILE} | ${gzip_input}) > ${FILE}.aligned # set $PATH!!!!!!!!!!

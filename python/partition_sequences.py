@@ -22,12 +22,6 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
         for record in records:
             if (record.name == "root"):
                 None
-                #if (data_type == "aligned"):
-                #    print("writing root.fa")
-                #    for dirpath in list(seqname2dirpath.values()):
-                #        outfilepath = dirpath2filepath[dirpath]
-                #        with open("/".join(outfilepath.split("/")[:-2]) + "/root/root.aligned.fa", 'w') as outhandle:
-                #            SeqIO.write(record, outhandle, "fasta")
             else:
                 outfilepath = dirpath2filepath[seqname2dirpath[record.id]]
 
@@ -64,6 +58,7 @@ def classify_sequences(inputFASTA_filehandle, seqname2dirpath, dirpath2filepath,
                 )
 
         countfilepath = "/".join(outfilepath.split("/")[:-2]) + "/count/" + outfilepath.split("/")[-1] + "." + data_type + ".count"
+
         with open(countfilepath, 'w') as numhandle:
             if (is_gzipped):
                 numhandle.write(outfilepath + ".gz\t" + str(outfilepath2Nseq[outfilepath]) + "\n")
@@ -117,7 +112,10 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + ".".join(inputFASTA_filepath.split("/")[-1].split(".")[:-1])
                 else:
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1]
+                print("debug",inputFASTA_filepath, outputFASTA_filepath)
                 dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
+
+            print("debug", dirpath2filepath)
 
             classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped, file_format = file_format, data_type = data_type)
             ist.close()
