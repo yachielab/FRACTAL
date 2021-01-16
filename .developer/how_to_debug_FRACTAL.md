@@ -8,9 +8,9 @@
     shutil.copytree(WD + "/INPUT", WD + "/INPUT_copy")
     ```
 
-2. Execute with '-e' option: FRACTAL quits deleting intermediate files
+2. Execute FRACTAL with '-e' option: FRACTAL quits deleting intermediate files
 
-3. See `FRACTALout/err` directory and identify the directory `dXX` where an error occured
+3. See `FRACTALout/err` directory and identify the directory `FRACTALout/nodes/dXX` which caused the error 
 
 4. Create a copy of the directory and initialize the directory by
 
@@ -20,4 +20,11 @@
     cp -r FRACTALout/nodes/dXX_copy/INPUT_copy FRACTALout/nodes/dXX/
     ```
 
-5. Debug the code and retry the calculation for the directory by executing the corresponding script saved in `FRACTALout/executed`
+5. Debug the code and retry the calculation only for the directory by executing the corresponding script saved in `FRACTALout/executed`
+
+6. Execute a test script to check if FRACTAL can work for any combination of options 
+
+    ```
+    cd FRACTALout/test
+    bash test.1.sh
+    ```
