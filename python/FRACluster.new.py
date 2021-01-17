@@ -338,7 +338,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
             #  file split  #
             ################
             split = nodenum > 1
-            Nseq_per_file = min(SPLIT_THRESHOLD, seq_count//max(nodenum,1))
+            Nseq_per_file = min(SPLIT_THRESHOLD, seq_count//max(nodenum-1,1))
             
             if   ALIGNED_original == "aligned" :
                 file_pathlist_to_be_splitted = infile_pathlist
