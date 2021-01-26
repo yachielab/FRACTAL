@@ -262,6 +262,14 @@ echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "python3 ${CODE_DIR}/python/TreeAssembly.py ${ROOT_DIR}/nodes/d0 ${ROOT_DIR}/final_tree/HUGE_Result.nwk TRUE" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
 echo "echo \"finished\" > ${ROOT_DIR}/final_tree/assembly_flag.txt" >>${ROOT_DIR}/qsub_dir/qsub_assembly.sh
+#### Trace memory usage and hostname ####
+file=qsub_assembly.sh
+if [ "$benchmark" = "TRUE" ]; then
+    (cat ${ROOT_DIR}/qsub_dir/${file} | sed 's/python3/\/usr\/bin\/time -f "%M,KB,%e,sec," python3/g'; echo "hostname")> ${ROOT_DIR}/qsub_dir/${file}.tmp
+    cp  ${ROOT_DIR}/qsub_dir/${file}.tmp ${ROOT_DIR}/qsub_dir/${file}
+    rm  ${ROOT_DIR}/qsub_dir/${file}.tmp
+fi
+#########################################
 if [ $max_num_of_jobs -gt 1 ]; then
     qsub_err="yet"
     while [ -n "${qsub_err}" ]; do

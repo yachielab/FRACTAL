@@ -70,7 +70,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             ALIGNED, seed, careful=1, hmm_aligner="", hmm_profiler="",
                             file_format = "fa", edit_list = None, alignment_outdir = None):
     
-    splitted_queryfile_list = os.listdir(query_dir)
+    splitted_queryfile_list = os.listdir(query_dir) # TODO: proper sorting will save runtime
 
     # Profile HMM
     if(ALIGNED=="unaligned"): # for unaligned sequences
