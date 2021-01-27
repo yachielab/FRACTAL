@@ -112,10 +112,10 @@ def partition_sequences(inputFASTA_filepathlist, outputFASTA_dirpathlist, seqnam
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + ".".join(inputFASTA_filepath.split("/")[-1].split(".")[:-1])
                 else:
                     outputFASTA_filepath = outputFASTA_dirpath + "/" + inputFASTA_filepath.split("/")[-1]
-                print("debug",inputFASTA_filepath, outputFASTA_filepath)
+                #print("debug",inputFASTA_filepath, outputFASTA_filepath)
                 dirpath2filepath[outputFASTA_dirpath] = outputFASTA_filepath
 
-            print("debug", dirpath2filepath)
+            #print("debug", dirpath2filepath)
 
             classify_sequences(ist, seqname2dirpath, dirpath2filepath, is_gzipped, file_format = file_format, data_type = data_type)
             ist.close()

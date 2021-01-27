@@ -1,5 +1,8 @@
 ### Update Log
 
+<h4> 1/16/2021 Version 2.7.0 </h4>
+1. Option: Debug for a combination of options "-u -p MP" 
+
 <h4> 1/16/2021 Version 2.6.0 </h4>
 1. Option: -u option revived. Now FRACTAL can take unaligned sequences as an input.
 

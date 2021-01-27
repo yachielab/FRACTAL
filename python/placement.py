@@ -494,15 +494,23 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 refseq + "\n"
                                 )
                             handle.write(
-                                "trimal "                                                  +
-                                " -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
-                                "-selectcols { "                                           +
-                                "   `trimal -sgc "                                         +
+                                "removed_col=$(trimal -sgc "                                         +
                                 "    -in " +outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.ref " +
                                 "    |awk ' { if( $2==100 ){ print $1 }}'"                 +
-                                "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\" ` "            +
-                                "    } "                                                   +
-                                "> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols\n"
+                                "    |tr \"\\n\" \",\" | sed -e \"s/,\$//\") \n"
+                                )
+                            handle.write(
+                                "if [ -n \"$removed_col\" ]; then "                                      +
+                                "   trimal "                                                             +
+                                "     -in " + outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "       +
+                                "     -selectcols { "                                                    +
+                                "     $removed_col "                                                     +
+                                "     } "                                                                +
+                                "   > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols; " +
+                                "else "                                                                  +
+                                "   cat "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa "           +
+                                "   > "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols; " +
+                                "fi\n"
                                 )
                             handle.write(
                                 "python3 "                                          +
@@ -510,6 +518,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols "+
                                 refseq  + "\n"
                                 )
+                            queryfile = outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.fa.selectcols.query"
                         elif(ALIGNED=="aligned"): # for aligned sequences
                             handle.write(
                                 "(cat "+refseq+"; cat "+
@@ -517,6 +526,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                                 gunzipcommand    +
                                 ")| sed 's/\./N/g'> "+outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa\n"
                             )
+                            queryfile = outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa"
                         handle.write(
                             RAXMLSEQ                                      +
                             " -n epa_result -f y -m GTRCAT"               +
@@ -528,7 +538,7 @@ def distributed_placement(  WD, EPANG, refseq, reftree, model,
                             codedir+"/python/jplace_parse.py "                              +
                             outdir+"/EPANG"+str(i)+"/"+filename+"/RAxML_portableTree.epa_result.jplace " +
                             "epa_MP "                                                       +
-                            outdir+"/EPANG"+str(i)+"/"+filename+"/ref_query.gap2N.fa "      +
+                            queryfile + " "                                                 +
                             seed + "\n"
                             )
                         files_to_be_removed = [
