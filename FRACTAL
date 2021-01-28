@@ -37,7 +37,7 @@ SEQ_NUM_FILE="unspecified"
 benchmark="TRUE"
 
 function version {
-  echo "######## FRACTAL v2.7.0 ########"
+  echo "######## FRACTAL v2.6.1 ########"
 }
 
 function usage {

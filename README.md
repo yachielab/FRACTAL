@@ -261,17 +261,15 @@ Output:
 ### FRACTAL Usage
 
 ```
-######## FRACTAL v2.5.0 ########
-FRACTAL is a tool for lineage estimation from massive number of DNA sequences.
 
 Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-f output_file_path] [-f output_file_name]
     [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
     [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
-    [-d job_number] [-c thread_number] [-e] [-r integer] [-E] [-O qsub_option]
-    [-I first_qsub_option] [-A last_qsub_option] [-j job_name] [-l iteration_upper_limit]
-    [-g]
+    [-d job_number] [-c thread_number] [-e] [-r integer] [-n file_path] [-E] 
+    [-O qsub_option] [-I first_qsub_option] [-A last_qsub_option] [-j job_name] 
+    [-l iteration_upper_limit] [-g]
 
 Options:
     -v
@@ -305,7 +303,7 @@ Options:
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
-      Threshold number of input sequences to switch to direct lineage tree reconstruction
+      Threshold number of input sequences to switch to direct lineage tree reconstruction 
         in each iteration cycle. Default: 500
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
@@ -317,15 +315,18 @@ Options:
       Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
-    -E
-      Treat input data as edit list of each sequence
+    -n <String>
+      File path of input sequence number. Default: unspecified
+    -E 
+      Treat input data as edit list of each sequence. 
+      Currently, this option can be used only with "-p MP -d 1", and "-g" option is not supported.
     -O "<String>"
       Options for qsub. Default: ""
-        example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G"
+        example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
     -A "<String>"
-      Options especially for the last qsub (tree assembly).
+      Options especially for the last qsub (tree assembly). 
         Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
@@ -333,7 +334,7 @@ Options:
       Maximum number of FRACTAL iterations. Default: 10000
     -z <Integer>
       Number of extracted tips from sample tree. Default: no extraction
-    -g
+    -g 
       Gzip intermediate files
 ```
 

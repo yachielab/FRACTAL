@@ -1,10 +1,10 @@
 ### Update Log
 
-<h4> 1/16/2021 Version 2.7.0 </h4>
+<h4> 1/16/2021 Version 2.6.1 </h4>
 1. Option: Debug for a combination of options "-u -p MP" 
 
 <h4> 1/16/2021 Version 2.6.0 </h4>
-1. Option: -u option revived. Now FRACTAL can take unaligned sequences as an input.
+1. Option: -E and -u option revived. Now FRACTAL can take indel pattern or unaligned sequences as an input.
 
 <h4> 11/14/2020 Version 2.5.0 </h4>
 1. Option: -g option was released. FRACTAL was enabled to gzip heavy intermediate files.
