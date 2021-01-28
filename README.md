@@ -13,7 +13,11 @@
 
 <img src=images/fractal_concept.jpg width=10000x3000>
 
-**Figure 1. Schematic diagram of FRACTAL.** From an input sequence pool, a given number of sequences are first randomly subsampled (Step 1) and their sample lineage tree is reconstructed with a rooting or provisional rooting sequence by lineage estimation software of choice (Step 2). Note that while an outgroup is preferred as the rooting sequence if available, any sequence can be used for unrooted tree estimation. The remaining input sequences are then mapped to the branches of the sample tree by phylogenetic placement (Step 3). If all of the input sequences are mapped on downstream branches of the sample tree so as to separate them into multiple distinct clades, their upstream lineage is considered to be true and fixed (Step 4), and the sequence group in each downstream clade is recursively subjected to the first process in a distributed computing node (Step 5). If any sequence(s) mapped on the root branch does not allow the grouping of input sequences into clades, the phylogenetic placement is repeated against a new sample tree generated for sequences randomly chosen from a union of the previous subsampled sequences and the “problematic” sequences (Step 6). This process generates a new sample tree in a biased manner such that it harbors the previous problematic sequences in its leaves and decreases the likelihood of acquiring problematic sequences in the following phylogenetic placement step. This procedure is repeated until the problem is solved, but only up to a given threshold number of times as long as the number of problematic sequences continues to be reduced in every retrial step. When the retrial cycle stops without solving the problem, the remaining problematic sequences are discarded, and the other sequence sets are separated into distinct clades and subjected to the first process. Accordingly, FRACTAL hierarchically generates expanding parallel computing trajectories, where each distributed computing job recursively generates a large set of successive jobs. When the number of input sequences is reduced to a certain threshold (hereafter called the naïve computing threshold) while the FRACTAL iteration cycles, the remaining marginal lineage is directly reconstructed by using the software of choice and the operation terminates for this computing trajectory (Step 7). For unrooted lineage estimation, the provisional rooting sequence can be removed after completion of the whole computation. Accordingly, FRACTAL enables efficient reconstruction of a large lineage by distributed computing while utilizing limited computing power and memory per node. FRACTAL is also effective even for a single computing node because its memory consumption level can be kept down for large lineage reconstructions.
+**Figure 1. Schematic diagram of FRACTAL.** From an input sequence pool, a given number of sequences are first randomly subsampled (Step 1) and their sample lineage tree is reconstructed with a rooting or provisional rooting sequence by lineage estimation software of choice (Step 2). Note that while an outgroup is preferred as the rooting sequence if available, any sequence can be used for unrooted tree estimation. The all the input sequences are then mapped to the branches of the sample tree by phylogenetic placement (Step 3). If all of the input sequences are mapped on downstream branches of the sample tree so as to separate them into multiple distinct clades, their upstream lineage is considered to be true and fixed (Step 4), and the sequence group in each downstream clade is recursively subjected to the first process in a distributed computing node (Step 5). If any sequence(s) mapped on the root branch does not allow the grouping of input sequences into clades, the phylogenetic placement is repeated against a new sample tree generated for sequences randomly chosen from a union of the previous subsampled sequences and the “problematic” sequences (Step 6). This process generates a new sample tree in a biased manner such that it harbors the previous problematic sequences in its leaves and decreases the likelihood of acquiring problematic sequences in the following phylogenetic placement step. This procedure is repeated until the problem is solved, but only up to a given threshold number of times as long as the number of problematic sequences continues to be reduced in every retrial step. When the retrial cycle stops without solving the problem, the remaining problematic sequences are discarded, and the other sequence sets are separated into distinct clades and subjected to the first process. Accordingly, FRACTAL hierarchically generates expanding parallel computing trajectories, where each distributed computing job recursively generates a large set of successive jobs. When the number of input sequences is reduced to a certain threshold (hereafter called the naïve computing threshold) while the FRACTAL iteration cycles, the remaining marginal lineage is directly reconstructed by using the software of choice and the operation terminates for this computing trajectory (Step 7). Accordingly, FRACTAL enables efficient reconstruction of a large lineage by distributed computing while utilizing limited computing power and memory per node. FRACTAL is also effective even for a single computing node because its memory consumption level can be kept down for large lineage reconstructions.
+
+<img src=images/fractal_unaligned.jpg width=10000x3000>
+
+**Figure 2. Workflow for unaligned dataset.** When FRACAL receives unaligned DNA sequence pool, FRACTAL can divide and distribute the alignment task with some additional procedures. After random subsampling (Step 1), the subsampled sequences are aligned by MAFFT (Step 2) and a sample tree is estimated from the aligned sequences (Step3). Each input sequence is then mapped onto the sample tree (Step 4). In step 4, each sequence is firstly aligned with the subsampled sequences by HMMER ("hmmalign" command) based on a HMM profile constructed from the aligned subsampled sequences by "hmmbuild" command (Step 4i). Then, the sequence is placed onto eather branch of the sample tree by phylogenetic placement (Step 4ii). Once all input sequences are aligned by Step 4i, the alignment result will be reused in the following FRACTAL iteration cycles until the the number of input sequences is reduced to X% of the number of sequences when the alignment was conducted (X is a user-defined parameter).
 
 ### Supported Environment
 
@@ -231,12 +235,12 @@ Lineage estimation with a software tool of choice and user defined parameters.
 Lineage estimation from an unaligned sequence dataset. The number of sequences in a subsample and the threshold number of input sequences to swich to direct lineage computing are set to be 1,000.
 
 ```shell
-FRACTAL -i test.unaligned.fa.gz -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
+FRACTAL -i test.unaligned.fa -f FRACTAL_unaligned -k 1000 -t 1000 -m fasttreeML -u
 ```
 
 Input:    
 
-​	 [`test.unaligend.fa.gz`](https://github.com/yachielab/FRACTAL/blob/master/example/test.unaligend.fa.gz) (Original format)
+​	 [`test.unaligned.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.unaligend.fa) (FASTA format)
 
 Output:  
 
@@ -244,15 +248,15 @@ Output:
 
 **Example 6**
 
-Lineage estimation from sets of CRISPR edits for lineage tracing by sample tree estimation using MP (RAxML) and phylogenetic placement using MP (RAxML). When `-E` option is specified, FRACTAL takes a special format of edit set file (see example input) as input and returns a lineage.
+Lineage estimation from sets of substitutions, insertions and deletions  using MP (RAxML) and phylogenetic placement using MP (RAxML). When `-E` option is specified, FRACTAL takes a special input file format to describe any set of mutations (see example input).
 
 ```shell
-FRACTAL -i test.edit.gz -f FRACTAL_edit -p MP -E
+FRACTAL -i test.edit -f FRACTAL_edit -p MP -E
 ```
 
 Input:    
 
-​	 [`test.edit.gz`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit.gz) (Original format)
+​	 [`test.edit`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit) (Original format)
 
 Output:  
 
@@ -261,7 +265,6 @@ Output:
 ### FRACTAL Usage
 
 ```
-
 Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-f output_file_path] [-f output_file_name]
@@ -294,12 +297,15 @@ Options:
         See sample codes (example 4).
     -k <Integer>
       Number of sequences for the subsampling procedure. Default: 100
+    -z <Integer>
+      Number of extracted tips from sample tree. 
+      Default: the number specified by "-k" (Tree extraction is not conducted)
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
     -p <String, Permissible values: ‘ML’, ‘MP’>
-      Method for phylogenetic placement in each iteration cycle. Default: ML
-    -P <Integer>
-      The rank considered for getting consensus of placement result Default: 1
+      Method for phylogenetic placement in each iteration cycle.
+        Placement by ML and MP method is conducted by EPAng and RAxML respecitively
+        Default: ML
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
@@ -315,11 +321,9 @@ Options:
       Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
-    -n <String>
-      File path of input sequence number. Default: unspecified
     -E 
-      Treat input data as edit list of each sequence. 
-      Currently, this option can be used only with "-p MP -d 1", and "-g" option is not supported.
+      Take original input file format. 
+      Currently, this option can be used only with "-p MP -d 1", and without "-g" option.
     -O "<String>"
       Options for qsub. Default: ""
         example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
@@ -332,8 +336,6 @@ Options:
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
     -l <Integer>
       Maximum number of FRACTAL iterations. Default: 10000
-    -z <Integer>
-      Number of extracted tips from sample tree. Default: no extraction
     -g 
       Gzip intermediate files
 ```
