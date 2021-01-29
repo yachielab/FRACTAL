@@ -32,6 +32,29 @@ def tree_extraction(treefile,nameset, newtreefile):
     Phylo.write(newtree, newtreefile, 'newick')
     return newtree
 
+def tree_extraction_biopython(tree,nameset):
+    
+    TipList=tree.get_terminals()
+    name_to_numtips={}
+    while(TipList!=[]):
+        tip=TipList.pop()
+        if(tip.name in nameset):
+            name_to_numtips[tip.name]=True
+        else:
+            name_to_numtips[tip.name]=False
+    InternalList=tree.get_nonterminals()
+    k=0
+    while(InternalList!=[]):
+        clade=InternalList.pop()
+        clade.name="clade"+str(k)
+        k+=1
+        if(one_of_child_true(clade,name_to_numtips)):
+            name_to_numtips[clade.name]=True
+        else:
+            name_to_numtips[clade.name]=False
+    newtree=create_tree(tree, name_to_numtips)
+    return newtree
+
 def one_of_child_true(clade,name_to_numtips):
     for child in clade.clades:
         if(name_to_numtips[child.name]):

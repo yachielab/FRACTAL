@@ -4,6 +4,8 @@
 import json
 from Bio import Phylo
 import sys
+import os
+import extraction
 
 color_list=['#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff']
 
@@ -12,27 +14,49 @@ def TreeAssembly(StartDIR, outfname, delete_name):
     tree = Phylo.BaseTree.Tree(init_clade)
     NONTERMINALS=[tree.clade]
     i=0
+
+    print("Start tree assembly...")
+
+    tip_name_list = []
+    extraction_is_needed = False
     while(NONTERMINALS!=[]):
         i+=1
         cstate=NONTERMINALS.pop(0)
         WD=cstate.name
-        try:
+        if (os.path.exists(WD+"/UPSTREAM.nwk")):
             downtree=Phylo.read(WD+"/UPSTREAM.nwk",'newick')
             cstate.clades.extend(downtree.clade.clades)
             NONTERMINALS.extend(list(terminal for terminal in downtree.get_terminals()))
-        except:
-            try:
-                downtree=Phylo.read(WD+"/TERMINAL.nwk",'newick')
-                if(downtree.clade.clades!=[]):
-                    cstate.clades.extend(downtree.clade.clades)
-                else:
-                    cstate.name=downtree.clade.name
-            except:
-                print("missing "+WD)
+        elif (os.path.exists(WD+"/TERMINAL.nwk")):
+            downtree=Phylo.read(WD+"/TERMINAL.nwk",'newick')
+            tip_name_list.extend([tip.name for tip in downtree.get_terminals()])
+
+            if(downtree.clade.clades!=[]):
+                cstate.clades.extend(downtree.clade.clades)
+            else:
+                cstate.name=downtree.clade.name
+        else:
+            print("No sequences in clade", cstate.name)
+            extraction_is_needed = True
+
     if (delete_name=="TRUE"):
         for internal_node in tree.get_nonterminals():
             internal_node.name=""
+
+    print("Finished tree assembly")
+
+    if (extraction_is_needed):
+        print("Start tree extraction...")
+        
+        tree = extraction.tree_extraction_biopython(tree,set(tip_name_list))
+
+        print("Finished tree extraction")
+    
+    print("Start writing a newick file...")
+
     Phylo.write(tree, outfname, 'newick')
+
+    print("Finish writing a newick file")
 
 '''
 main function
