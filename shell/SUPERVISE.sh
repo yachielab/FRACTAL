@@ -279,7 +279,7 @@ if [ $max_num_of_jobs -gt 1 ]; then
     done
     echo "qsub... ${ROOT_DIR}/qsub_dir/qsub_assembly.sh submitted!" 
 else
-  bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh
+  bash ${ROOT_DIR}/qsub_dir/qsub_assembly.sh > ${ROOT_DIR}/out/qsub_assembly.sh.out 2> ${ROOT_DIR}/err/qsub_assembly.sh.err
   wait
 fi
 mv ${ROOT_DIR}/qsub_dir/qsub_assembly.sh ${ROOT_DIR}/executed/qsub_assembly.sh
