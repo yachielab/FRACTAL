@@ -1,16 +1,16 @@
 ### Update Log
 
 <h4> 1/16/2021 Version 2.6.2 </h4>
-1. Option: -w option was implemented. Now users can specify the frequency of multiple sequence alignment.
+1. Option: -w option was implemented. Now users can specify the frequency of multiple sequence alignment. ... to be released by Code Ocean
 
 <h4> 1/16/2021 Version 2.6.1 </h4>
-1. Option: Debug for a combination of options "-u -p MP" 
+1. Option: Debug for a combination of options "-u -p MP" ... used for epPCR experiment
 
 <h4> 1/16/2021 Version 2.6.0 </h4>
-1. Option: -E and -u option revived. Now FRACTAL can take indel pattern or unaligned sequences as an input.
+1. Option: -E and -u option revived. Now FRACTAL can take indel pattern or unaligned sequences as an input. ... used for tree reconstruction of unaligned sequences
 
 <h4> 11/14/2020 Version 2.5.0 </h4>
-1. Option: -g option was released. FRACTAL was enabled to gzip heavy intermediate files.
+1. Option: -g option was released. FRACTAL was enabled to gzip heavy intermediate files. ... used for FRACTALized Casssiopeia experiment
 
 <h4> 7/21/2020 Version 2.4.0 </h4>
 
