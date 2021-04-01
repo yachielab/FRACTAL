@@ -1,5 +1,6 @@
 WD=$(pwd)
 
+
 if [ -e test ]; then
     rm -r test
 fi
