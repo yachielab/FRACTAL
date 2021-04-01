@@ -25,6 +25,6 @@
 6. Execute a test script to check if FRACTAL can work for any combination of options 
 
     ```
-    cd FRACTALout/test
+    cd FRACTAL/test
     bash test.1.sh
     ```

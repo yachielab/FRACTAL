@@ -1,4 +1,5 @@
 example/FRACTALout/
-test/test/
+
 python/__pycache__/
-test/tmp/
+
+test/

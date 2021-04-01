@@ -24,7 +24,7 @@ import random
 
 def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, THREAD_NUM, NUMFILE, QSUBDIR, CODEDIR, 
                ROOTING, MODEL, OPTION,TREEMETHOD, ALIGNED, EPANG, RAXMLSEQ, RAXMLPAR, SOFTWARE,NODE_COUNT,
-               INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,careful,FASTA_or_EDIT,
+               INIT_SEQ_COUNT,SEED,ML_or_MP, EXTRACTION_SIZE,careful,FASTA_or_EDIT, ALIGNMENT_FREQ,
                ALIGNER="unspecified", HMM_PROFILER="unspecified", HMM_ALIGNER="unspecified",
                seq_count_when_aligned=None,
                ):
@@ -33,7 +33,7 @@ def FRACluster(ARGVS, WD, MAX_ITERATION, SUBSAMPLE_SIZE, NODESDIR, THRESHOLD, TH
     start = time.time() 
 
     ##### hyper parameter #####
-    ALIGNMENT_TIMING_PARAMETER = 0.5
+    ALIGNMENT_TIMING_PARAMETER = ALIGNMENT_FREQ
     SPLIT_THRESHOLD            = 10000
     mem_req_threshold          = 10**7
     ###########################
@@ -871,7 +871,7 @@ if __name__ == "__main__":
 
     #print(argvs)
 
-    if (len(argvs)==27):
+    if (len(argvs)==28):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
@@ -899,12 +899,13 @@ if __name__ == "__main__":
             EXTRACTION_SIZE   = int(argvs[23]),  
             careful           = int(argvs[24]),
             FASTA_or_EDIT     = argvs[25],
+            ALIGNMENT_FREQ    = float(argvs[26]),
             ALIGNER           = "unspecified", 
             HMM_PROFILER      = "unspecified", 
             HMM_ALIGNER       = "unspecified",
             seq_count_when_aligned=None
             )
-    elif ((len(argvs)==27+3)):
+    elif ((len(argvs)==28+3)):
         FRACluster(
             ARGVS             = argvs, 
             WD                = argvs[1],
@@ -932,10 +933,11 @@ if __name__ == "__main__":
             EXTRACTION_SIZE   = int(argvs[23]),
             careful           = int(argvs[24]),
             FASTA_or_EDIT     = argvs[25],
-            ALIGNER           = argvs[26],
-            HMM_PROFILER      = argvs[27],
-            HMM_ALIGNER       = argvs[28],
-            seq_count_when_aligned=int(argvs[29])
+            ALIGNMENT_FREQ    = float(argvs[26]),
+            ALIGNER           = argvs[27],
+            HMM_PROFILER      = argvs[28],
+            HMM_ALIGNER       = argvs[29],
+            seq_count_when_aligned=int(argvs[30])
         )
     else:
         print("Error: Number of arguments: "+str(len(argvs))+" for FRACluster.py is wrong!")

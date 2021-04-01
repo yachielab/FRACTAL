@@ -35,9 +35,10 @@ CAREFUL_PLACEMENT=1
 GZIP_INTERMEDIATE="FALSE"
 SEQ_NUM_FILE="unspecified"
 benchmark="TRUE"
+ALIGNMENT_FREQUENCY=0.5
 
 function version {
-  echo "######## FRACTAL v2.6.1 ########"
+  echo "######## FRACTAL v2.6.2 ########"
 }
 
 function usage {
@@ -46,9 +47,10 @@ FRACTAL is a tool for lineage estimation from massive number of DNA sequences.
 
 Usage:
     FRACTAL.sh
-    [-v] [-h] [-i input_file] [-f output_file_path] [-f output_file_name]
-    [-u] [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
-    [-b model_name] [-p placement_method] [-x iteration_number] [-t sequence_number]
+    [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
+    [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
+    [-u] [-w alignment_frequency] [-b model_name] 
+    [-p placement_method] [-x iteration_number] [-t sequence_number]
     [-d job_number] [-c thread_number] [-e] [-r integer] [-n file_path] [-E] 
     [-O qsub_option] [-I first_qsub_option] [-A last_qsub_option] [-j job_name] 
     [-l iteration_upper_limit] [-g]
@@ -64,8 +66,6 @@ Options:
       Output directory path. Default: current working directory
     -f <String>
       Output file name. Default: FRACTALout
-    -u
-      Reconstuct a lineage from unaligned sequences
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
@@ -76,12 +76,14 @@ Options:
         See sample codes (example 4).
     -k <Integer>
       Number of sequences for the subsampling procedure. Default: 100
+    -u
+      Reconstuct a lineage from unaligned sequences
+    -w <float>
+      Alignment frequency parameter rho. Default: 0.5
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
     -p <String, Permissible values: ‘ML’, ‘MP’>
       Method for phylogenetic placement in each iteration cycle. Default: ML
-    -P <Integer>
-      The rank considered for getting consensus of placement result Default: 1
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
@@ -122,7 +124,7 @@ EOF
 }
 
 # read argument
-while getopts i:o:f:s:a:k:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugEB OPT
+while getopts i:o:f:s:a:k:w:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugEB OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -133,6 +135,7 @@ do
     "s" ) FLG_s="TRUE" ; SOFTWARE=`which $OPTARG`;;
     "a" ) FLG_A="TRUE" ; OPTION="$OPTARG";;
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
+    "w" ) FLG_W="TRUE" ; ALIGNMENT_FREQUENCY="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
     "p" ) FLG_P="TRUE" ; PLACEMENT_METHOD="$OPTARG";;
     "P" ) FLG_P="TRUE" ; CAREFUL_PLACEMENT="$OPTARG";;
@@ -203,7 +206,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE} ${benchmark}
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE} ${benchmark} ${ALIGNMENT_FREQUENCY}
 wait
 
 #show result

@@ -1,7 +1,7 @@
 echo -n "Lineage reconstruction started:  "
 date
 
-if [ $# -ne 28 ]; then
+if [ $# -ne 29 ]; then
   echo "args:$#" 1>&2
   echo "SUPERVISE.sh: wrong number of arguments!" 1>&2
   exit 1
@@ -35,6 +35,7 @@ FASTA_or_EDIT=${25}
 GZIP_INTERMEDIATE=${26}
 SEQ_NUM_FILE=${27}
 benchmark=${28}
+ALIGNMENT_FREQUENCY=${29}
 ROOT_DIR=${DATA_DIR}/${exp_num}
 
 
@@ -139,7 +140,7 @@ echo "1" >${ROOT_DIR}/NUMFILE
 echo "#!/bin/bash" >${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 echo "#$ -S /bin/bash" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 echo "export PATH=${PATH}" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
-echo "python3 ${CODE_DIR}/python/FRACluster.new.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} $FASTA_or_EDIT ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
+echo "python3 ${CODE_DIR}/python/FRACluster.new.py ${ROOT_DIR}/nodes/d0 ${num_of_subsample} ${subsample_size} ${ROOT_DIR}/nodes $threshold ${THREADNUM} ${ROOT_DIR}/NUMFILE ${ROOT_DIR}/qsub_dir ${CODE_DIR} $ROOTING $MODEL \"${OPTION}\" ${TREE} ${ALIGNED} $EPANG $RAXMLSEQ $RAXMLPAR $SOFTWARE $max_num_of_jobs 0 \"$SEED\" ${PLACEMENT_METHOD} ${extraction_size} ${careful} $FASTA_or_EDIT ${ALIGNMENT_FREQUENCY} ${MAFFT} ${HMM_BUILD} ${HMM_ALIGN} 0" >>${ROOT_DIR}/qsub_dir/qsub_d0.cycle.sh
 
 # first qsub
 
