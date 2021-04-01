@@ -1,5 +1,8 @@
 ### Update Log
 
+<h4> 1/16/2021 Version 2.6.2 </h4>
+1. Option: -w option was implemented. Now users can specify the frequency of multiple sequence alignment.
+
 <h4> 1/16/2021 Version 2.6.1 </h4>
 1. Option: Debug for a combination of options "-u -p MP" 
 
