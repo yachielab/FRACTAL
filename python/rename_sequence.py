@@ -4,29 +4,91 @@ import sys
 import shutil
 import os
 import subprocess
-import jplace_parse
+import gzip
 
-def rename_sequence(in_fname,out_fname):
-    with open(in_fname) as origin, open(out_fname, 'w') as renamed:
+def almighty_open(fpath, mode='r'):
+    if fpath.split(".")[-1] == "gz":
+        return gzip.open(fpath, mode+'t')
+    else:
+        return open(fpath, mode)
+
+def rename_sequence(in_fname,out_fname,file_format='fa'):
+    is_gzipped = (in_fname.split(".")[-1] == "gz")
+    if (is_gzipped):
+        renamed   = gzip.open(out_fname, 'wt')
+        origin    = gzip.open(in_fname, 'rt')
+    else:
+        renamed   = open(out_fname, 'w')
+        origin    = open(in_fname, 'r')
+
+    if   file_format == 'fa':
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k = 0
+        name2renamed = {"root":"s0"}
         for s in input_itr:
+            name2renamed[s.name] = "s"+str(k)
             s.id = "s"+str(k)
             s.description = "s"+str(k)
-            k = k +1
             SeqIO.write(s, renamed, "fasta")
-
-
-def outgroup_check_fast(in_fname):
-    exist_root = False
-    with open(in_fname) as origin:
+            k += 1
+    elif file_format == 'edit':
+        name2renamed = {"root":"s0"}
+        renamed.write("s0\t\n")
+        k = 1
         for line in origin:
-            if (line==">root\n"): exist_root = True; break
-    return exist_root
+            if line.split()[0]!="root":
+                name     = line.split()[0]
+                if (len(line.split())==2): edit_str = line.split()[1]
+                name2renamed[name] = "s"+str(k)
+                if (len(line.split())==2): renamed.write("s"+str(k)+"\t"+edit_str+"\n")
+                elif (len(line.split())==1): renamed.write("s"+str(k)+"\t\n")
+                k += 1
+
+    renamed.close()
+    origin.close()
+
+    return name2renamed
+
+def outgroup_check_fast(in_fpathlist, file_format, root_fpath):
+    exist_root = False
+    for in_fname in in_fpathlist:
+        if (exist_root): break
+        is_gzipped = (in_fname.split(".")[-1] == "gz")
+        
+        # file open
+        if ( is_gzipped ):
+            origin = gzip.open(in_fname, 'rt') 
+        else:
+            origin = open(in_fname, 'r') 
+
+        idx = 0
+        if (file_format == "fasta"):
+            records = SeqIO.parse(origin, file_format)
+            for record in records:
+                if (record.name  == "root"):
+                    exist_root = True
+                    SeqIO.write(record, root_fpath, 'fasta')
+                    break
+        elif (file_format == "edit"):
+            for line in origin:
+                if   (line.split()[0]== "root"): 
+                    exist_root = True
+                    with open(root_fpath, 'w') as root_handle:
+                        root_handle.write(line)
+                    break
+                else: 
+                    idx += 1
+
+    # file close
+    origin.close()
+    if (exist_root):
+        return root_fpath
+    else:
+        raise Exception('No root')
 
 def count_sequence(in_fname):
-    with open(in_fname) as origin:
+    with gzip.open(in_fname, 'rt') as origin:
         input_itr = SeqIO.parse(origin, "fasta")
         # Build a list sequences:
         k=0
@@ -37,130 +99,222 @@ def count_sequence(in_fname):
         for s in input_itr:
             n+=len(str(s.seq))//k
     return [k,n] # k: number of sequence, n: average sequence length
-
+'''
 def count_sequence_fast(in_fname):
-    with open(in_fname) as handle:
+    with gzip.open(in_fname, 'rt') as handle:
         k, l=0, 0
         for line in handle:
             if(line[0]==">"): k+=1
             elif(k==1): l+=len(line)-1
     return [k,l] # k: number of sequence, n: sequence length of first sequence (outgroup)
+'''
+def count_sequence_fast(in_fpathlist, form = "fa"): # form: fa or edit
+    fpath2seqcount = {}
+    for in_fname in in_fpathlist:
+        is_gzipped = (in_fname.split(".")[-1] == "gz")
 
-def random_sampling(in_fname,out_fname,subsample_size,seed,n=None):
-    if(seed=="random"): random.seed(int(random.randint(0,99999)))
-    elif(len(seed)!=0):random.seed(int(seed))
-    else:print("-r Error: invalid random seed!")
-    if (n==None):
-        n=count_sequence_fast(in_fname)[0]
-    rand_idx=random.sample(range(n-1),subsample_size)
-    rand_idx.sort()
-    with open(out_fname, 'w') as subs:
-        with open(in_fname) as allseq:
-            allseq_itr = SeqIO.parse(allseq, "fasta")
-            for s in allseq_itr:
-                if(s.id=="root"):
-                    SeqIO.write(s, subs, "fasta")
-        with open(in_fname) as allseq:
-            allseq_itr = SeqIO.parse(allseq, "fasta")
-            i=0 # index on rand_idx
-            k=0 # index on record
-            for s in allseq_itr:
-                if(i>=len(rand_idx)):
-                    break
-                if(s.id!="root"):
-                    if(k==rand_idx[i]):
-                        SeqIO.write(s, subs, "fasta")
-                        i+=1
-                    k+=1
+        if (is_gzipped):    gunzip = "| gunzip"
+        else:               gunzip = ""
 
-# decompose fasta file (in_file) into x fasta files.
-def decompose_fasta(in_file, x,seq_count):
-    n=seq_count
-    k=n//x + 1 # each decomposed file has k sequences
-    ohandle=[]
-    for i in range(x):
-        ohandle.append(open(in_file+"."+str(i), 'w')) 
-    with open(in_file,'r') as ihandle:
-        allseq_itr = SeqIO.parse(ihandle, "fasta")
-        l=0 # inclement constantly
-        m=0 # inclement for each sequence, but become 0 after m reaches k
-        i=0 # 
-        while(l<n):
-            sys.stdout.write("\rsequence: %d" % l)
-            sys.stdout.flush()
-            for record in allseq_itr:
-                if(m<k):
-                    m+=1
-                else:
-                    i+=1
-                    m=0
-                SeqIO.write(record,ohandle[i],'fasta')
-                l+=1
-    for i in range(x):
-        ohandle[i].close()
+        if (form == "fa"):
+            grep_command = "| grep '>'"
+        else:
+            grep_command = ""
+        seq_count_str = (
+            subprocess.Popen(
+                "cat " + in_fname + " " + gunzip + grep_command + "| wc -l",
+                stdout=subprocess.PIPE,
+                shell=True
+                ).communicate()[0]
+                ).decode('utf-8')
+        fpath2seqcount[in_fname] = int(seq_count_str)
+    return fpath2seqcount
 
-def distributed_EPAng(WD, EPANG, refseq, reftree, model, query, outdir, threadnum, nodenum, codedir, seq_count):
-    if(nodenum<=1):
-        subprocess.call(EPANG+" --redo -s "+refseq+" -t "+reftree+" --model "+model+" -q "+query+" -w "+outdir+" -T "+str(threadnum),shell=True)
-        os.chdir(outdir)
-        jplace_parse.parse_jplace(outdir+"/epa_result.jplace")
-        os.rename(outdir+"/edge_to_seqname.out", outdir+"/edge_to_seqname_all.out")
+def random_sampling( # fasta only
+    in_dirpath,
+    out_fname,
+    subsample_size,
+    fpath2seqcount,
+    root_fpath,
+    total_seqcount=None, 
+    file_format   ="fa",
+    in_fpath      =None,
+    #seed = 0
+    ):
+    #print("seed",seed)
+    #random.seed(seed)
+
+    # set input file path list
+    if (in_fpath == None):
+        fpath_list     = sorted([in_dirpath + "/" + fname for fname in os.listdir(in_dirpath)])
     else:
-        dname=WD.split("/").pop()
-        moved=outdir+"/query.fa"
-        shutil.move(query, moved)
-        decompose_fasta(moved, nodenum, seq_count)
+        fpath_list     = [in_fpath]
+    
+    # count total number of sequences
+    if (total_seqcount == None):
+        fpath2seqcount = count_sequence_fast(fpath_list,form=file_format)
+        total_seqcount = 0
+        for fpath in fpath_list:
+            seqcount              = fpath2seqcount[fpath]
+            total_seqcount       += seqcount
 
-        #distribution start
-        for i in range(nodenum):
-            os.mkdir(outdir+"/EPANG"+str(i))
-            with open(WD+"/../../qsub_dir/qsub_"+dname+"."+str(i)+".sh", 'w') as handle:
-                PATH = (subprocess.Popen('echo $PATH', stdout=subprocess.PIPE,shell=True).communicate()[0]).decode('utf-8')
-                PATH = (PATH.split('\n'))[0]
-                LD_LIBRARY_PATH = (subprocess.Popen('echo $LD_LIBRARY_PATH', stdout=subprocess.PIPE,shell=True).communicate()[0]).decode('utf-8')
-                LD_LIBRARY_PATH = (LD_LIBRARY_PATH.split('\n'))[0]
-                handle.write("#!/bin/bash\n")
-                handle.write("#$ -S /bin/bash\n")
-                handle.write("PATH={}\n".format(PATH))
-                handle.write("LD_LIBRARY_PATH={}\n".format(LD_LIBRARY_PATH))
-                handle.write(EPANG+" --redo -s "+refseq +" -t "+reftree+" --model "+model+" -q "+moved+"."+str(i)+" -w "+outdir+"/EPANG"+str(i)+" -T "+str(threadnum)+"\n")
-                handle.write("cd "+outdir+"/EPANG"+str(i)+"\n")
-                handle.write("python3 "+codedir+"/python/jplace_parse.py "+outdir+"/EPANG"+str(i)+"/epa_result.jplace\n")
-                handle.write("echo \"finished\" > "+outdir+"/epang"+str(i)+".o")
-        #distribution end
-        flag=0
-        while(flag==0):
-            i=0
-            while(i<nodenum):
-                if(not os.path.exists(outdir+"/epang"+str(i)+".o")):
-                    break
-                i+=1
-            if i == nodenum:
-                flag=1
-        for i in range(nodenum):
-            os.remove(outdir+"/epang"+str(i)+".o")
-            os.remove(outdir+"/query.fa."+str(i))
-        shutil.move(moved,query)
-        shutil.move(outdir+"/EPANG0/placement_tree.out",outdir+"/placement_tree.out")
-        #subprocess.call("paste "+outdir+"/EPANG*/edge_to_seqname.out | tr -d '\t'> "+outdir+"/edge_to_seqname_all.out",shell=True)
-        my_paste(outdir,nodenum, outdir+"/edge_to_seqname_all.out")
+    # get sequence indices to extract
+    if (total_seqcount > subsample_size):
+        rand_idx_list=random.sample(range(total_seqcount),subsample_size) # n-1: not include root
+        rand_idx_list.sort()
+    else:
+        rand_idx_list=list(range(total_seqcount))
+    rand_idx_set = set(rand_idx_list)
 
-def my_paste(outdir, nodenum, outfilename):
-    handles=[]
-    for i in range(nodenum):
-        if os.path.exists(outdir+"/EPANG"+str(i)+"/edge_to_seqname.out"):
-            handles.append(open(outdir+"/EPANG"+str(i)+"/edge_to_seqname.out"))
-    with open(outfilename,'w') as outhandle:
-        line=handles[0].readline()
-        while line:
-            mergedline=line.split("\n")[0]
-            for i in range(1,len(handles)):
-                line=handles[i].readline().split("\n")[0]
-                mergedline+=line
-            outhandle.write(mergedline+"\n")
-            line=handles[0].readline()
-    for i in range(len(handles)):
-        handles[i].close()
+    # get sequence index > file name + local index
+    idx2fpath_localindex = {}
+    idx            = 0
+    fpath2localidx = {}
+    for fpath in fpath_list:
+        for local_idx in range(fpath2seqcount[fpath]):
+            if (idx in rand_idx_set):
+                try   : fpath2localidx[fpath].append(local_idx)
+                except: fpath2localidx[fpath]     = [local_idx]
+            idx += 1
+    
+    # sequence extraction
+    seq_set      = set()
+    seqname_list = []
+    with open(out_fname, 'w') as ost:
+        #print(file_format)
+        if (file_format == 'fa'):
+            #print(root_fpath)
+            # write root sequence
+            with open(root_fpath, 'r') as ist:
+                records        = SeqIO.parse(ist, 'fasta')
+                for record in records:
+                    seq_set.add(str(record.seq))
+                    SeqIO.write(record, ost, 'fasta')
+                    seqname_list.append(record.name)
+            for fpath in sorted(list(fpath2localidx.keys())):
+                with almighty_open(fpath, 'r') as ist:
+                    local_idx_list = fpath2localidx[fpath]
+                    records        = SeqIO.parse(ist, 'fasta')
+                    i = 0
+                    for record in records:
+                        if len(local_idx_list) < 1:
+                            break 
+                        if i == local_idx_list[0]:
+                            if ( str(record.seq) not in seq_set ):
+                                seq_set.add(str(record.seq))
+                                SeqIO.write(record, ost, 'fasta')
+                                seqname_list.append(record.name)
+                            local_idx_list.pop(0)
+                        i += 1
+        if (file_format == 'edit'):
+            ost.write("root\t\n")
+            for fpath in sorted(list(fpath2localidx.keys())):
+                with almighty_open(fpath, 'r') as ist:
+                    local_idx_list = fpath2localidx[fpath]
+                    i = 0
+                    for line in ist:
+                        if len(local_idx_list) < 1:
+                            break 
+                        if i == local_idx_list[0]:
+                            if line.split()[0] != "s0":
+                                seq_set.add(line)
+                                ost.write(line)
+                                seqname_list.append(line.split()[0])
+                                local_idx_list.pop(0)
+                        i += 1
+    return seqname_list
+
+# To be deleted
+def random_sampling_fasta( # fasta only
+    in_dirpath,
+    out_fname,
+    subsample_size,
+    fpath2seqcount,
+    root_fpath,
+    total_seqcount=None, 
+    file_format   ="fa",
+    in_fpath      =None
+    ):
+
+    # set input file path list
+    if (in_fpath == None):
+        fpath_list     = sorted([in_dirpath + "/" + fname for fname in os.listdir(in_dirpath)])
+    else:
+        fpath_list     = [in_fpath]
+    
+
+    # count total number of sequences
+    if (total_seqcount == None):
+        fpath2seqcount = count_sequence_fast(fpath_list)
+        total_seqcount = 0
+        for fpath in fpath_list:
+            seqcount              = fpath2seqcount[fpath]
+            total_seqcount       += seqcount
+
+    # get sequence indices to extract
+    if (total_seqcount > subsample_size):
+        rand_idx_list=random.sample(range(total_seqcount),subsample_size) # n-1: not include root
+        rand_idx_list.sort()
+    else:
+        rand_idx_list=list(range(total_seqcount))
+    rand_idx_set = set(rand_idx_list)
+
+    # get sequence index > file name + local index
+    idx2fpath_localindex = {}
+    idx            = 0
+    fpath2localidx = {}
+    for fpath in fpath_list:
+        for local_idx in range(fpath2seqcount[fpath]):
+            if (idx in rand_idx_set):
+                try   : fpath2localidx[fpath].append(local_idx)
+                except: fpath2localidx[fpath]     = [local_idx]
+            idx += 1
+    
+    
+    # sequence extraction
+    seq_set      = set()
+    seqname_list = []
+    with open(out_fname, 'w') as ost:
+        #print(file_format)
+        if (file_format == 'fa'):
+            #print(seqname_list)
+            # write root sequence
+            with open(root_fpath, 'r') as ist:
+                records = SeqIO.parse(ist, 'fasta')
+                for record in records:
+                    seq_set.add(str(record.seq))
+                    SeqIO.write(record, ost, 'fasta')
+                    seqname_list.append(record.name)
+            for fpath in sorted(list(fpath2localidx.keys())):
+                with almighty_open(fpath, 'r') as ist:
+                    local_idx_list = fpath2localidx[fpath]
+                    records        = SeqIO.parse(ist, 'fasta')
+                    i = 0
+                    for record in records:
+                        if len(local_idx_list) < 1:
+                            break 
+                        if i == local_idx_list[0]:
+                            if ( str(record.seq) not in seq_set ):
+                                seq_set.add(str(record.seq))
+                                SeqIO.write(record, ost, 'fasta')
+                                seqname_list.append(record.name)
+                            local_idx_list.pop(0)
+                        i += 1
+        elif (file_format == 'edit'):
+            for fpath in sorted(list(fpath2localidx.keys())):
+                with almighty_open(fpath, 'r') as ist:
+                    local_idx_list = fpath2localidx[fpath]
+                    i = 0
+                    for line in ist:
+                        if len(local_idx_list) < 1:
+                            break 
+                        if i == local_idx_list[0]:
+                            seq_set.add(line)
+                            ost.write(line, ost)
+                            seqname_list.append(line.split()[0])
+                            local_idx_list.pop(0)
+                        i += 1
+    return seqname_list
 
 '''
 command line argument: "<input .fa file path> <output .fa file path>"
