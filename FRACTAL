@@ -6,13 +6,13 @@ CMDNAME="FRACTAL"
 #setting defalt parameter
 
 MAX_ITERATION=5             #Integer
-SUBSAMPLE_SIZE=100          #Integer
+SUBSAMPLE_SIZE=10          #Integer
 INFILE="unspecified"        #Absolute Path of .fa file
 NAME="FRACTALout"           #Experiment No.
 CODE_DIR=`dirname $0`       #Absolute path of FRACTAL directory
 OUT_DIR="`pwd`"             #output dir should be ${OUT_DIR}/${NAME}
 SOFTWARE="unspecified"      #Absolute Path of the executable file for lineage reconstruction
-THRESHOLD=500
+THRESHOLD=10
 ROOTING="Origin"
 NUM_OF_JOBS=1
 TREE=raxmlMP
@@ -75,7 +75,7 @@ Options:
       File name of a shell script used to reconstruct lineage tree in each iteration cycle.
         See sample codes (example 4).
     -k <Integer>
-      Number of sequences for the subsampling procedure. Default: 100
+      Number of sequences for the subsampling procedure. Default: 10
     -u
       Reconstuct a lineage from unaligned sequences
     -w <float>
@@ -88,7 +88,7 @@ Options:
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
       Threshold number of input sequences to switch to direct lineage tree reconstruction 
-        in each iteration cycle. Default: 500
+        in each iteration cycle. Default: 10
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
         Default: 1 (no distributed computing)
@@ -206,6 +206,7 @@ fi
 echo "Command:"
 echo "$0 $*"
 echo "################################"
+
 bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE} ${benchmark} ${ALIGNMENT_FREQUENCY}
 wait
 
