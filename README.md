@@ -200,10 +200,10 @@ Output:
 
 **Example 3**
 
-Lineage estimation by sample tree estimation using FastTreeMP with its option `-fastest` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
+Lineage estimation by sample tree estimation using FastTreeMP with its option `-fastest -quiet` without distributed computing. The number of threads required for the phylogenetic placement and the sample tree reconstruction procedures is set to be 16. The output file name is set to `FRACTAL_ML`.  The computation will take ~5 min.
 
 ```shell
-FRACTAL -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest" -c 16
+FRACTAL -i test.fa -f FRACTAL_ML -m fasttreeML -a "-fastest -quiet" -c 16
 ```
 
 Input:    
@@ -296,7 +296,7 @@ Options:
       File name of a shell script used to reconstruct lineage tree in each iteration cycle.
         See sample codes (example 4).
     -k <Integer>
-      Number of sequences for the subsampling procedure. Default: 100
+      Number of sequences for the subsampling procedure. Default: 10
     -z <Integer>
       Number of extracted tips from sample tree. 
       Default: the number specified by "-k" (Tree extraction is not conducted)
@@ -310,7 +310,7 @@ Options:
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
       Threshold number of input sequences to switch to direct lineage tree reconstruction 
-        in each iteration cycle. Default: 500
+        in each iteration cycle. Default: 10
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
         Default: 1 (no distributed computing)

@@ -427,7 +427,7 @@ def qsub_prep(ARGVS, WD, DIRdict, INITIAL_SEQ_COUNT, seq_count_when_aligned,dirp
                 for arg in ARGVS: 
                     if str(arg)=="":
                         arg="\"\""
-                    command += str(arg) + " "
+                    command += "\"" + str(arg) + "\" "
                 qf.write(command)
             shutil.move(job_script_filepath, WD+"/../../qsub_dir")
 
