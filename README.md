@@ -9,7 +9,8 @@
 
 ### Overview of FRACTAL
 
-**FRACTAL** (framework for distributed computing to trace large accurate lineages) is a new deep distributed computing framework that is designated to reconstruct extremely large lineages of nucleotide sequences using a software tool of choice. In brief, FRACTAL first subsamples a small number of sequences to reconstruct only an upper hierarchy of a target lineage and assigns the remaining sequences to its downstream clades, for each of which the same procedure is recursively iterated. Since the iteration procedures can be performed in parallel in a distributed computing framework, FRACTAL allows highly scalable reconstruction of an extremely large lineage tree.
+**FRACTAL** (framework for distributed computing to trace large accurate lineages) is a new deep distributed computing framework that is designated to reconstruct extremely large lineages of nucleotide sequences using a software tool of choice. In brief, FRACTAL first subsamples a small number of sequences to reconstruct only an upper hierarchy of a target lineage and assigns the remaining sequences to its downstream clades, for each of which the same procedure is recursively iterated (Fig. 1). Since the iteration procedures can be performed in parallel in a distributed computing framework, FRACTAL allows highly scalable reconstruction of an extremely large lineage tree. 
+The input sequences of FRACTAL need not be unaligned (Fig. 2). When many unaligned sequences are queried to FRACTAL for lineage reconstruction, only the sequences subsampled from the input sequences are aligned by MSA for the sample tree reconstruction in each cycle. For phylogenetic placement, each of the remaining input sequences is mapped to the sample tree through “plus-one” alignment to the MSA result that reconstructed the sample tree. This strategy enables the scalable lineage reconstruction of unaligned sequences.
 
 <img src=images/fractal_concept.jpg width=10000x3000>
 
@@ -264,11 +265,15 @@ FRACTAL -i test.edit -f FRACTAL_edit -p MP -E
 
 Input:    
 
-​	 [`test.edit`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit) (Original format: One sequence is written in a row as "\<Name of a sequence\>\t\<Mutation pattern name 1\>;<Mutation pattern name 2\>;...")
+​	 [`test.edit`](https://github.com/yachielab/FRACTAL/blob/master/example/test.edit) (Original format: One sequence is represented in one row as "\<Name of a sequence\>\t\<Mutation pattern name 1\>;\<Mutation pattern name 2\>;...")
 
 Output:  
 
 ​	 [`FRACTAL_edit.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_edit.nwk) (Newick format) 
+
+> Note for option -E:
+    While most of the practical phylogeny estimation tools can consider only substitutions, FRACTAL allows any software of choice to use both substitutions and indels for scalable lineage reconstruction. By specifying option -E, mutation patterns in the input sequences are converted into another sequence representation using four nucleotide sequences in the sample tree reconstruction and phylogenetic placement of each cycle as follows. All of the mutation patterns in sequences subsampled at each FRACTAL iteration are first encoded by binary letter patterns of unique positions to convert each mutated source sequence into a binary sequence of a fixed length, each of which represents the presence and absence of a specific mutation observed in the original subsampled pool by 1 and 0, respectively. The binary sequence of 1/0 is then further converted into a nucleotide sequence of thymine/cytosine or adenine/guanine at each position. The converted sequences are used to construct a sample tree using the given software of choice. Phylogenetic placement is achieved by converting the remaining sequences using the same encoding rule, ignoring the unique mutation patterns observed outside the original subsampled pool. The encoding rule is updated for every sample tree reconstruction, economically taking into account all mutations in the original input sequences through the lineage reconstruction process. Terminal tree reconstruction is performed using the same sequence conversion process. 
+
 
 ### FRACTAL Usage
 
