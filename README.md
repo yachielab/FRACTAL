@@ -19,7 +19,7 @@ Multiple sequence alignment (MSA) of the input sequences is a prerequisite for s
 
 <img src=images/fractal_unaligned.jpg width=10000x3000>
 
-**Figure 2. Evolutionary lineage reconstruction without preliminary MSA.** <span style="font-size: 80%; color: black;">**A given number of sequences are first randomly subsampled from the input sequences (Step 1). The subsampled sequences are aligned with a common root sequence by MSA using MAFFT (Step 2) and a sample tree is reconstructed by a software tool of choice (Step 3). Each of the remaining input sequences are then independently added to the MSA result by “plus-one” alignment using HMMER (Step 4i) and placed on the sample tree (Step 4ii).**</span>
+**Figure 2. Evolutionary lineage reconstruction without preliminary MSA.** <span style="font-size: 60%; color: black;">**A given number of sequences are first randomly subsampled from the input sequences (Step 1). The subsampled sequences are aligned with a common root sequence by MSA using MAFFT (Step 2) and a sample tree is reconstructed by a software tool of choice (Step 3). Each of the remaining input sequences are then independently added to the MSA result by “plus-one” alignment using HMMER (Step 4i) and placed on the sample tree (Step 4ii).**</span>
 
 ### Supported Environment
 
