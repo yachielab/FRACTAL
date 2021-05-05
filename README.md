@@ -15,11 +15,11 @@
 
 **Figure 1. Schematic diagram of FRACTAL.** 
 
-Multiple sequence alignment (MSA) of the input sequences is a prerequisite for some steps in FRACTAL (Figure 2). When unaligned sequences are queried to FRACTAL for lineage reconstruction, only the sequences subsampled from the input sequences are aligned by MSA for the sample tree reconstruction in each cycle. For phylogenetic placement, each of the remaining input sequences is mapped to the sample tree through “plus-one” alignment to the MSA result that reconstructed the sample tree. This strategy enables the scalable lineage reconstruction of unaligned sequences.
+Multiple sequence alignment (MSA) of the input sequences is a prerequisite for some steps in FRACTAL (Figure 2). When unaligned sequences are queried to FRACTAL for lineage reconstruction, only the sequences subsampled from the input sequences are aligned by MSA for the sample tree reconstruction in each cycle. For phylogenetic placement, each of the remaining input sequences is mapped to the sample tree through “plus-one” alignment to the MSA result that reconstructed the sample tree. This strategy enables the scalable lineage reconstruction of unaligned sequences. 
 
 <img src=images/fractal_unaligned.jpg width=10000x3000>
 
-**Figure 2. Evolutionary lineage reconstruction without preliminary MSA.** A given number of sequences are first randomly subsampled from the input sequences (Step 1). The subsampled sequences are aligned with a common root sequence by MSA using MAFFT (Step 2) and a sample tree is reconstructed by a software tool of choice (Step 3). Each of the remaining input sequences are then independently added to the MSA result by “plus-one” alignment using HMMER (Step 4i) and placed on the sample tree (Step 4ii).
+**Figure 2. Evolutionary lineage reconstruction without preliminary MSA.** <span style="font-size: 80%; color: black;">**A given number of sequences are first randomly subsampled from the input sequences (Step 1). The subsampled sequences are aligned with a common root sequence by MSA using MAFFT (Step 2) and a sample tree is reconstructed by a software tool of choice (Step 3). Each of the remaining input sequences are then independently added to the MSA result by “plus-one” alignment using HMMER (Step 4i) and placed on the sample tree (Step 4ii).**</span>
 
 ### Supported Environment
 
@@ -33,10 +33,10 @@ Multiple sequence alignment (MSA) of the input sequences is a prerequisite for s
 3. EPA-ng (version: 0.3.5) *required*
 4. Seqkit (version: 0.11.0) *required*
 5. Trimal (version: 1.4.1) *required*
-6.	RapidNJ (version: 2.3.2) optional; for NJ method
-7.	FastTreeMP (version: 2.1.10) optional; for ML method
-8.	MAFFT (version: 7.464) optional; for lineage reconstruction with the incremental MSA method
-9.	HMMER (version: 3.3) optional; for lineage reconstruction with the incremental MSA method
+6.	RapidNJ (version: 2.3.2) *optional; for NJ method*
+7.	FastTreeMP (version: 2.1.10) *optional; for ML method*
+8.	MAFFT (version: 7.464) *optional; for lineage reconstruction with the incremental MSA method*
+9.	HMMER (version: 3.3) *optional; for lineage reconstruction with the incremental MSA method*
 
 
 ### Software installation
@@ -366,5 +366,5 @@ Options:
 
 Naoki Konno (The University of Tokyo) [konno-naoki555@g.ecc.u-tokyo.ac.jp](mailto:konno-naoki555@g.ecc.u-tokyo.ac.jp)
 
-Nozomu Yachie (The University of Tokyo) [nzmyachie@gmail.com](mailto:yachie@synbiol.rcast.u-tokyo.ac.jp)
+Nozomu Yachie (The University of British Columbia and The University of Tokyo) [nozomu.yachie@ubc.ca](mailto:nozomu.yachie@ubc.ca)
 
