@@ -250,7 +250,7 @@ FRACTAL -i test.unaligned.fa -f FRACTAL_unaligned -k 10 -t 10 -m fasttreeML -u
 
 Input:    
 
-​	 [`test.unaligned.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.unaligend.fa) (FASTA format)
+​	 [`test.unaligned.fa`](https://github.com/yachielab/FRACTAL/blob/master/example/test.unaligned.fa) (FASTA format)
 
 Output:  
 
@@ -277,6 +277,7 @@ Output:
 ​	 [`FRACTAL_edit.nwk`](https://github.com/yachielab/FRACTAL/blob/master/example/output/FRACTAL_edit.nwk) (Newick format) 
 
 **Note**:
+
 While most of the practical phylogeny estimation tools can consider only substitutions, FRACTAL allows any software of choice to use both substitutions and indels for scalable lineage reconstruction. By specifying option -E, mutation patterns in the input sequences are converted into another sequence representation using four nucleotide sequences in the sample tree reconstruction and phylogenetic placement of each cycle as follows. All of the mutation patterns in sequences subsampled at each FRACTAL iteration are first encoded by binary letter patterns of unique positions to convert each mutated source sequence into a binary sequence of a fixed length, each of which represents the presence and absence of a specific mutation observed in the original subsampled pool by 1 and 0, respectively. The binary sequence of 1/0 is then further converted into a nucleotide sequence of thymine/cytosine or adenine/guanine at each position. The converted sequences are used to construct a sample tree using the given software of choice. Phylogenetic placement is achieved by converting the remaining sequences using the same encoding rule, ignoring the unique mutation patterns observed outside the original subsampled pool. The encoding rule is updated for every sample tree reconstruction, economically taking into account all mutations in the original input sequences through the lineage reconstruction process. Terminal tree reconstruction is performed using the same sequence conversion process. 
 
 

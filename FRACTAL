@@ -57,9 +57,9 @@ Usage:
 
 Options:
     -v
-      Print FRACTAL version; ignore all the other parameters
+      Print FRACTAL version. Ignore all the other parameters.
     -h
-      Print the usage of FRACTAL; ignore all the other parameters
+      Print the usage of FRACTAL. Ignore all the other parameters.
     -i <String>
       Input FASTA file
     -o <String>
@@ -68,22 +68,25 @@ Options:
       Output file name. Default: FRACTALout
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
-        When you specify -s option, this option will be ignored.
+        When -s is specified, this option will be ignored.
     -a "<String>"
-      Options for the software corresponding to the method selected by -m
+      Options for the software tool selected by -m
     -s <String>
-      File name of a shell script used to reconstruct lineage tree in each iteration cycle.
-        See sample codes (example 4).
+      File name of a shell script for a user-defined lineage reconstruction tool 
     -k <Integer>
       Number of sequences for the subsampling procedure. Default: 10
+    -z <Integer>
+      Number of leaves randomly extracted from sample trees for the phylogenetic placement.
+        Default: same as the value specified by -k
     -u
-      Reconstuct a lineage from unaligned sequences
+      Reconstuct a lineage from unaligned sequences.
     -w <float>
-      Alignment frequency parameter rho. Default: 0.5
+      Fold-change threshold that determines the timing to update the MSA and the plus-one 
+        alignment result. This option is valid only when -u is specified. Default: 0.5
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
     -p <String, Permissible values: ‘ML’, ‘MP’>
-      Method for phylogenetic placement in each iteration cycle. Default: ML
+      Method of phylogenetic placement. Default: ML
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
@@ -99,27 +102,23 @@ Options:
       Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
-    -n <String>
-      File path of input sequence number. Default: unspecified
     -E 
-      Treat input data as edit list of each sequence. 
-      Currently, this option can be used only with "-p MP -d 1", and "-g" option is not supported.
+      Reconstruct a lineage from mutation lists of the input sequences. 
+      Currently, this option can be specified only with "-p MP -d 1" and without "-g".
     -O "<String>"
       Options for qsub. Default: ""
         example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
-      Options especially for the first qsub. Default: the string specified by -O
+      Options specified for the first qsub job. Default: Same as the string specified by -O
     -A "<String>"
-      Options especially for the last qsub (tree assembly). 
-        Default: the string specified by -O
+      Options specified for the last qsub job (tree assembly). 
+        Default: Same as the string specified by -O
     -j "<String>"
-      Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
+      Common name header of the jobs distributed by FRACTAL. Default: "FRACTAL"
     -l <Integer>
       Maximum number of FRACTAL iterations. Default: 10000
-    -z <Integer>
-      Number of extracted tips from sample tree. Default: no extraction
     -g 
-      Gzip intermediate files
+      gzip intermediate files.
 EOF
 }
 
