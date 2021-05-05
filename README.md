@@ -3,8 +3,8 @@
 - [Overview of FRACTAL](#overview-of-fractal)
 - [Supported Environment](#supported-environment)
 - [Software Dependency](#software-dependency)
-- [Software installation](#software-installation)
-- [Sample Codes](#sample-codes)
+- [Software Installation](#software-installation)
+- [Sample Commands](#sample-commands)
 - [FRACTAL Usage](#fractal-usage)
 
 ### Overview of FRACTAL
@@ -39,7 +39,7 @@ Multiple sequence alignment (MSA) of the input sequences is a prerequisite for s
 9.	HMMER (version: 3.3) *optional; for lineage reconstruction with the incremental MSA method*
 
 
-### Software installation
+### Software Installation
 
 Each installation step will take less than 1 min
 
