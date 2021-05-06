@@ -15,7 +15,7 @@
 
 **Figure 1. Schematic diagram of FRACTAL.** 
 
-Multiple sequence alignment (MSA) of the input sequences is not a prerequisite for FRACTAL (Figure 2). When unaligned sequences are queried to FRACTAL for lineage reconstruction, only the sequences subsampled from the input sequences are aligned by MSA for the sample tree reconstruction in each cycle. For phylogenetic placement, each of the remaining input sequences is mapped to the sample tree through “plus-one” alignment to the MSA result that reconstructed the sample tree. This strategy enables the scalable lineage reconstruction of unaligned sequences. 
+Multiple sequence alignment (MSA) of the input sequences is not a prerequisite in FRACTAL (Figure 2). When unaligned sequences are queried to FRACTAL for lineage reconstruction, only the sequences subsampled from the input sequences are aligned by MSA for the sample tree reconstruction in each cycle. For phylogenetic placement, each of the remaining input sequences is mapped to the sample tree through “plus-one” alignment to the MSA result that reconstructed the sample tree. This strategy enables the scalable lineage reconstruction of unaligned sequences. 
 
 <img src=images/fractal_unaligned.jpg width=10000x3000>
 
