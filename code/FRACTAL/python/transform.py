@@ -6,7 +6,6 @@ def transform(infile, inform, outform):
     with open(infile,"r") as input_handle, open(infile+"."+outform,"w") as output_handle:
         sequences = SeqIO.parse(input_handle, inform)
         count = SeqIO.write(sequences, output_handle, outform)
-    print("Converted %i records" % count)
 
 '''
 main function

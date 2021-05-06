@@ -1,17 +1,18 @@
 #!/bin/bash
 #$ -S /bin/bash
 
-CMDNAME="FRACTAL.sh"
+
+CMDNAME="FRACTAL"
 #setting defalt parameter
 
 MAX_ITERATION=5             #Integer
-SUBSAMPLE_SIZE=100          #Integer
+SUBSAMPLE_SIZE=10          #Integer
 INFILE="unspecified"        #Absolute Path of .fa file
 NAME="FRACTALout"           #Experiment No.
-CODE_DIR=`dirname $0 | sed -e "s/\/FRACTAL.sh//"` #Absolute path of FRACTAL-X.X.X directory
+CODE_DIR=`dirname $0`       #Absolute path of FRACTAL directory
 OUT_DIR="`pwd`"             #output dir should be ${OUT_DIR}/${NAME}
 SOFTWARE="unspecified"      #Absolute Path of the executable file for lineage reconstruction
-THRESHOLD=500
+THRESHOLD=10
 ROOTING="Origin"
 NUM_OF_JOBS=1
 TREE=raxmlMP
@@ -23,26 +24,36 @@ SEED=0
 MODEL="GTRCAT"
 QSUB_OPTION="" # option of qsub
 INIT_QSUB_OPTION="" # option of qsub
+ASSEMBLY_QSUB_OPTION=""
 JOB_NAME="FRACTAL"
-#MEM_REQ=16
-#INIT_MEM_REQ=16
-#ENVIRONMENT="unspecified"
+PLACEMENT_METHOD="ML"
+EXTRACTION_SIZE=10000000000
+ALIGNED="aligned"
+LIMITATION=10000
+FASTA_or_EDIT="fa"
+CAREFUL_PLACEMENT=1
+GZIP_INTERMEDIATE="FALSE"
+SEQ_NUM_FILE="unspecified"
+benchmark="FALSE"
+ALIGNMENT_FREQUENCY=0.5
 
 function version {
-  echo "######## FRACTAL v1.4.2 ########"
+  echo "######## FRACTAL v2.6.2 ########"
 }
 
 function usage {
     cat <<EOF
-$(basename ${0}) is a tool for lineage estimation from massive number of DNA sequences.
+FRACTAL is a tool for lineage estimation from massive number of DNA sequences.
 
 Usage:
     FRACTAL.sh
     [-v] [-h] [-i input_file] [-o output_file_path] [-f output_file_name]
-    [-m method] [-p "options"] [-k sequence_number] [-b model_name]
-    [-x iteration_number] [-t sequence_number]
-    [-d job_number] [-c thread_number] [-e]
-    [-r integer] [-O qsub_option] [-I first_qsub_option] [-j job_name]
+    [-m method] [-a "options"] [-s script_file_name] [-k sequence_number]
+    [-u] [-w alignment_frequency] [-b model_name] 
+    [-p placement_method] [-x iteration_number] [-t sequence_number]
+    [-d job_number] [-c thread_number] [-e] [-r integer] [-n file_path] [-E] 
+    [-O qsub_option] [-I first_qsub_option] [-A last_qsub_option] [-j job_name] 
+    [-l iteration_upper_limit] [-g]
 
 Options:
     -v
@@ -58,20 +69,26 @@ Options:
     -m <String, Permissible values: ‘raxmlMP’, ‘rapidnjNJ’ and ‘fasttreeML’>
       Method to reconstruct lineage tree in each iteration cycle. Default: raxmlMP
         When you specify -s option, this option will be ignored.
-    -p "<String>"
+    -a "<String>"
       Options for the software corresponding to the method selected by -m
     -s <String>
       File name of a shell script used to reconstruct lineage tree in each iteration cycle.
         See sample codes (example 4).
     -k <Integer>
-      Number of sequences for the subsampling procedure. Default: 100
+      Number of sequences for the subsampling procedure. Default: 10
+    -u
+      Reconstuct a lineage from unaligned sequences
+    -w <float>
+      Alignment frequency parameter rho. Default: 0.5
     -b <String>
       Substitution model of RAxML for phylogenetic placement. Default: GTRCAT
+    -p <String, Permissible values: ‘ML’, ‘MP’>
+      Method for phylogenetic placement in each iteration cycle. Default: ML
     -x <Integer>
       Threshold for the maximum number of retrial iterations in the subsampling process
     -t <Integer>
       Threshold number of input sequences to switch to direct lineage tree reconstruction 
-        in each iteration cycle. Default: 500
+        in each iteration cycle. Default: 10
     -d <Integer>
       Maximum number of jobs permissible for distributed computing.
         Default: 1 (no distributed computing)
@@ -82,18 +99,32 @@ Options:
       Output intermediate files
     -r <Integer>
       Seed number for generation of random values. Default: 0
+    -n <String>
+      File path of input sequence number. Default: unspecified
+    -E 
+      Treat input data as edit list of each sequence. 
+      Currently, this option can be used only with "-p MP -d 1", and "-g" option is not supported.
     -O "<String>"
       Options for qsub. Default: ""
-      example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
+        example:  -O "-pe def_slot 4 -l s_vmem=16G -l mem_req=16G" 
     -I "<String>"
       Options especially for the first qsub. Default: the string specified by -O
+    -A "<String>"
+      Options especially for the last qsub (tree assembly). 
+        Default: the string specified by -O
     -j "<String>"
       Name of the jobs distributed by FRACTAL. Default: "FRACTAL"
+    -l <Integer>
+      Maximum number of FRACTAL iterations. Default: 10000
+    -z <Integer>
+      Number of extracted tips from sample tree. Default: no extraction
+    -g 
+      Gzip intermediate files
 EOF
 }
 
 # read argument
-while getopts i:o:f:s:p:k:b:x:t:d:c:r:O:I:j:m:vhe OPT
+while getopts i:o:f:s:a:k:w:b:p:P:x:t:d:c:r:n:O:I:A:j:m:l:z:vheugEB OPT
 do
   case $OPT in
     "v" ) version; exit 1;;
@@ -102,22 +133,35 @@ do
     "o" ) FLG_o="TRUE" ; OUT_DIR="$OPTARG";;
     "f" ) FLG_F="TRUE" ; NAME="$OPTARG";;
     "s" ) FLG_s="TRUE" ; SOFTWARE=`which $OPTARG`;;
-    "p" ) FLG_P="TRUE" ; OPTION="$OPTARG";;
+    "a" ) FLG_A="TRUE" ; OPTION="$OPTARG";;
     "k" ) FLG_K="TRUE" ; SUBSAMPLE_SIZE="$OPTARG";;
+    "w" ) FLG_W="TRUE" ; ALIGNMENT_FREQUENCY="$OPTARG";;
     "b" ) FLG_B="TRUE" ; MODEL="$OPTARG";;
+    "p" ) FLG_P="TRUE" ; PLACEMENT_METHOD="$OPTARG";;
+    "P" ) FLG_P="TRUE" ; CAREFUL_PLACEMENT="$OPTARG";;
     "x" ) FLG_X="TRUE" ; MAX_ITERATION="$OPTARG";;
     "t" ) FLG_T="TRUE" ; THRESHOLD="$OPTARG";;
-    "d" ) FLG_D="TRUE" ; echo -e "Because Code Ocean does not support Univa Grid Engine, the distributed computing mode is disabled. If you want to use the distributed computing mode, please install FRACTAL from http:/github.com/yachielab/FRACTAL."; exit 1;;
+    "d" ) FLG_D="TRUE" ; NUM_OF_JOBS="$OPTARG";; 
     "c" ) FLG_C="TRUE" ; THREADNUM="$OPTARG";;
     "e" ) REMOVE_INTERMEDIATES="FALSE" ;;
     "r" ) FLG_R="TRUE" ; SEED="$OPTARG";;
+    "n" ) FLG_N="TRUE" ; SEQ_NUM_FILE="$OPTARG";;
+    "E" ) FLG_E="TRUE" ; FASTA_or_EDIT="edit";;
     "O" ) FLG_O="TRUE" ; QSUB_OPTION="$OPTARG";;
     "I" ) FLG_I="TRUE" ; INIT_QSUB_OPTION="$OPTARG";;
+    "A" ) FLG_A="TRUE" ; ASSEMBLY_QSUB_OPTION="$OPTARG";;
     "j" ) FLG_j="TRUE" ; JOB_NAME="$OPTARG";;
     "m" ) FLG_m="TRUE" ; TREE="$OPTARG";;
+    "u" ) FLG_u="TRUE" ; ALIGNED="unaligned";;
+    "l" ) FLG_u="TRUE" ; LIMITATION="$OPTARG";;
+    "z" ) FLG_z="TRUE" ; EXTRACTION_SIZE="$OPTARG";;
+    "g" ) FLG_g="TRUE" ; GZIP_INTERMEDIATE="TRUE";;
+    "B" ) benchmark="TRUE" ;;
     * ) usage; exit 1;;
   esac
 done
+
+NUM_OF_JOBS=1; # Please note that the deep distributed computing mode is disabled here because UGE is not supported by Code Ocean.
 
 # print version
 version
@@ -161,7 +205,11 @@ else
     TREE="unspecified" # when -s is specified, -m is ignored
 fi
 
-bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${SEED}" "${JOB_NAME}"
+echo "Command:"
+echo "$0 $*"
+echo "################################"
+
+bash ${CODE_DIR}/shell/SUPERVISE.sh ${MAX_ITERATION} ${SUBSAMPLE_SIZE} ${INFILE} ${NAME} ${CODE_DIR} ${OUT_DIR} ${THRESHOLD} ${ROOTING} ${NUM_OF_JOBS} ${TREE} ${THREADNUM} ${SOFTWARE} "${OPTION}" ${MODEL} "${QSUB_OPTION}" "${INIT_QSUB_OPTION}" "${ASSEMBLY_QSUB_OPTION}" "${SEED}" "${JOB_NAME}" ${PLACEMENT_METHOD} ${ALIGNED} ${LIMITATION} ${EXTRACTION_SIZE} ${CAREFUL_PLACEMENT} ${FASTA_or_EDIT} ${GZIP_INTERMEDIATE} ${SEQ_NUM_FILE} ${benchmark} ${ALIGNMENT_FREQUENCY}
 wait
 
 #show result
