@@ -114,7 +114,9 @@ Options:
       Options specified for the last qsub job (tree assembly). 
         Default: Same as the string specified by -O
     -j "<String>"
-      Common name header of the jobs distributed by FRACTAL. Default: "FRACTAL"
+      Common name header of the jobs distributed by FRACTAL. 
+        The length of the name header should be <8.
+        Default: "FRACTAL"
     -l <Integer>
       Maximum number of FRACTAL iterations. Default: 10000
     -g 
