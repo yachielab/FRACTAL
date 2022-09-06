@@ -360,6 +360,9 @@ Options:
       gzip intermediate files.
 ```
 
+### Citation
+
+Naoki Konno, Yusuke Kijima, Keito Watano, Soh Ishiguro, Keiichiro Ono, Mamoru Tanaka, Hideto Mori, Nanami Masuyama, Dexter Pratt, Trey Ideker, Wataru Iwasaki & Nozomu Yachie. Deep distributed computing to reconstruct extremely large lineage trees. *Nat Biotechnol* **40**, 566–575 (2022). https://doi.org/10.1038/s41587-021-01111-2
 
 ### Contact
 
